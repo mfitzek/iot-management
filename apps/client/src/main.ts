@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 
+import router from "./router/index";
+
 import { Quasar } from 'quasar'
 import quasarLang from 'quasar/lang/cs'
 import '@quasar/extras/roboto-font/roboto-font.css'
@@ -20,4 +22,7 @@ app.use(Quasar, {
   plugins: {}, // import Quasar plugins and add here
   lang: quasarLang,
 })
+
+app.use(router);
+
 app.mount('#app');
