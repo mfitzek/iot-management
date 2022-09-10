@@ -15,6 +15,7 @@ export default defineConfig({
       "@components": getPath("./src/components"),
       "@pages": getPath("./src/pages"),
       "@layouts": getPath("./src/layouts"),
+      "@store": getPath("./src/store"),
     }
   },
   plugins: [vue({

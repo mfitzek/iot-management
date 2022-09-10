@@ -42,19 +42,19 @@ export default defineComponent({
     const links = [
       {
         name: 'Device',
-        icon: 'fas fa-microchip',
+        icon: 'sym_o_table_lamp',
         route: { name: 'DeviceDetail' },
         auth_level: 0,
       },
       {
         name: 'Data',
-        icon: 'fas fa-database',
+        icon: 'sym_o_monitoring',
         route: { name: 'DataMain' },
         auth_level: 0,
       },
       {
         name: 'Settings',
-        icon: 'settings',
+        icon: 'sym_o_settings',
         route: { name: 'DatabaseSettings' },
         auth_level: 2,
       },
