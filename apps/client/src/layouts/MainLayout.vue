@@ -43,7 +43,7 @@ export default defineComponent({
       {
         name: 'Device',
         icon: 'sym_o_table_lamp',
-        route: { name: 'DeviceDetail' },
+        route: { name: 'DeviceList' },
         auth_level: 0,
       },
       {
