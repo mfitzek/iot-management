@@ -1,0 +1,3 @@
+<template>
+    <component></component>
+</template>
