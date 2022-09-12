@@ -5,20 +5,21 @@
         <h3>Device list</h3>
       </div>
       <div class="col-auto">
-        <q-btn color="green" icon-right ="add">Add device</q-btn>
+        <q-btn color="green" icon-right="add" :to="{ name: 'DeviceCreate' }"
+          >Add device</q-btn
+        >
       </div>
     </div>
     <div>
-
-    <q-table :columns="columns" :rows="rows" @row-click="clickDevice">
-      <template #body-cell-status="{ row }">
-        <q-td class="text-right">
-          <q-badge rounded :color="row_status(row.status)"></q-badge>
-        </q-td>
-      </template>
-    </q-table>
+      <q-table :columns="columns" :rows="rows" @row-click="clickDevice">
+        <template #body-cell-status="{ row }">
+          <q-td class="text-right">
+            <q-badge rounded :color="row_status(row.status)"></q-badge>
+          </q-td>
+        </template>
+      </q-table>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup lang="ts">
@@ -63,7 +64,7 @@ const rows: IDevice[] = [
     type: 'S3X-CMD',
     last_data: '01.08.2022 07:52',
     status: 'error',
-  }
+  },
 ];
 
 const row_status = (status: string) => {
@@ -75,11 +76,10 @@ const row_status = (status: string) => {
   return colors[status] ?? 'red';
 };
 
-async function clickDevice({}, row: IDevice){
+async function clickDevice({}, row: IDevice) {
   console.log('clicked device', row.id);
-  router.push({name: 'DeviceDetail', params: {id: row.id}});
+  router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
-
 </script>
 
 <style scoped></style>
