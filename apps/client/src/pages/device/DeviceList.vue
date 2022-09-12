@@ -9,8 +9,6 @@
       </div>
     </div>
     <div>
-      
-    <component is="h1">Hello</component>
 
     <q-table :columns="columns" :rows="rows" @row-click="clickDevice">
       <template #body-cell-status="{ row }">
@@ -25,6 +23,9 @@
 
 <script setup lang="ts">
 import { QTableColumn } from 'quasar';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const columns: QTableColumn[] = [
   { name: 'name', label: 'Name', field: 'name', align: 'left' },
@@ -76,6 +77,7 @@ const row_status = (status: string) => {
 
 async function clickDevice({}, row: IDevice){
   console.log('clicked device', row.id);
+  router.push({name: 'DeviceDetail', params: {id: row.id}});
 }
 
 </script>

@@ -4,6 +4,7 @@
   "projects": {
     "api": "apps/api",
     "client": "apps/client",
+    "custom-device": "libs/custom-device",
     "user": "libs/user"
   }
 }
