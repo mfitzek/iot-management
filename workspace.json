@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "basic-device": "libs/basic-device",
     "client": "apps/client",
     "custom-device": "libs/custom-device",
     "user": "libs/user"
