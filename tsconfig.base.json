@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@iot/basic-device": ["libs/basic-device/src/index.ts"],
+      "@iot/constants": ["libs/constants/src/index.ts"],
       "@iot/custom-device": ["libs/custom-device/src/index.ts"],
       "@shared/user": ["libs/user/src/index.ts"]
     }
