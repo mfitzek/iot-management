@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+import http from '@service/http';
+
 const props = defineProps({
   id: Number,
 });
