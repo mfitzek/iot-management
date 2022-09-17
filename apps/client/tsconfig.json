@@ -11,7 +11,14 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "@components": ["apps/client/src/components"],
+      "@pages": ["apps/client/src/pages"],
+      "@service": ["apps/client/src/service"],
+      "@layouts": ["apps/client/src/layouts"],
+      "@store": ["apps/client/src/store"],
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
 }
