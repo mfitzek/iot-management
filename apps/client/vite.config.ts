@@ -25,6 +25,7 @@ export default defineConfig({
     quasar(),
     tsconfigPaths({
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.Vue'],
+      projects: ['../../tsconfig.base.json', 'tsconfig.json'],
     }),
   ],
   server: {
