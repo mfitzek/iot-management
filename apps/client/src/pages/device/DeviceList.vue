@@ -25,7 +25,6 @@
 <script setup lang="ts">
 import { QTableColumn } from 'quasar';
 import { useRouter } from 'vue-router';
-import http from '@service/http';
 
 const router = useRouter();
 
@@ -78,10 +77,6 @@ const row_status = (status: string) => {
 };
 
 async function clickDevice({}, row: IDevice) {
-  const req = await http.get('/Any?safe-mode');
-
-  console.log(req.data);
-
   console.log('clicked device', row.id);
   router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
