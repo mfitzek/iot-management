@@ -15,7 +15,6 @@
     "paths": {
       "@components": ["apps/client/src/components"],
       "@pages": ["apps/client/src/pages"],
-      "@service": ["apps/client/src/service"],
       "@layouts": ["apps/client/src/layouts"],
       "@store": ["apps/client/src/store"],
     }

@@ -15,7 +15,6 @@ export default defineConfig({
       '@pages': getPath('./src/pages'),
       '@layouts': getPath('./src/layouts'),
       '@store': getPath('./src/store'),
-      '@service': getPath('./src/service'),
     },
   },
   plugins: [

@@ -7,6 +7,7 @@
     "client": "apps/client",
     "constants": "libs/constants",
     "custom-device": "libs/custom-device",
+    "services-http": "libs/services/http",
     "user": "libs/user"
   }
 }
