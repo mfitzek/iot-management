@@ -32,7 +32,7 @@ import { reactive } from 'vue';
 const rows = reactive<IDeviceListRow[]>([]);
 
 async function getRows() {
-  const req = await http.get('devices');
+  const req = await http.get('device/list');
   rows.push(...req.data);
 }
 
