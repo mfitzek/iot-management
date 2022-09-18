@@ -31,5 +31,6 @@ export default defineConfig({
     fs: {
       allow: ['..', '../..'],
     },
+    cors: true,
   },
 });

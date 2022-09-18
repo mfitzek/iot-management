@@ -25,6 +25,18 @@
 <script setup lang="ts">
 import { QTableColumn } from 'quasar';
 import { useRouter } from 'vue-router';
+import { IDeviceListRow } from '@iot/device';
+import http from '@iot/services/http';
+import { reactive } from 'vue';
+
+const rows = reactive<IDeviceListRow[]>([]);
+
+async function getRows() {
+  const req = await http.get('devices');
+  rows.push(...req.data);
+}
+
+getRows();
 
 const router = useRouter();
 
@@ -33,38 +45,6 @@ const columns: QTableColumn[] = [
   { name: 'type', label: 'Type', field: 'type', align: 'left' },
   { name: 'lastdata', label: 'Last data', field: 'last_data', align: 'left' },
   { name: 'status', label: 'Status', field: 'status' },
-];
-
-interface IDevice {
-  id: number;
-  name: string;
-  type: string;
-  last_data: string;
-  status: string;
-}
-
-const rows: IDevice[] = [
-  {
-    id: 100,
-    name: 'Test',
-    type: 'X752-AB',
-    last_data: '12.09.2022 13:52',
-    status: 'online',
-  },
-  {
-    id: 101,
-    name: 'Test2',
-    type: 'S3X-BD',
-    last_data: '12.09.2022 10:52',
-    status: 'warning',
-  },
-  {
-    id: 102,
-    name: 'Test3',
-    type: 'S3X-CMD',
-    last_data: '01.08.2022 07:52',
-    status: 'error',
-  },
 ];
 
 const row_status = (status: string) => {
@@ -76,7 +56,7 @@ const row_status = (status: string) => {
   return colors[status] ?? 'red';
 };
 
-async function clickDevice({}, row: IDevice) {
+async function clickDevice({}, row: IDeviceListRow) {
   console.log('clicked device', row.id);
   router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
