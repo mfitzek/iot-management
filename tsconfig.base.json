@@ -21,7 +21,7 @@
       "@iot/custom-device": ["libs/custom-device/src/index.ts"],
       "@iot/device": ["libs/device/src/index.ts"],
       "@iot/services/http": ["libs/services/http/src/index.ts"],
-      "@shared/user": ["libs/user/src/index.ts"]
+      "@iot/user": ["libs/user/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
