@@ -1,8 +1,5 @@
-<script setup lang="ts">
-  import {Users} from "@shared/user";
-  </script>
+<script setup lang="ts"></script>
 
-  <template>
-    <h1>{{Users}}</h1>
-    <q-btn color="primary">Hello</q-btn>
-  </template>
+<template>
+  <q-btn color="primary">Hello</q-btn>
+</template>
