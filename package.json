@@ -12,6 +12,7 @@
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.3.1",
@@ -19,6 +20,7 @@
     "axios": "^0.27.2",
     "lodash": "^4.17.21",
     "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "quasar": "^2.7.7",
     "reflect-metadata": "^0.1.13",
@@ -44,6 +46,7 @@
     "@quasar/vite-plugin": "^1.1.1",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
+    "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
     "@typescript-eslint/eslint-plugin": "~5.33.1",
     "@typescript-eslint/parser": "~5.33.1",
