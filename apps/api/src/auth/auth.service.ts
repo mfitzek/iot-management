@@ -1,12 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { IRegisterPost } from '@iot/user';
+import { IRegisterPost, ILoginPost } from '@iot/user';
 
 import { randomBytes, pbkdf2 } from 'crypto';
+import { UserService } from '../user/user.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
+  constructor(private users: UserService) {}
+
   async register(data: IRegisterPost) {
     return await this.createPasswordHash(data.password);
+  }
+
+  async validateUser(data: ILoginPost): Promise<User | null> {
+    const user = await this.users.getUser(data.username);
+
+    if (
+      user &&
+      this.comparePasswords(data.password, user.password, user.salt)
+    ) {
+      return user;
+    }
+
+    return null;
   }
 
   private createPasswordHash(
