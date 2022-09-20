@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 import { ILoginPost, IRegisterPost, IUser } from '@iot/user';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreatingUserError } from '@iot/user';
 import { LocalAuthGuard } from './guards/local.guard';
 
@@ -17,5 +17,12 @@ export class AuthController {
   @Post('register')
   async register(@Body() credentials: IRegisterPost) {
     return this.auth.register(credentials);
+  }
+
+  // TODO: Delete this method
+  @UseGuards(LocalAuthGuard)
+  @Get('test')
+  test() {
+    return 'Very secret information about the user.';
   }
 }
