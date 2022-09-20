@@ -1,4 +1,4 @@
-export default class CreatingUserError extends Error {
+export class CreatingUserError extends Error {
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, CreatingUserError.prototype);

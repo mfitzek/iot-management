@@ -2,10 +2,11 @@ import { PrismaService } from './../prisma/prisma.service';
 import { IUser } from '@iot/user';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import CreatingUserError, {
+import {
+  CreatingUserError,
   EmaillreadyExists,
   UsernameAlreadyExists,
-} from 'libs/user/src/errors/CreatingUser';
+} from '@iot/user';
 
 @Injectable()
 export class UserService {

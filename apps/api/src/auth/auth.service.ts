@@ -1,3 +1,5 @@
+import { CreatingUserError } from '@iot/user';
+
 import { Injectable } from '@nestjs/common';
 import { IRegisterPost, ILoginPost } from '@iot/user';
 
@@ -10,7 +12,24 @@ export class AuthService {
   constructor(private users: UserService) {}
 
   async register(data: IRegisterPost) {
-    return await this.createPasswordHash(data.password);
+    const { hash, salt } = await this.createPasswordHash(data.password);
+    const result = await this.users.createUser({
+      username: data.username,
+      email: data.email,
+      password: hash,
+      salt: salt,
+    });
+
+    const user = result as User;
+    const errors = result as CreatingUserError[];
+
+    if (user.username) {
+      return { username: user.username, email: user.email };
+    }
+
+    return {
+      errors: errors.map((err) => err.message),
+    };
   }
 
   async validateUser(data: ILoginPost): Promise<User | null> {
