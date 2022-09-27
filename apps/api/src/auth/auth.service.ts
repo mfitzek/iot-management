@@ -6,10 +6,11 @@ import { IRegisterPost, ILoginPost } from '@iot/user';
 import { randomBytes, pbkdf2 } from 'crypto';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private users: UserService) {}
+  constructor(private users: UserService, private jwtService: JwtService) {}
 
   async register(data: IRegisterPost) {
     const { hash, salt } = await this.createPasswordHash(data.password);
@@ -30,6 +31,13 @@ export class AuthService {
     return {
       errors: errors.map((err) => err.message),
     };
+  }
+
+  async login(user: User) {
+    const payload = {id: user.id, username: user.username, email: user.email};
+    return {
+      access_token: await this.jwtService.signAsync(payload)  
+    }
   }
 
   async validateUser(data: ILoginPost): Promise<User | null> {
