@@ -1,4 +1,4 @@
-import { CreatingUserError } from '@iot/user';
+import { CreatingUserError, ILoginResponse } from '@iot/user';
 
 import { Injectable } from '@nestjs/common';
 import { IRegisterPost, ILoginPost } from '@iot/user';
@@ -33,10 +33,19 @@ export class AuthService {
     };
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<ILoginResponse> {
     const payload = {id: user.id, username: user.username, email: user.email};
+
+    const token = await this.jwtService.signAsync(payload);
+
     return {
-      access_token: await this.jwtService.signAsync(payload)  
+      token: token,
+      expiration: this.getExpirationDateInMillisFromToken(token),
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      }
     }
   }
 
@@ -80,4 +89,23 @@ export class AuthService {
       });
     });
   }
+
+  private getExpirationDateInMillisFromToken(token: string): number {
+
+    let expiration: number;
+
+    try {
+      const decoded = this.jwtService.decode(token);
+      const exp: string = decoded["exp"];
+      
+      expiration = Number(exp) * 1000;
+    } catch (error) {
+      const hour = 1000 * 60 * 15;
+      expiration = new Date().getTime() + hour;
+    }
+
+    return expiration;
+
+  }
+
 }

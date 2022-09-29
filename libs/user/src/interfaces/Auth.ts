@@ -8,3 +8,14 @@ export interface IRegisterPost {
   email: string;
   password: string;
 }
+
+
+export interface ILoginResponse {
+  token: string;
+  expiration: number;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
+}
