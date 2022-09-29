@@ -15,6 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    return payload;
+    return "Something";
+    // TODO: Req.User = return
+    // if return null then use is unauthorized
   }
 }
