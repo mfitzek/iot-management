@@ -51,6 +51,8 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref, watch } from 'vue';
 import { QForm } from 'quasar';
+import http from '@iot/services/http';
+import { IRegisterPost } from '@iot/user';
 
 export default defineComponent({
   emits: ['signUp'],
@@ -99,17 +101,28 @@ export default defineComponent({
       }
 
       if (valid) {
-        try {
-          //   await auth.signup(email.value, username.value, password.value);
-          ctx.emit('signUp', {});
-        } catch (error: any | { email?: string; username?: string }) {
-          valid = false;
-          if (error.username || error.email) {
-            errors.username = error.username;
-            errors.email = error.email;
-          } else {
-            console.log(error);
-          }
+        const requestData: IRegisterPost = {
+          email: email.value,
+          username: username.value,
+          password: password.value,
+        };
+        const req = await http.post('auth/register', requestData);
+
+        if (req.data.username) {
+          ctx.emit('signUp', req.data);
+        } else {
+          parseRegisterErrors(req.data.errors);
+        }
+      }
+    }
+
+    function parseRegisterErrors(data: string[]) {
+      for (const err of data) {
+        if (err.includes('Username')) {
+          errors.username = err;
+        }
+        if (err.includes('Email')) {
+          errors.email = err;
         }
       }
     }

@@ -25,7 +25,7 @@ export class AuthService {
     const errors = result as CreatingUserError[];
 
     if (user.username) {
-      return { username: user.username, email: user.email };
+      return { id: user.id, username: user.username, email: user.email };
     }
 
     return {
@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<ILoginResponse> {
-    const payload = {id: user.id, username: user.username, email: user.email};
+    const payload = { id: user.id, username: user.username, email: user.email };
 
     const token = await this.jwtService.signAsync(payload);
 
@@ -45,8 +45,8 @@ export class AuthService {
         id: user.id,
         username: user.username,
         email: user.email,
-      }
-    }
+      },
+    };
   }
 
   async validateUser(data: ILoginPost): Promise<User | null> {
@@ -91,13 +91,12 @@ export class AuthService {
   }
 
   private getExpirationDateInMillisFromToken(token: string): number {
-
     let expiration: number;
 
     try {
       const decoded = this.jwtService.decode(token);
-      const exp: string = decoded["exp"];
-      
+      const exp: string = decoded['exp'];
+
       expiration = Number(exp) * 1000;
     } catch (error) {
       const hour = 1000 * 60 * 15;
@@ -105,7 +104,5 @@ export class AuthService {
     }
 
     return expiration;
-
   }
-
 }
