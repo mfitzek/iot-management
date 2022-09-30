@@ -1,12 +1,12 @@
 <template>
   <q-form @submit="login" class="login-form">
     <q-input
-      v-model="email"
+      v-model="username"
       required
-      name="email"
-      autocomplete="email"
-      label="Email"
-      :rules="[(val) => (val && val.length > 0) || 'Email is required']"
+      name="username"
+      autocomplete="username"
+      label="Username"
+      :rules="[(val) => (val && val.length > 0) || 'Username is required']"
     ></q-input>
     <q-input
       v-model="password"
@@ -18,8 +18,9 @@
       type="password"
       :rules="[
         (val) => (val && val.length > 0) || 'Password is required',
-        verify,
+        verify
       ]"
+      
     ></q-input>
 
     <div class="q-mt-lg row justify-between">
@@ -39,20 +40,22 @@ import { defineComponent, ref } from 'vue';
 import auth from '../../store/auth';
 
 import { useRouter } from 'vue-router';
+import { computed } from '@vue/reactivity';
 export default defineComponent({
   setup() {
-    const email = ref('');
+    const username = ref('');
     const password = ref('');
     const router = useRouter();
-    let first = true;
-    let verified = false;
-    function verify() {
-      if (first) return true;
-      return verified || 'Wrong email or password';
-    }
+    const verified = ref<boolean | null>(null);
+
+    const verify = () => {
+      if(verified.value === false)
+        return 'Wrong username or password';
+      return true;
+    };
+
     async function login() {
-      verified = await auth.login(email.value, password.value);
-      first = false;
+      verified.value = await auth.login(username.value, password.value);
       if (verified) {
         const redir = router.currentRoute.value.query['redirect'];
         if (redir && redir.toString() != 'Login') {
@@ -62,7 +65,7 @@ export default defineComponent({
         }
       }
     }
-    return { email, password, login, verify };
+    return { username, password, login, verify };
   },
 });
 </script>

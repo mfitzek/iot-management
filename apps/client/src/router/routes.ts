@@ -4,8 +4,7 @@ import MainLayout from '@layouts/MainLayout.vue';
 import Home from '@pages/Home.vue';
 import NotFound from '@pages/errors/404.vue';
 import authRoutes from './auth';
-import deviceRoutes from "./device";
-
+import deviceRoutes from './device';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -15,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'Index page', component: Home },
       { path: '/auth', children: authRoutes },
-      { path: '/device', children: deviceRoutes },
+      { path: '/device', children: deviceRoutes, meta: { requiresAuth: true } },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ],
   },
