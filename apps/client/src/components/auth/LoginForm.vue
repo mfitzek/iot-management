@@ -36,6 +36,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
+import auth from '../../store/auth';
+
 import { useRouter } from 'vue-router';
 export default defineComponent({
   setup() {
@@ -49,15 +51,14 @@ export default defineComponent({
       return verified || 'Wrong email or password';
     }
     async function login() {
-      // verified = await auth_store.login(email.value, password.value);
-      verified = true;
+      verified = await auth.login(email.value, password.value);
       first = false;
       if (verified) {
         const redir = router.currentRoute.value.query['redirect'];
         if (redir && redir.toString() != 'Login') {
           router.push({ name: redir.toString() });
         } else {
-          router.push({ name: 'DeviceDetail' });
+          router.push({ name: 'DeviceList' });
         }
       }
     }

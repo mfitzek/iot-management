@@ -1,9 +1,12 @@
 import { API_URL } from '@iot/constants';
-import Axios from 'axios';
-import { reactive } from 'vue';
+import Axios, { AxiosInstance } from 'axios';
 
-const axios = Axios.create({
-  baseURL: API_URL,
-});
+export default class AxiosClient {
+  private static _axios: AxiosInstance = Axios.create({
+    baseURL: API_URL,
+  });
 
-export const http_axios = reactive(axios);
+  public static get instance() {
+    return this._axios;
+  }
+}

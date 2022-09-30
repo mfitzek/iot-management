@@ -5,3 +5,9 @@ export interface IUser {
   password: string;
   salt: string;
 }
+
+export interface IUserInfo {
+  id: string;
+  username: string;
+  email: string;
+}

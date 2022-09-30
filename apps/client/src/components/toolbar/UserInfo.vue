@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import authStore from '@store/auth';
+import authStore from '../../store/auth';
 
 function links() {
   const router = useRouter();
@@ -52,13 +52,11 @@ function links() {
 export default defineComponent({
   setup() {
     const router = useRouter();
-    const username = computed(() => {
-      return authStore.state.username ?? '#';
-    });
 
-    const email = computed(() => {
-      return authStore.state.email ?? '#';
-    });
+    const user = computed(()=> authStore.state.value?.user);
+
+    const username = computed(() => user.value?.username ?? '#');
+    const email = computed(() => user.value?.email ?? '#');
 
     function logout() {
       authStore.logout();

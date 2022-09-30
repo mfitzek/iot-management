@@ -1,3 +1,3 @@
-import { http_axios } from './lib/axios';
+import AxiosClient from './lib/axios';
 
-export default http_axios;
+export default AxiosClient.instance;
