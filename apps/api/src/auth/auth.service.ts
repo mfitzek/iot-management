@@ -54,7 +54,7 @@ export class AuthService {
 
     if (
       user &&
-      this.comparePasswords(data.password, user.password, user.salt)
+      (await this.comparePasswords(data.password, user.password, user.salt))
     ) {
       return user;
     }
@@ -84,8 +84,9 @@ export class AuthService {
           reject(err);
         }
         const hashed_password = result.toString('hex');
+        const password_equals = hashed_password === hash;
 
-        resolve(hashed_password === hash);
+        resolve(password_equals);
       });
     });
   }
