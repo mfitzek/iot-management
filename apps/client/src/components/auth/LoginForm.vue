@@ -2,6 +2,7 @@
   <q-form @submit="login" class="login-form">
     <q-input
       v-model="username"
+      @change="dataChanged"
       required
       name="username"
       autocomplete="username"
@@ -10,17 +11,16 @@
     ></q-input>
     <q-input
       v-model="password"
+      @change="dataChanged"
       required
       name="password"
       autocomplete="password"
       lazyRules
       label="Password"
       type="password"
-      :rules="[
-        (val) => (val && val.length > 0) || 'Password is required',
-        verify
-      ]"
-      
+      :rules="[(val) => (val && val.length > 0) || 'Password is required']"
+      :error="verify"
+      :errorMessage="err_message"
     ></q-input>
 
     <div class="q-mt-lg row justify-between">
@@ -35,27 +35,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+
+import { QForm } from 'quasar';
 
 import auth from '../../store/auth';
 
 import { useRouter } from 'vue-router';
-import { computed } from '@vue/reactivity';
+
 export default defineComponent({
   setup() {
     const username = ref('');
     const password = ref('');
     const router = useRouter();
-    const verified = ref<boolean | null>(null);
 
-    const verify = () => {
-      if(verified.value === false)
-        return 'Wrong username or password';
-      return true;
+    const verified = ref<Boolean | null>(null);
+
+    const dataChanged = () => {
+      verified.value = null;
     };
 
+    const verify = computed(() => {
+      return verified.value === false;
+    });
+
+    const err_message = computed(() =>
+      verified.value === false ? 'Wrong username or wrong password' : undefined
+    );
+
     async function login() {
+      if (verified.value === false) return;
       verified.value = await auth.login(username.value, password.value);
+
       if (verified) {
         const redir = router.currentRoute.value.query['redirect'];
         if (redir && redir.toString() != 'Login') {
@@ -65,7 +76,7 @@ export default defineComponent({
         }
       }
     }
-    return { username, password, login, verify };
+    return { username, password, login, verify, dataChanged, err_message };
   },
 });
 </script>
