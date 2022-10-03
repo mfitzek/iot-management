@@ -1,5 +1,6 @@
-import { ICustomDevice } from '@iot/custom-device';
+import component from './ui/BasicDevice.vue';
 
-export default class BasicDevice implements ICustomDevice {
-  type = 'Basic Device';
+export default class BasicDevice {
+  public readonly type = 'basic-device';
+  public component = component;
 }
