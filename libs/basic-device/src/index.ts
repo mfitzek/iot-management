@@ -1,6 +1,7 @@
+import { ICustomDevice } from '@iot/custom-device';
 import { defineAsyncComponent } from 'vue';
 
-export class BasicDevice {
-  public readonly type = 'basic-device';
-  public component = defineAsyncComponent(() => import('./ui/BasicDevice.vue'));
-}
+export const BasicDevice: ICustomDevice = {
+  type: 'basic-device',
+  component: defineAsyncComponent(() => import('./ui/BasicDevice.vue')),
+};

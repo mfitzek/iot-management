@@ -3,16 +3,6 @@
   "sourceRoot": "libs/custom-device-manager/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/custom-device-manager",
-        "main": "libs/custom-device-manager/src/index.ts",
-        "tsConfig": "libs/custom-device-manager/tsconfig.lib.json",
-        "assets": ["libs/custom-device-manager/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
