@@ -1,40 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { IDeviceListRow } from '@iot/device';
+import { Controller, Get, UseGuards, Req, Body, Put } from '@nestjs/common';
+import { ICreateDevicePost } from '@iot/device';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { DeviceService } from './device.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('device')
 export class DeviceController {
+  constructor(private devices: DeviceService) {}
+
   @Get('list')
-  getDevices() {
-    const rows: IDeviceListRow[] = [
-      {
-        id: 100,
-        name: 'Test',
-        type: 'X752-AB',
-        last_data: '12.09.2022 13:52',
-        status: 'online',
-      },
-      {
-        id: 101,
-        name: 'Test2',
-        type: 'S3X-BD',
-        last_data: '12.09.2022 10:52',
-        status: 'warning',
-      },
-      {
-        id: 102,
-        name: 'Test3',
-        type: 'S3X-CMD',
-        last_data: '01.08.2022 07:52',
-        status: 'error',
-      },
-      {
-        id: 103,
-        name: 'Yum',
-        type: '3XC-XYZ',
-        last_data: '18.09.2022 20:52',
-        status: 'online',
-      },
-    ];
-    return rows;
+  getDevices(@Req() req) {
+    return this.devices.getDeviceList(req.user.id);
+  }
+
+  @Put('create')
+  createDevice(@Req() req, @Body() data: ICreateDevicePost) {
+    return this.devices.createDevice({ user_id: req.user.id, ...data });
   }
 }
