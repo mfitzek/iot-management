@@ -16,8 +16,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { DeviceTypeManager } from '@iot/custom-device-manager';
 
-const types = ['X752', 'ZY-320', 'Thermometer'];
+const types = DeviceTypeManager.instance.getTypesList();
 
 const name = ref('');
 const type = ref('');

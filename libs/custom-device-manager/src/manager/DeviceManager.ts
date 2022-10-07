@@ -40,5 +40,3 @@ export class DeviceTypeManager {
     return [...this.devices.keys()];
   }
 }
-
-export default DeviceTypeManager.instance;
