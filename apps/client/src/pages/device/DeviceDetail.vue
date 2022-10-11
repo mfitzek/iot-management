@@ -1,35 +1,27 @@
 <template>
-    <suspense>
-      <comp></comp>
-      <template #fallback>
-        idk
-      </template>
-    </suspense>
+  <suspense>
+    <comp></comp>
+    <template #fallback> idk </template>
+  </suspense>
 </template>
 
 <script setup lang="ts">
-    import customComponents from "@iot/custom-device";
+import api from '@iot/services/http';
+import { DeviceTypeManager } from '@iot/custom-device-manager';
 
+const props = defineProps({
+  id: String,
+});
 
-    const props = defineProps({
-        id: Number
-    });
+async function getDevice(id: string) {
+  const req = await api.get(`device/${id}`);
+  return req.data;
+}
 
-    const comp_name = (id:number) => {
-        if(id == 100){
-            return "hello";
-        }
-        return "sample";
-    }
+const device = await getDevice(props.id ?? '');
 
-    
-    const comp = customComponents[comp_name(props.id?? 0)];
-
-
-
-
+const comp = DeviceTypeManager.instance.getDevice(device.type).component;
+console.log(device, comp);
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

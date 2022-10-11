@@ -41,4 +41,8 @@ export class DeviceService {
     });
     return device;
   }
+
+  async getDevice(device_id: string) {
+    return this.prisma.device.findFirst({ where: { id: device_id } });
+  }
 }

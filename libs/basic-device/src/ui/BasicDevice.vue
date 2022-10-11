@@ -1,10 +1,13 @@
 <template>
-  <div></div>
+  <div>
+    <h1>Basic device</h1>
+    <q-card> Hello </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps({
-  id: Number,
+  id: String,
 });
 </script>
 
