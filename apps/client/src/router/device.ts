@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import DeviceList from '@pages/device/DeviceList.vue';
-import DeviceDetail from '@pages/device/DeviceDetail.vue';
 import CreateDevice from '@pages/device/CreateDevice.vue';
+import DeviceLayoutVue from '../layouts/DeviceLayout.vue';
 
 const authRoutes: RouteRecordRaw[] = [
   {
@@ -12,7 +12,7 @@ const authRoutes: RouteRecordRaw[] = [
   {
     path: 'detail/:id',
     name: 'DeviceDetail',
-    component: DeviceDetail,
+    component: DeviceLayoutVue,
     props: true,
   },
   {

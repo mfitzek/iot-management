@@ -1,27 +1,24 @@
 <template>
-  <suspense>
-    <comp></comp>
-    <template #fallback> idk </template>
-  </suspense>
+  <comp />
 </template>
 
 <script setup lang="ts">
 import api from '@iot/services/http';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
+import { ICustomDevice } from '@iot/custom-device';
 
 const props = defineProps({
   id: String,
 });
 
 async function getDevice(id: string) {
-  const req = await api.get(`device/${id}`);
+  const req = await api.get<ICustomDevice>(`device/${id}`);
   return req.data;
 }
 
-const device = await getDevice(props.id ?? '');
-
-const comp = DeviceTypeManager.instance.getDevice(device.type).component;
-console.log(device, comp);
+const device = await getDevice(props.id ?? '...');
+const comp = await DeviceTypeManager.instance.getDevice(device?.type ?? '')
+  .component;
 </script>
 
 <style scoped></style>
