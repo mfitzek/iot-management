@@ -18,6 +18,7 @@ function is_authenticated(): boolean {
 function logout() {
   state.value = null;
   removeHttpClientAuthToken();
+  removeLocalStorageAuthToken();
 }
 
 async function login(username: string, password: string): Promise<boolean> {
@@ -31,6 +32,7 @@ async function login(username: string, password: string): Promise<boolean> {
     .then((response) => {
       state.value = response.data;
       setHttpClientAuthToken(response.data.token);
+      setAuthStoreToLocalStorage();
       return true;
     })
     .catch(() => {
@@ -42,12 +44,30 @@ function setHttpClientAuthToken(token: string) {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
+function setAuthStoreToLocalStorage() {
+  localStorage.setItem('auth', JSON.stringify(state.value));
+}
+
+function loadAuthStoreFromLocalStorage() {
+  const local = localStorage.getItem('auth');
+  if (local) {
+    const parsed: IAuthStore = JSON.parse(local);
+    setHttpClientAuthToken(parsed.token);
+    state.value = parsed;
+  }
+}
+
 function removeHttpClientAuthToken() {
   api.defaults.headers.common['Authorization'] = '';
 }
 
+function removeLocalStorageAuthToken() {
+  localStorage.removeItem('auth');
+}
+
 export default {
   state: readonly(state),
+  loadAuthStoreFromLocalStorage,
   is_authenticated,
   logout,
   login,
