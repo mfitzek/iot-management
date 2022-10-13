@@ -29,7 +29,7 @@ export class DeviceController {
   @Get(':id')
   async getDevice(@Req() req, @Param() params) {
     const device = await this.devices.getDevice(params.id);
-    if (device?.userId === req.user.id) {
+    if (device?.owner_id === req.user.id) {
       return device;
     }
     return { message: 'Not found' };

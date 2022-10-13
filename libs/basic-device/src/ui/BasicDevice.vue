@@ -17,9 +17,13 @@
 </template>
 
 <script setup lang="ts">
+import { fetchDevice } from './store';
+
 const props = defineProps({
   id: String,
 });
+
+fetchDevice(props.id ?? '');
 </script>
 
 <style scoped></style>

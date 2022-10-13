@@ -1,6 +1,7 @@
 import { IDeviceListRow } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { IDevice } from '@iot/device';
 
 export interface ICreateDeviceData {
   user_id: string;
@@ -42,7 +43,20 @@ export class DeviceService {
     return device;
   }
 
-  async getDevice(device_id: string) {
-    return this.prisma.device.findFirst({ where: { id: device_id } });
+  async getDevice(device_id: string): Promise<IDevice | null> {
+    const dev = await this.prisma.device.findFirst({
+      where: { id: device_id },
+    });
+
+    if (!dev) return null;
+
+    return {
+      id: dev.id,
+      name: dev.name,
+      type: dev.type,
+      owner_id: dev.userId,
+      attributes: [],
+      keyValues: {},
+    };
   }
 }
