@@ -12,7 +12,7 @@ import LoadingComponent from '../pages/device/LoadingComponent.vue';
 import DeviceDetail from '../pages/device/DeviceDetail.vue';
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 </script>
 

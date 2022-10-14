@@ -20,10 +20,11 @@
 import { fetchDevice } from './store';
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
-fetchDevice(props.id ?? '');
+// init store
+fetchDevice(props.id);
 </script>
 
 <style scoped></style>
