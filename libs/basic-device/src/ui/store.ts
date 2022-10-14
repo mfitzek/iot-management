@@ -1,10 +1,18 @@
 import { IDevice } from '@iot/device';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import http_api from '@iot/services/http';
 
-export const device = ref<IDevice | null>(null);
+interface IDeviceStore {
+  device: IDevice | null;
+}
+
+const store = reactive<IDeviceStore>({
+  device: null,
+});
 
 export async function fetchDevice(id: string) {
-  const req = await http_api.get<IDevice | null>(`/api/device/${id}`);
-  device.value = req.data;
+  const req = await http_api.get<IDevice | null>(`/device/${id}`);
+  store.device = req.data;
 }
+
+export default store;

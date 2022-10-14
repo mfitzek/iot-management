@@ -1,5 +1,5 @@
 <template>
-  <comp />
+  <comp :id="id" />
 </template>
 
 <script setup lang="ts">
@@ -8,7 +8,7 @@ import { DeviceTypeManager } from '@iot/custom-device-manager';
 import { ICustomDevice } from '@iot/custom-device';
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 async function getDevice(id: string) {
