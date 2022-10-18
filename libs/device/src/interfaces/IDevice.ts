@@ -5,10 +5,12 @@ export interface IDevice {
   owner_id: string;
 
   attributes: IAttribute[];
-  keyValues: { [key: string]: string };
+  keyValues: KeyValues;
 }
 
 export interface IAttribute {
   name: string;
   type: 'number' | 'string' | 'any';
 }
+
+export type KeyValues = { [key: string]: string };

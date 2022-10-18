@@ -31,14 +31,14 @@ model Device {
 }
 
 model Attribute {
-  id       String   @id @default(cuid())
-  name     String
-  type     String
-  device   Device   @relation(fields: [deviceId], references: [id])
-  owner    User     @relation(fields: [userId], references: [id])
-  deviceId String
-  userId   String
-  Record   Record[]
+  id        String      @id @default(cuid())
+  name      String
+  type      String
+  device    Device      @relation(fields: [deviceId], references: [id])
+  owner     User        @relation(fields: [userId], references: [id])
+  deviceId  String
+  userId    String
+  telemetry Telemetry[]
 }
 
 model KeyValue {
@@ -49,7 +49,7 @@ model KeyValue {
   deviceId String
 }
 
-model Record {
+model Telemetry {
   id          String    @id @default(cuid())
   date        DateTime
   attribute   Attribute @relation(fields: [attributeId], references: [id])
