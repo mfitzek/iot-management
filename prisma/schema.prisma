@@ -11,18 +11,48 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  username String
-  email    String
-  password String
-  salt     String
-  Device   Device[]
+  id        String      @id @default(cuid())
+  username  String
+  email     String
+  password  String
+  salt      String
+  Device    Device[]
+  Attribute Attribute[]
 }
 
 model Device {
-  id     String @id @default(cuid())
-  name   String
-  type   String
-  owner  User   @relation(fields: [userId], references: [id])
-  userId String
+  id        String      @id @default(cuid())
+  name      String
+  type      String
+  owner     User        @relation(fields: [userId], references: [id])
+  userId    String
+  Attribute Attribute[]
+  KeyValue  KeyValue[]
+}
+
+model Attribute {
+  id       String   @id @default(cuid())
+  name     String
+  type     String
+  device   Device   @relation(fields: [deviceId], references: [id])
+  owner    User     @relation(fields: [userId], references: [id])
+  deviceId String
+  userId   String
+  Record   Record[]
+}
+
+model KeyValue {
+  id       String @id @default(cuid())
+  key      String
+  value    String
+  device   Device @relation(fields: [deviceId], references: [id])
+  deviceId String
+}
+
+model Record {
+  id          String    @id @default(cuid())
+  date        DateTime
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  value       String
+  attributeId String
 }
