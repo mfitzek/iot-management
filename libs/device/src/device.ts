@@ -33,4 +33,10 @@ export class Device {
       owner_id: this.owner_id,
     };
   }
+
+  async delete() {
+    // todo remove device;
+  }
+
+  async update(data: any) {}
 }
