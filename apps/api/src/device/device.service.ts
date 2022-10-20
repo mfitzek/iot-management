@@ -2,12 +2,20 @@ import { IDeviceListRow } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { IDevice } from '@iot/device';
+import { Attribute, Device, Prisma } from '@prisma/client';
 
 export interface ICreateDeviceData {
   user_id: string;
   name: string;
   type: string;
 }
+
+type DeviceInclude = Prisma.DeviceGetPayload<{
+  include: {
+    Attribute: true;
+    KeyValue: true;
+  };
+}>;
 
 @Injectable()
 export class DeviceService {
@@ -32,6 +40,16 @@ export class DeviceService {
     });
   }
 
+  async getAllDevices(): Promise<IDevice[]> {
+    const data = await this.prisma.device.findMany({
+      include: {
+        Attribute: true,
+        KeyValue: true,
+      },
+    });
+    return data.map((device): IDevice => this.parseToIDevice(device));
+  }
+
   async createDevice(data: ICreateDeviceData) {
     const device = await this.prisma.device.create({
       data: {
@@ -46,17 +64,25 @@ export class DeviceService {
   async getDevice(device_id: string): Promise<IDevice | null> {
     const dev = await this.prisma.device.findFirst({
       where: { id: device_id },
+      include: {
+        Attribute: true,
+        KeyValue: true,
+      },
     });
 
     if (!dev) return null;
 
+    return this.parseToIDevice(dev);
+  }
+
+  parseToIDevice(device: DeviceInclude): IDevice {
     return {
-      id: dev.id,
-      name: dev.name,
-      type: dev.type,
-      owner_id: dev.userId,
-      attributes: [],
-      keyValues: {},
+      id: device.id,
+      name: device.name,
+      type: device.type,
+      owner_id: device.userId,
+      attributes: device.Attribute,
+      keyValues: device.KeyValue,
     };
   }
 }

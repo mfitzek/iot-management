@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { Device } from '@iot/device';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DeviceManager {
@@ -11,7 +12,8 @@ export class DeviceManager {
   }
 
   async initDevices() {
-    // TODO: initialize all devices
+    const devices_data = await this.devices.getAllDevices();
+    this.device_list = devices_data.map((device) => new Device(null, device));
   }
 
   async getUserDeviceList(user_id: string): Promise<Device[]> {
