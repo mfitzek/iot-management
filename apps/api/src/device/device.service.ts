@@ -55,8 +55,14 @@ export class DeviceService implements IDeviceService {
     if (device) return this.parseToIDevice(device);
     return null;
   }
-  removeDevice(id: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async removeDevice(id: string): Promise<boolean> {
+    const device = await this.prisma.device.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return device != null;
   }
 
   async getDeviceList(): Promise<IDevice[]> {

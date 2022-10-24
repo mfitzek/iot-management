@@ -11,7 +11,7 @@ export class DeviceManager {
   }
 
   async initDevices() {
-    const devices_data = await this.devices.getAllDevices();
+    const devices_data = await this.devices.getDeviceList();
     this.device_list = devices_data.map((device) => new Device(null, device));
   }
 
