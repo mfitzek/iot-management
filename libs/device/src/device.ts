@@ -1,4 +1,4 @@
-import { IAttribute, IDevice, KeyValues } from './interfaces/IDevice';
+import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
 
 export class Device {
@@ -8,7 +8,7 @@ export class Device {
   owner_id: string;
 
   attributes: IAttribute[];
-  keyValues: KeyValues;
+  keyValues: IKeyValue[];
 
   constructor(protected db: IDeviceService, data: IDevice) {
     this.id = data.id;

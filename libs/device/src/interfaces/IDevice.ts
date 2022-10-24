@@ -1,5 +1,5 @@
 export interface IDevice {
-  id: string;
+  id?: string;
   name: string;
   type: string;
   owner_id: string;

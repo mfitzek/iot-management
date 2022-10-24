@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { Device } from '@iot/device';
-import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DeviceManager {

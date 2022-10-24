@@ -1,4 +1,4 @@
-import { IDeviceListRow } from '@iot/device';
+import { IDeviceListRow, IDeviceService } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { IDevice } from '@iot/device';
@@ -18,47 +18,55 @@ type DeviceInclude = Prisma.DeviceGetPayload<{
 }>;
 
 @Injectable()
-export class DeviceService {
+export class DeviceService implements IDeviceService {
   constructor(private prisma: PrismaService) {}
 
-  async getDeviceList(user_id: string): Promise<IDeviceListRow[]> {
-    const devices = await this.prisma.device.findMany({
-      where: {
-        userId: user_id,
+  async createDevice(data: IDevice): Promise<IDevice> {
+    const device = await this.prisma.device.create({
+      data: {
+        name: data.name,
+        type: data.type,
+        userId: data.owner_id,
       },
-    });
 
-    return devices.map((device) => {
-      const row: IDeviceListRow = {
-        id: device.id,
-        name: device.name,
-        type: device.type,
-        last_data: new Date().toLocaleString(),
-        status: 'online',
-      };
-      return row;
-    });
-  }
-
-  async getAllDevices(): Promise<IDevice[]> {
-    const data = await this.prisma.device.findMany({
       include: {
         Attribute: true,
         KeyValue: true,
       },
     });
-    return data.map((device): IDevice => this.parseToIDevice(device));
-  }
 
-  async createDevice(data: ICreateDeviceData) {
-    const device = await this.prisma.device.create({
+    return this.parseToIDevice(device);
+  }
+  async updateDevice(id: string, data: IDevice): Promise<IDevice | null> {
+    const device = await this.prisma.device.update({
+      where: {
+        id: id,
+      },
       data: {
-        userId: data.user_id,
         name: data.name,
         type: data.type,
+        userId: data.owner_id,
+      },
+      include: {
+        Attribute: true,
+        KeyValue: true,
       },
     });
-    return device;
+    if (device) return this.parseToIDevice(device);
+    return null;
+  }
+  removeDevice(id: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  async getDeviceList(): Promise<IDevice[]> {
+    const devices = await this.prisma.device.findMany({
+      include: {
+        Attribute: true,
+        KeyValue: true,
+      },
+    });
+    return devices.map((device) => this.parseToIDevice(device));
   }
 
   async getDevice(device_id: string): Promise<IDevice | null> {
@@ -75,7 +83,7 @@ export class DeviceService {
     return this.parseToIDevice(dev);
   }
 
-  parseToIDevice(device: DeviceInclude): IDevice {
+  private parseToIDevice(device: DeviceInclude): IDevice {
     return {
       id: device.id,
       name: device.name,
