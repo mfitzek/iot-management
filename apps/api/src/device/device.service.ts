@@ -1,4 +1,4 @@
-import { IDeviceListRow, IDeviceService } from '@iot/device';
+import { IAttribute, IDeviceListRow, IDeviceService } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { IDevice } from '@iot/device';
@@ -28,7 +28,6 @@ export class DeviceService implements IDeviceService {
         type: data.type,
         userId: data.owner_id,
       },
-
       include: {
         Attribute: true,
         KeyValue: true,
@@ -38,6 +37,21 @@ export class DeviceService implements IDeviceService {
     return this.parseToIDevice(device);
   }
   async updateDevice(id: string, data: IDevice): Promise<IDevice | null> {
+    const attributes = await this.prisma.attribute.findMany({
+      where: {
+        deviceId: data.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const attrToUpdate = data.attributes.filter((attr) => attr.id);
+    const attrToCreate = data.attributes.filter((attr) => !attr.id);
+    const attrToDelete = attributes.filter(
+      (attr) => data.attributes.some((id) => id === attr) == false
+    );
+
     const device = await this.prisma.device.update({
       where: {
         id: id,
@@ -52,6 +66,7 @@ export class DeviceService implements IDeviceService {
         KeyValue: true,
       },
     });
+
     if (device) return this.parseToIDevice(device);
     return null;
   }
@@ -98,5 +113,16 @@ export class DeviceService implements IDeviceService {
       attributes: device.Attribute,
       keyValues: device.KeyValue,
     };
+  }
+
+  private async createAttribute(attribute: IAttribute): Promise<IAttribute> {
+    return await this.prisma.attribute.create({
+      data: {
+        name: attribute.name,
+        type: attribute.type,
+        deviceId: attribute.deviceId,
+        userId: attribute.userId,
+      },
+    });
   }
 }
