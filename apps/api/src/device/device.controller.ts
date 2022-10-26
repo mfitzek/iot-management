@@ -25,7 +25,7 @@ export class DeviceController {
 
   @Get('list')
   getDevices(@Req() req) {
-    return this.devices.getDeviceList(req.user.id);
+    return this.device_manager.getUserDeviceList(req.user.id);
   }
 
   @Put('create')
