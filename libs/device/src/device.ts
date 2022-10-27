@@ -2,7 +2,7 @@ import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
 
 export class Device {
-  id: string;
+  id?: string;
   name: string;
   type: string;
   owner_id: string;
@@ -20,7 +20,7 @@ export class Device {
   }
 
   async save() {
-    return this.db.UpdateDevice(this.id, this.getData());
+    throw new Error('Not implemented');
   }
 
   getData(): IDevice {
@@ -35,8 +35,10 @@ export class Device {
   }
 
   async delete() {
-    // todo remove device;
+    throw new Error('Not implemented');
   }
 
-  async update(data: any) {}
+  async update(data: any) {
+    throw new Error('Not implemented');
+  }
 }

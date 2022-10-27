@@ -30,7 +30,12 @@ export class DeviceController {
 
   @Put('create')
   createDevice(@Req() req, @Body() data: ICreateDevicePost) {
-    return this.devices.createDevice({ user_id: req.user.id, ...data });
+    return this.device_manager.createDevice({
+      ...data,
+      owner_id: req.user.id as string,
+      attributes: [],
+      keyValues: [],
+    });
   }
 
   @Get(':id')
