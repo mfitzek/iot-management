@@ -2,10 +2,15 @@
   <div>
     <q-card class="q-ma-lg">
       <q-card-section>
-        <h3>{{ store.device?.name }}</h3>
+        <q-tabs v-model="tab" dense>
+          <q-tab name="info" icon="info" label="Description" />
+          <q-tab name="attributes" icon="s_category" label="Attributes" />
+          <q-tab name="movies" icon="movie" label="Movies" />
+        </q-tabs>
       </q-card-section>
       <q-card-section>
-        <DeviceInformation></DeviceInformation>
+        <!-- <DeviceInformation></DeviceInformation> -->
+        <component :is="currentView"> </component>
       </q-card-section>
     </q-card>
   </div>
@@ -14,10 +19,24 @@
 <script setup lang="ts">
 import { fetchDevice } from './store';
 import DeviceInformation from './components/DeviceInformation.vue';
+import AttributesView from './views/Attributes.vue';
 import store from './store';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   id: { type: String, required: true },
+});
+
+const views: { [key: string]: any } = {
+  info: DeviceInformation,
+  attributes: AttributesView,
+};
+
+const tab = ref('info');
+
+const currentView = computed(() => {
+  const currentTab = tab.value;
+  return views[currentTab] || null;
 });
 
 // init store
