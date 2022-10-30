@@ -1,5 +1,5 @@
 <template>
-  <div class="q-gutter-md">
+  <div class="q-gutter-md info_form">
     <q-input v-model="name" type="text" label="Device name" filled />
     <q-select v-model="type" :options="options" label="Device type" filled />
   </div>
@@ -15,4 +15,9 @@ const name = ref(store.device?.name);
 const type = ref(store.device?.type);
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+
+.info_form{
+  max-width: 400px;
+}
+</style>
