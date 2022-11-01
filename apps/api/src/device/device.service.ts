@@ -1,8 +1,7 @@
-import { IAttribute, IDeviceListRow, IDeviceService } from '@iot/device';
+import { IAttribute, IDevice, IDeviceService } from '@iot/device';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { IDevice } from '@iot/device';
-import { Attribute, Device, Prisma } from '@prisma/client';
 
 export interface ICreateDeviceData {
   user_id: string;
@@ -37,7 +36,7 @@ export class DeviceService implements IDeviceService {
     return this.parseToIDevice(device);
   }
   async updateDevice(id: string, data: IDevice): Promise<IDevice | null> {
-    //TODO: await this.updateDeviceAttributes(data);
+    this.updateDeviceAttributes(data);
     const device = await this.prisma.device.update({
       where: {
         id: id,
@@ -101,57 +100,53 @@ export class DeviceService implements IDeviceService {
     };
   }
 
-  private async updateDeviceAttributes(data: IDevice) {
-    const attributes = await this.prisma.attribute.findMany({
+  private updateDeviceAttributes(data: IDevice) {
+    const attrToUpdate = data.attributes
+      .filter((attr) => attr.id != null && attr.to_be_deleted == null)
+      .map((attr) => this.updateAttribute(attr.id, attr));
+
+    const attrToCreate = data.attributes
+      .filter((attr) => attr.id == null)
+      .map((attr) => this.createAttribute(data.owner_id, data.id, attr));
+
+    const attrToDelete = data.attributes
+      .filter((attr) => attr.to_be_deleted === true)
+      .map((attr) => attr.id);
+
+    const deleteAttributes = this.prisma.attribute.deleteMany({
       where: {
-        deviceId: data.id,
-      },
-      select: {
-        id: true,
+        id: {
+          in: attrToDelete,
+        },
       },
     });
 
-    const attrToUpdate = data.attributes.filter((attr) => attr.id);
-    const attrToCreate = data.attributes.filter((attr) => !attr.id);
-    const attrToDelete = attributes.filter(
-      (attr) => data.attributes.some((id) => id === attr) == false
-    );
-    const promises: Promise<any>[] = [];
-    promises.push(
-      ...attrToUpdate.map((attr) => this.updateAttribute(attr.id, attr))
-    );
-    promises.push(
-      ...attrToCreate.map((attr) =>
-        this.createAttribute({
-          id: null,
-          name: attr.name,
-          type: attr.type,
-          userId: data.owner_id,
-          deviceId: data.id,
-        })
-      )
-    );
-    await Promise.all(promises);
+    return this.prisma.$transaction([
+      deleteAttributes,
+      ...attrToCreate,
+      ...attrToUpdate,
+    ]);
   }
 
-  private async createAttribute(attribute: Attribute): Promise<Attribute> {
-    return await this.prisma.attribute.create({
-      data: attribute,
-    });
-  }
-
-  private async updateAttribute(
-    id: string,
+  private createAttribute(
+    user_id: string,
+    device_id: string,
     attribute: IAttribute
-  ): Promise<Attribute> {
-    return await this.prisma.attribute.update({
+  ) {
+    return this.prisma.attribute.create({
+      data: {
+        name: attribute.name,
+        type: attribute.type,
+        userId: user_id,
+        deviceId: device_id,
+      },
+    });
+  }
+
+  private updateAttribute(id: string, attribute: IAttribute) {
+    return this.prisma.attribute.update({
       where: { id: id },
       data: attribute,
     });
-  }
-
-  private async delete(id: string): Promise<boolean> {
-    const deleted = await this.prisma.attribute.delete({ where: { id: id } });
-    return deleted != null;
   }
 }
