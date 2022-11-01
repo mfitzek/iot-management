@@ -1,8 +1,7 @@
 <template>
   <div class="row q-gutter-md">
     <div class="col">
-      <q-table :rows="data" :columns="columns" @row-click="rowClick">
-      </q-table>
+      <q-table :rows="data" :columns="columns" @row-click="rowClick"> </q-table>
     </div>
     <div class="col">
       <div v-if="selected" class="q-gutter-sm q-mb-sm">
@@ -15,14 +14,13 @@
           :options="typeOptions"
         />
         <q-btn color="green" label="Update" />
-        <q-btn color="red" label="Remove " @click="removeCurrent"/>
-
+        <q-btn color="red" label="Remove " @click="removeCurrent" />
       </div>
       <q-btn
-            color="primary"
-            label="Add attribute"
-            @click="addAttribute"
-          ></q-btn>
+        color="primary"
+        label="Add attribute"
+        @click="addAttribute"
+      ></q-btn>
     </div>
   </div>
 </template>
@@ -52,11 +50,11 @@ function rowClick({}, row: IAttribute) {
   type.value = row.type;
 }
 
-function removeCurrent(){
+function removeCurrent() {
   const attr = selected.value;
-  if(attr){
+  if (attr) {
     const idx = data.value.indexOf(attr);
-    data.value.splice(idx,1);
+    data.value.splice(idx, 1);
   }
 
   selected.value = null;
