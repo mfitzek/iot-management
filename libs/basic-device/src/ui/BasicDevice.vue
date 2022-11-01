@@ -3,9 +3,9 @@
     <q-card class="q-ma-lg">
       <q-card-section>
         <q-tabs v-model="tab" dense>
-          <q-tab name="info" icon="info" label="Description" />
+          <q-tab name="info" icon="info" label="Information" />
           <q-tab name="attributes" icon="s_category" label="Attributes" />
-          <q-tab name="movies" icon="movie" label="Movies" />
+          <q-tab name="connection" icon="s_settings_input_antenna" label="Connection" />
         </q-tabs>
       </q-card-section>
       <q-card-section>
@@ -20,6 +20,7 @@
 import { fetchDevice } from './store';
 import DeviceInformation from './components/DeviceInformation.vue';
 import AttributesView from './views/Attributes.vue';
+import ConnectionView from "./views/Connection.vue";
 import store from './store';
 import { computed, ref } from 'vue';
 
@@ -30,6 +31,7 @@ const props = defineProps({
 const views: { [key: string]: any } = {
   info: DeviceInformation,
   attributes: AttributesView,
+  connection: ConnectionView
 };
 
 const tab = ref('info');
