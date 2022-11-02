@@ -1,9 +1,9 @@
-import { IDevice } from './IDevice';
+import { IDeviceData } from './IDevice';
 
 export interface IDeviceService {
-  getDeviceList(): Promise<IDevice[]>;
-  getDevice(id: string): Promise<IDevice | null>;
-  createDevice(data: IDevice): Promise<IDevice | null>;
-  updateDevice(id: string, data: IDevice): Promise<IDevice | null>;
+  getDeviceList(): Promise<IDeviceData[]>;
+  getDevice(id: string): Promise<IDeviceData | null>;
+  createDevice(data: IDeviceData): Promise<IDeviceData | null>;
+  updateDevice(id: string, data: IDeviceData): Promise<IDeviceData | null>;
   removeDevice(id: string): Promise<boolean>;
 }

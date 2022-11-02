@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
-import { Device, IDevice } from '@iot/device';
+import { Device, IDeviceData } from '@iot/device';
 
 @Injectable()
 export class DeviceManager {
@@ -17,14 +17,14 @@ export class DeviceManager {
     );
   }
 
-  async createDevice(data: IDevice) {
+  async createDevice(data: IDeviceData) {
     const created = await this.devices.createDevice(data);
     const device = new Device(this.devices, created);
     this.device_list.push(device);
     return device.getData();
   }
 
-  async getUserDeviceList(user_id: string): Promise<IDevice[]> {
+  async getUserDeviceList(user_id: string): Promise<IDeviceData[]> {
     return this.device_list
       .filter((dev) => dev.owner_id === user_id)
       .map((dev) => dev.getData());

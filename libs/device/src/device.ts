@@ -1,4 +1,4 @@
-import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
+import { IAttribute, IDeviceData, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
 
 export class Device {
@@ -10,7 +10,7 @@ export class Device {
   attributes: IAttribute[];
   keyValues: IKeyValue[];
 
-  constructor(protected db: IDeviceService, data: IDevice) {
+  constructor(protected db: IDeviceService, data: IDeviceData) {
     this.id = data.id;
     this.name = data.name;
     this.type = data.type;
@@ -23,7 +23,7 @@ export class Device {
     throw new Error('Not implemented');
   }
 
-  getData(): IDevice {
+  getData(): IDeviceData {
     return {
       id: this.id,
       name: this.name,

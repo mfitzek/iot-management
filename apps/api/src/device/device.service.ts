@@ -1,4 +1,4 @@
-import { IAttribute, IDevice, IDeviceService } from '@iot/device';
+import { IAttribute, IDeviceData, IDeviceService } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -20,7 +20,7 @@ type DeviceInclude = Prisma.DeviceGetPayload<{
 export class DeviceService implements IDeviceService {
   constructor(private prisma: PrismaService) {}
 
-  async createDevice(data: IDevice): Promise<IDevice> {
+  async createDevice(data: IDeviceData): Promise<IDeviceData> {
     const device = await this.prisma.device.create({
       data: {
         name: data.name,
@@ -35,7 +35,10 @@ export class DeviceService implements IDeviceService {
 
     return this.parseToIDevice(device);
   }
-  async updateDevice(id: string, data: IDevice): Promise<IDevice | null> {
+  async updateDevice(
+    id: string,
+    data: IDeviceData
+  ): Promise<IDeviceData | null> {
     this.updateDeviceAttributes(data);
     const device = await this.prisma.device.update({
       where: {
@@ -65,7 +68,7 @@ export class DeviceService implements IDeviceService {
     return device != null;
   }
 
-  async getDeviceList(): Promise<IDevice[]> {
+  async getDeviceList(): Promise<IDeviceData[]> {
     const devices = await this.prisma.device.findMany({
       include: {
         Attribute: true,
@@ -75,7 +78,7 @@ export class DeviceService implements IDeviceService {
     return devices.map((device) => this.parseToIDevice(device));
   }
 
-  async getDevice(device_id: string): Promise<IDevice | null> {
+  async getDevice(device_id: string): Promise<IDeviceData | null> {
     const dev = await this.prisma.device.findFirst({
       where: { id: device_id },
       include: {
@@ -89,7 +92,7 @@ export class DeviceService implements IDeviceService {
     return this.parseToIDevice(dev);
   }
 
-  private parseToIDevice(device: DeviceInclude): IDevice {
+  private parseToIDevice(device: DeviceInclude): IDeviceData {
     return {
       id: device.id,
       name: device.name,
@@ -100,7 +103,7 @@ export class DeviceService implements IDeviceService {
     };
   }
 
-  private updateDeviceAttributes(data: IDevice) {
+  private updateDeviceAttributes(data: IDeviceData) {
     const attrToUpdate = data.attributes
       .filter((attr) => attr.id != null && attr.to_be_deleted == null)
       .map((attr) => this.updateAttribute(attr.id, attr));
