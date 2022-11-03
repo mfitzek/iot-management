@@ -10,7 +10,7 @@ import {
   Delete,
   NotFoundException,
 } from '@nestjs/common';
-import { ICreateDevicePost } from '@iot/device';
+import { ICreateDevicePost, IDeviceData } from '@iot/device';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { DeviceService } from './device.service';
 import { DeviceManager } from './device.manager.service';
@@ -48,16 +48,13 @@ export class DeviceController {
   }
 
   @Post(':id')
-  async updateDevice(@Req() req, @Param() params) {
+  async updateDevice(@Req() req, @Param() params, @Body() data: IDeviceData) {
     const device = await this.device_manager.getUserDevice(
       params.id,
       req.user.id
     );
-
     if (!device) throw new NotFoundException();
-
-    device.update({});
-    return device.getData();
+    return device.update(data);
   }
 
   @Delete(':id')

@@ -38,7 +38,20 @@ export class Device {
     throw new Error('Not implemented');
   }
 
-  async update(data: any) {
-    throw new Error('Not implemented');
+  async update(data: IDeviceData) {
+    await this.db.updateDevice(this.id!, data);
+    await this.fetchData();
+    return this.getData();
+  }
+
+  async fetchData() {
+    const data = await this.db.getDevice(this.id!);
+    if (data) {
+      this.name = data.name;
+      this.type = data.type;
+      this.attributes = data.attributes;
+      this.keyValues = data.keyValues;
+      this.owner_id = data.owner_id;
+    }
   }
 }

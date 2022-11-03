@@ -39,7 +39,7 @@ export class DeviceService implements IDeviceService {
     id: string,
     data: IDeviceData
   ): Promise<IDeviceData | null> {
-    this.updateDeviceAttributes(data);
+    await this.updateDeviceAttributes(data);
     const device = await this.prisma.device.update({
       where: {
         id: id,

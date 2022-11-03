@@ -15,4 +15,14 @@ export async function fetchDevice(id: string) {
   store.device = req.data;
 }
 
+export async function updateCurrentDevice() {
+  const id = store.device!.id!;
+
+  const req = await http_api.post<IDeviceData | null>(
+    `/device/${id}`,
+    store.device
+  );
+  store.device = req.data;
+}
+
 export default store;
