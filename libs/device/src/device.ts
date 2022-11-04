@@ -35,7 +35,7 @@ export class Device {
   }
 
   async delete() {
-    throw new Error('Not implemented');
+    return await this.db.removeDevice(this.id!);
   }
 
   async update(data: IDeviceData) {

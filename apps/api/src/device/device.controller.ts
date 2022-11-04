@@ -64,6 +64,5 @@ export class DeviceController {
       req.user.id
     );
     return removed;
-    // TODO: return some message with status code depending on removed
   }
 }

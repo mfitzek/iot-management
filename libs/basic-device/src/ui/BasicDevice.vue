@@ -22,10 +22,9 @@
 
 <script setup lang="ts">
 import { fetchDevice } from './store';
-import DeviceInformation from './components/DeviceInformation.vue';
+import DeviceInformation from './views/DeviceInformation.vue';
 import AttributesView from './views/Attributes.vue';
 import ConnectionView from './views/Connection.vue';
-import store from './store';
 import { computed, ref } from 'vue';
 
 const props = defineProps({

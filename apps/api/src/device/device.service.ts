@@ -103,16 +103,16 @@ export class DeviceService implements IDeviceService {
     };
   }
 
-  private updateDeviceAttributes(data: IDeviceData) {
-    const attrToUpdate = data.attributes
+  private updateDeviceAttributes(device: IDeviceData) {
+    const attrToUpdate = device.attributes
       .filter((attr) => attr.id != null && attr.to_be_deleted == null)
       .map((attr) => this.updateAttribute(attr.id, attr));
 
-    const attrToCreate = data.attributes
+    const attrToCreate = device.attributes
       .filter((attr) => attr.id == null)
-      .map((attr) => this.createAttribute(data.owner_id, data.id, attr));
+      .map((attr) => this.createAttribute(device.id, attr));
 
-    const attrToDelete = data.attributes
+    const attrToDelete = device.attributes
       .filter((attr) => attr.to_be_deleted === true)
       .map((attr) => attr.id);
 
@@ -131,16 +131,11 @@ export class DeviceService implements IDeviceService {
     ]);
   }
 
-  private createAttribute(
-    user_id: string,
-    device_id: string,
-    attribute: IAttribute
-  ) {
+  private createAttribute(device_id: string, attribute: IAttribute) {
     return this.prisma.attribute.create({
       data: {
         name: attribute.name,
         type: attribute.type,
-        userId: user_id,
         deviceId: device_id,
       },
     });

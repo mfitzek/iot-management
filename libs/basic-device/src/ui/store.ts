@@ -25,4 +25,15 @@ export async function updateCurrentDevice() {
   store.device = req.data;
 }
 
+export async function removeCurrentDevice() {
+  const id = store.device!.id!;
+
+  const req = await http_api.delete<boolean>(`/device/${id}`);
+  if (req.data) {
+    store.device = null;
+  }
+
+  return req.data;
+}
+
 export default store;
