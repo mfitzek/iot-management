@@ -40,6 +40,7 @@ export class DeviceService implements IDeviceService {
     data: IDeviceData
   ): Promise<IDeviceData | null> {
     await this.updateDeviceAttributes(data);
+    await this.updateDeviceKeyValues(data);
     const device = await this.prisma.device.update({
       where: {
         id: id,
@@ -129,6 +130,39 @@ export class DeviceService implements IDeviceService {
       ...attrToCreate,
       ...attrToUpdate,
     ]);
+  }
+
+  private async updateDeviceKeyValues(device: IDeviceData) {
+    const toUpsert = device.keyValues
+      .filter((kv) => kv.to_be_deleted == null)
+      .map((kv) =>
+        this.prisma.keyValue.upsert({
+          where: {
+            id: kv.id,
+          },
+          create: {
+            key: kv.key,
+            value: kv.value,
+            deviceId: device.id,
+          },
+          update: {
+            key: kv.key,
+            value: kv.value,
+          },
+        })
+      );
+
+    const toDelete = device.keyValues
+      .filter((kv) => kv.to_be_deleted === true)
+      .map((kv) =>
+        this.prisma.keyValue.delete({
+          where: {
+            id: kv.id,
+          },
+        })
+      );
+
+    await this.prisma.$transaction([...toUpsert, ...toDelete]);
   }
 
   private createAttribute(device_id: string, attribute: IAttribute) {
