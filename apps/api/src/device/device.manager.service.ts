@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
-import { Device, IDeviceData } from '@iot/device';
+import { Device, IDevice, IDeviceData } from '@iot/device';
+import { DeviceTypeManager } from '@iot/custom-device-manager';
 
 @Injectable()
 export class DeviceManager {
-  device_list: Device[] = [];
+  device_list: IDevice[] = [];
 
   constructor(private devices: DeviceService) {
     this.initDevices();
@@ -13,13 +14,13 @@ export class DeviceManager {
   async initDevices() {
     const devices_data = await this.devices.getDeviceList();
     this.device_list = devices_data.map(
-      (device) => new Device(this.devices, device)
+      (device_data) => this.createCustomDevice(device_data)
     );
   }
 
   async createDevice(data: IDeviceData) {
     const created = await this.devices.createDevice(data);
-    const device = new Device(this.devices, created);
+    const device = this.createCustomDevice(created);
     this.device_list.push(device);
     return device.getData();
   }
@@ -33,7 +34,7 @@ export class DeviceManager {
   async getUserDevice(
     device_id: string,
     user_id: string
-  ): Promise<Device | undefined> {
+  ): Promise<IDevice | undefined> {
     return this.device_list.find(
       (dev) => dev.id === device_id && dev.owner_id === user_id
     );
@@ -49,4 +50,10 @@ export class DeviceManager {
 
     return true;
   }
+
+  private createCustomDevice(data: IDeviceData){
+    const custom_device = DeviceTypeManager.instance.getDevice(data.type);
+    return custom_device.factory(data, this.devices);
+  }
+
 }

@@ -1,3 +1,13 @@
+export interface IDevice {
+
+  id: string;
+  owner_id: string
+
+  getData(): IDeviceData,
+  update(data: IDeviceData): Promise<IDeviceData>,
+  delete(): Promise<boolean>
+}
+
 export interface IDeviceData {
   id?: string;
   name: string;

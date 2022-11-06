@@ -10,7 +10,7 @@ export class DeviceTypeManager {
   private static _instance = new DeviceTypeManager();
 
   private constructor() {
-    this.registerDeviceType('basic-device', BasicDevice);
+    this.registerDeviceType('basic-device', new BasicDevice());
   }
 
   public static get instance() {
