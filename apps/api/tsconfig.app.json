@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": false,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["node"],
@@ -8,5 +9,5 @@
     "target": "es2015"
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "webpack.config.js"]
 }
