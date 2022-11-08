@@ -5,6 +5,7 @@ import Home from '@pages/Home.vue';
 import NotFound from '@pages/errors/404.vue';
 import authRoutes from './auth';
 import deviceRoutes from './device';
+import telemetryRoutes from './telemetry';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -15,6 +16,11 @@ const routes: RouteRecordRaw[] = [
       { path: '', name: 'Index page', component: Home },
       { path: '/auth', children: authRoutes },
       { path: '/device', children: deviceRoutes, meta: { requiresAuth: true } },
+      {
+        path: '/telemtry',
+        children: telemetryRoutes,
+        meta: { requiresAuth: true },
+      },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ],
   },

@@ -49,7 +49,7 @@ export default defineComponent({
       {
         name: 'Data',
         icon: 'sym_o_monitoring',
-        route: { name: 'DataMain' },
+        route: { name: 'Telemetry' },
         auth_level: 0,
       },
       {
