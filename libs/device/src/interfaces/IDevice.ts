@@ -1,11 +1,10 @@
 export interface IDevice {
-
   id: string;
-  owner_id: string
+  owner_id: string;
 
-  getData(): IDeviceData,
-  update(data: IDeviceData): Promise<IDeviceData>,
-  delete(): Promise<boolean>
+  getData(): IDeviceData;
+  update(data: IDeviceData): Promise<IDeviceData>;
+  delete(): Promise<boolean>;
 }
 
 export interface IDeviceData {
@@ -30,4 +29,11 @@ export interface IKeyValue {
   key: string;
   value: string;
   to_be_deleted?: boolean;
+}
+
+export interface ITelemetry {
+  id?: string;
+  attribute: IAttribute;
+  date: Date;
+  value: string;
 }
