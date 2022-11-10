@@ -55,7 +55,7 @@ export default defineComponent({
       {
         name: 'Settings',
         icon: 'sym_o_settings',
-        route: { name: 'DatabaseSettings' },
+        route: { name: 'SettingsMain' },
         auth_level: 2,
       },
     ];

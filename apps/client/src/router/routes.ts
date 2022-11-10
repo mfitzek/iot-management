@@ -6,6 +6,7 @@ import NotFound from '@pages/errors/404.vue';
 import authRoutes from './auth';
 import deviceRoutes from './device';
 import telemetryRoutes from './telemetry';
+import settingsRoutes from './settings';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -19,6 +20,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/telemtry',
         children: telemetryRoutes,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/settings',
+        children: settingsRoutes,
         meta: { requiresAuth: true },
       },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
