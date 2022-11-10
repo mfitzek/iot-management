@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/gateway/mqtt/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/gateway/mqtt",
+        "tsConfig": "libs/gateway/mqtt/tsconfig.lib.json",
+        "packageJson": "libs/gateway/mqtt/package.json",
+        "main": "libs/gateway/mqtt/src/index.ts",
+        "assets": ["libs/gateway/mqtt/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/gateway/mqtt/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/gateway/mqtt"],
+      "options": {
+        "jestConfig": "libs/gateway/mqtt/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

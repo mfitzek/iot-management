@@ -9,6 +9,8 @@
     "custom-device": "libs/custom-device",
     "custom-device-manager": "libs/custom-device-manager",
     "device": "libs/device",
+    "gateway-http": "libs/gateway/http",
+    "gateway-mqtt": "libs/gateway/mqtt",
     "services-http": "libs/services/http",
     "telemetry": "libs/telemetry",
     "user": "libs/user"

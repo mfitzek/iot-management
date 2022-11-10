@@ -21,6 +21,8 @@
       "@iot/custom-device": ["libs/custom-device/src/index.ts"],
       "@iot/custom-device-manager": ["libs/custom-device-manager/src/index.ts"],
       "@iot/device": ["libs/device/src/index.ts"],
+      "@iot/gateway/http": ["libs/gateway/http/src/index.ts"],
+      "@iot/gateway/mqtt": ["libs/gateway/mqtt/src/index.ts"],
       "@iot/services/http": ["libs/services/http/src/index.ts"],
       "@iot/telemetry": ["libs/telemetry/src/index.ts"],
       "@iot/user": ["libs/user/src/index.ts"]
