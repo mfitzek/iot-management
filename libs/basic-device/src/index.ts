@@ -1,10 +1,11 @@
 import { ICustomDevice } from '@iot/custom-device';
-import { Device, IDevice, IDeviceData, IDeviceService } from '@iot/device';
+import { Device, IDevice, IDeviceData } from '@iot/device';
+import { IProvidedServices } from '@iot/custom-device';
 import { defineAsyncComponent } from 'vue';
 
 export class BasicDevice implements ICustomDevice {
-  factory(data: IDeviceData, device_service: IDeviceService): IDevice {
-    return new Device(device_service, data);
+  factory(data: IDeviceData, providers: IProvidedServices): IDevice {
+    return new Device(providers.device_service, data);
   }
 
   type = 'basic-device';
