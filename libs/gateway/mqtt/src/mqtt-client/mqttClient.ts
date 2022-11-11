@@ -44,7 +44,8 @@ export class CustomMqttClient implements IMqttClient {
         return false;
     }
     disconnect() {
-        throw new Error('Method not implemented.');
+       this.client.end();
+       this.subscriptions = [];
     }
 
     private onMessage(topic, data: Buffer){

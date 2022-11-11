@@ -4,6 +4,7 @@ import { IDevice, IDeviceData } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
 import { TelemetryService } from '@iot/telemetry';
 import { IProvidedServices } from '@iot/custom-device';
+import { MqttService } from '@iot/gateway/mqtt';
 
 @Injectable()
 export class DeviceManager {
@@ -11,7 +12,8 @@ export class DeviceManager {
 
   constructor(
     private device_service: DeviceService,
-    private telemetry_service: TelemetryService
+    private telemetry_service: TelemetryService,
+    private mqtt_service: MqttService
   ) {
     this.initDevices();
   }
@@ -65,6 +67,7 @@ export class DeviceManager {
     return {
       device_service: this.device_service,
       telemetry_service: this.telemetry_service,
+      mqtt_service: this.mqtt_service
     };
   }
 }

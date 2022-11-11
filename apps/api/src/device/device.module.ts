@@ -12,12 +12,4 @@ import { GatewayMqttModule, MqttService } from '@iot/gateway/mqtt';
   providers: [DeviceService, DeviceManager],
   imports: [PrismaModule, AuthModule, TelemetryModule, GatewayMqttModule],
 })
-export class DeviceModule {
-
-  constructor(mqtt: MqttService){
-    mqtt.createClient({server: "mqtt://localhost:1883"}).subscribe("test", (topic, data)=>{
-      console.log(`(${topic})=> ${data}`);
-    });
-  }
-
-}
+export class DeviceModule {}
