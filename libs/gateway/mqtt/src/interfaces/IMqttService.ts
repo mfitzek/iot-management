@@ -11,7 +11,7 @@ export interface IMqttService {
 }
 
 export interface IMqttClient {
-    subscribe(topic: string, onData: (topic, data) => void): Promise<boolean>;
-    publish(topic: string, data: string): Promise<boolean>;
+    subscribe(topic: string, onData: (topic, data) => void): boolean;
+    publish(topic: string, data: string): boolean;
     disconnect()
 }

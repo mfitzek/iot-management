@@ -25,21 +25,23 @@ export class CustomMqttClient implements IMqttClient {
         this.client.on("error", (err)=>console.log(err));
     }
 
-    async subscribe(topic: string, onData: (topic: string, data: any) => void): Promise<boolean> {
-        this.subscriptions.push({topic, onData });
-        let ok = true;
-        this.client.subscribe(topic, (err)=> {
-            if(err) {
-                console.log("Subscribe error", err);
-                ok = false;
-            }
+    subscribe(topic: string, onData: (topic: string, data: any) => void): boolean {
+        if(this.client){
+            this.subscriptions.push({topic, onData });
+            this.client.subscribe(topic);
+            // TODO: Remove subscribed topics if exists??
+            return true;
+        }
+        return false;
 
-        });
-        return ok;
     }
 
-    publish(topic: string, data: string): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    publish(topic: string, data: string): boolean {
+        if(this.client){
+            this.client.publish(topic, data);
+            return true;
+        }
+        return false;
     }
     disconnect() {
         throw new Error('Method not implemented.');
