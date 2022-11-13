@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "api",
+			"problemMatcher": [],
+			"label": "npm: api",
+			"detail": "nx serve api"
+		},
+		{
+			"type": "npm",
+			"script": "client",
+			"problemMatcher": [],
+			"label": "npm: client",
+			"detail": "nx serve client"
+		},
+		{"label": "start dev", "dependsOn": ["npm: api", "npm: client"]}
+	]
+}

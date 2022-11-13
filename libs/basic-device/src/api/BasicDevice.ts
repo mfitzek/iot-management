@@ -14,7 +14,7 @@ export class APIBasicDevice extends Device {
     constructor(data: IDeviceData, providers: IProvidedServices){
         super(providers.device_service, data);
         this.providers = providers;
-        this.connectToMqtt();
+        //this.connectToMqtt();
     }
 
 

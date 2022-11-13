@@ -6,7 +6,9 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "postinstall": "node node_modules/@nx-plus/vue/patch-nx-dep-graph.js"
+    "postinstall": "node node_modules/@nx-plus/vue/patch-nx-dep-graph.js",
+    "api": "nx serve api",
+    "client": "nx serve client"
   },
   "private": true,
   "dependencies": {
