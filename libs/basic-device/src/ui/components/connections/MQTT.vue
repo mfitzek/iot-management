@@ -58,24 +58,29 @@
     </section>
 
     <section>
-      <q-table :rows="data" :columns="columns" row-key="name" flat>
+      <q-table
+        :rows="data"
+        :columns="columns"
+        row-key="name"
+        flat
+        @row-click="openEditDialog"
+      >
         <template #top>
           <div class="col text-h5">Mqtt attribute mapping</div>
-          <q-btn
-            color="primary"
-            label="Add attribute"
-            @click="showDialog = true"
-          />
+          <q-btn color="primary" label="Add attribute" @click="openAddDialog" />
         </template>
       </q-table>
     </section>
   </div>
 
-  <MqttMapDialog
-    :show="showDialog"
-    @close="showDialog = false"
-    @add="addTopic"
-  ></MqttMapDialog>
+  <template v-if="showDialog">
+    <MqttMapDialog
+      :mapping="dialogMapping"
+      @close="showDialog = false"
+      @add="addTopic"
+      @remove="removeTopic()"
+    ></MqttMapDialog>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -95,6 +100,8 @@ import store, {
 const settings = ref(getMqttSettings());
 
 const showDialog = ref(false);
+const dialogMapping = ref<IMqttAttributeMap | undefined>(undefined);
+let currentEditIndex: number | null = null;
 
 const columns: QTableColumn[] = [
   { name: 'attribute', label: 'Attribute', field: 'attribute', align: 'left' },
@@ -115,7 +122,21 @@ const data = computed(() => {
 });
 
 function addTopic(mapping: IMqttAttributeMap) {
-  settings.value.attribute_mapping.push(mapping);
+  if (currentEditIndex !== null) {
+    settings.value.attribute_mapping[currentEditIndex] = mapping;
+  } else {
+    settings.value.attribute_mapping.push(mapping);
+  }
+  currentEditIndex = null;
+  dialogMapping.value = undefined;
+}
+
+function removeTopic() {
+  if (currentEditIndex !== null) {
+    settings.value.attribute_mapping.splice(currentEditIndex, 1);
+  }
+  currentEditIndex = null;
+  dialogMapping.value = undefined;
 }
 
 function setMqttData() {
@@ -125,6 +146,18 @@ function setMqttData() {
 function updateSettings() {
   setMqttSettings(settings.value);
   updateCurrentDevice();
+}
+
+function openEditDialog({}, {}, index: number) {
+  currentEditIndex = index;
+  dialogMapping.value = settings.value.attribute_mapping[index];
+  showDialog.value = true;
+}
+
+function openAddDialog() {
+  dialogMapping.value = undefined;
+  currentEditIndex = null;
+  showDialog.value = true;
 }
 
 watch(

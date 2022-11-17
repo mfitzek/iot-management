@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="show" @hide="close()">
+  <q-dialog v-model="show" @hide="close()">
     <q-card class="mqtt-dialog">
       <q-card-section>
         <div class="text-h6">Attributes mapping</div>
@@ -32,8 +32,12 @@
           placeholder="eg. /building1/room2/temp"
         ></q-input>
       </q-card-section>
-
-      <q-card-actions align="right">
+      <q-card-actions align="right" v-if="mapping">
+        <q-btn flat label="Delete" color="red" @click="removeTopic" />
+        <q-btn flat label="Cancel" color="primary" @click="close" />
+        <q-btn label="Update" color="primary" @click="add_topic" />
+      </q-card-actions>
+      <q-card-actions align="right" v-else>
         <q-btn flat label="Cancel" color="primary" @click="close" />
         <q-btn label="Add mapping" color="primary" @click="add_topic" />
       </q-card-actions>
@@ -44,13 +48,14 @@
 <script setup lang="ts">
 import { IAttribute } from '@iot/device';
 import { IMqttAttributeMap } from 'libs/basic-device/src/common/mqtt/IMqttSettings';
+import { emit } from 'process';
 import { ref } from 'vue';
 import store from '../../store';
 
-const props = defineProps({
-  show: Boolean,
-});
-const emits = defineEmits(['close', 'add']);
+const show = true;
+
+const props = defineProps<{ mapping?: IMqttAttributeMap }>();
+const emits = defineEmits(['close', 'add', 'remove']);
 
 const attribute = ref<IAttribute | null>(null);
 const options = store.device?.attributes;
@@ -72,6 +77,23 @@ function add_topic() {
     close();
   }
 }
+
+function removeTopic() {
+  emits('remove');
+  close();
+}
+
+function initValues() {
+  if (props.mapping) {
+    attribute.value =
+      store.device?.attributes.find(
+        (attr) => attr.id === props.mapping?.attribute_id
+      ) ?? null;
+    topic.value = props.mapping.topic;
+  }
+}
+
+initValues();
 </script>
 
 <style scoped>
