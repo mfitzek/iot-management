@@ -1,6 +1,8 @@
+import { IMqttSettings } from './../common/mqtt/IMqttSettings';
 import { IDeviceData } from '@iot/device';
 import { reactive, ref } from 'vue';
 import http_api from '@iot/services/http';
+import { getDeviceMqttSettings, setDeviceMqttsettings } from '../common/mqtt/mqtt';
 
 interface IDeviceStore {
   device: IDeviceData | null;
@@ -34,6 +36,32 @@ export async function removeCurrentDevice() {
   }
 
   return req.data;
+}
+
+export function getMqttSettings(): IMqttSettings{
+  let settings: IMqttSettings = {
+    active: false,
+    url: "",
+    client_id: "",
+    username: "",
+    password: "",
+    attribute_mapping: []
+  }
+
+  if(store.device){
+    const parsed = getDeviceMqttSettings(store.device);
+    if(parsed){
+      settings = parsed;
+    }
+  }
+  
+  return settings;
+}
+
+export function setMqttSettings(settings: IMqttSettings){
+  if(store.device){
+    setDeviceMqttsettings(store.device, settings);
+  }
 }
 
 export default store;

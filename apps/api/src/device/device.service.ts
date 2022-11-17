@@ -138,7 +138,7 @@ export class DeviceService implements IDeviceService {
       .map((kv) =>
         this.prisma.keyValue.upsert({
           where: {
-            id: kv.id,
+            id: kv.id?? "",
           },
           create: {
             key: kv.key,

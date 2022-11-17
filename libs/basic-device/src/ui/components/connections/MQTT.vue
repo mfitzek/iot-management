@@ -1,41 +1,75 @@
 <template>
-  <section>
-    <span class="text-h4">MQTT connection</span>
-    <q-toggle v-model="enabled" color="green" />
-  </section>
+  <div class="q-gutter-md">
+    <section>
+      <div class="row justify-between">
+        <div class="col">
+          <span class="text-h4">MQTT connection</span>
+          <q-toggle v-model="settings.active" color="green" />
+        </div>
+        <div class="col-auto">
+          <q-btn
+            color="green"
+            label="Update settings"
+            @click="updateSettings()"
+          />
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <div class="row q-mt-sm q-gutter-x-sm">
-      <div class="col">
-        <q-input v-model="url" type="text" label="URL" required filled />
+    <section>
+      <div class="row q-mt-sm q-gutter-x-sm">
+        <div class="col">
+          <q-input
+            v-model="settings.url"
+            type="text"
+            label="URL"
+            required
+            filled
+          />
+        </div>
+        <!-- <div class="col">
+          <q-input
+            v-model="settings.client_id"
+            type="text"
+            label="Client ID"
+            filled
+          />
+        </div> -->
       </div>
-      <div class="col">
-        <q-input v-model="client" type="text" label="Client ID" filled />
-      </div>
-    </div>
 
-    <div class="row q-mt-sm q-gutter-x-sm">
-      <div class="col">
-        <q-input v-model="username" type="text" label="Username" filled />
+      <div class="row q-mt-sm q-gutter-x-sm">
+        <div class="col">
+          <q-input
+            v-model="settings.username"
+            type="text"
+            label="Username"
+            filled
+          />
+        </div>
+        <div class="col">
+          <q-input
+            v-model="settings.password"
+            type="password"
+            label="Password"
+            filled
+          />
+        </div>
       </div>
-      <div class="col">
-        <q-input v-model="pass" type="password" label="Password" filled />
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <q-table :rows="data" :columns="columns" row-key="name">
-      <template #top>
-        <div class="col text-h5">Mqtt attribute mapping</div>
-        <q-btn
-          color="primary"
-          label="Add attribute"
-          @click="showDialog = true"
-        />
-      </template>
-    </q-table>
-  </section>
+    <section>
+      <q-table :rows="data" :columns="columns" row-key="name" flat>
+        <template #top>
+          <div class="col text-h5">Mqtt attribute mapping</div>
+          <q-btn
+            color="primary"
+            label="Add attribute"
+            @click="showDialog = true"
+          />
+        </template>
+      </q-table>
+    </section>
+  </div>
 
   <MqttMapDialog
     :show="showDialog"
@@ -45,16 +79,20 @@
 </template>
 
 <script setup lang="ts">
+import {
+  IMqttAttributeMap,
+  IMqttSettings,
+} from 'libs/basic-device/src/common/mqtt/IMqttSettings';
 import { QTableColumn } from 'quasar';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import MqttMapDialog from './mqttMapDialog.vue';
+import store, {
+  getMqttSettings,
+  setMqttSettings,
+  updateCurrentDevice,
+} from '../../store';
 
-const enabled = ref(false);
-
-const url = ref('');
-const client = ref('');
-const username = ref('');
-const pass = ref('');
+const settings = ref(getMqttSettings());
 
 const showDialog = ref(false);
 
@@ -63,17 +101,39 @@ const columns: QTableColumn[] = [
   { name: 'topic', label: 'Topic', field: 'topic', align: 'left' },
 ];
 
-const data = ref([
-  { attribute: 'teplota', topic: '/roomX/thermometer/temp' },
-  { attribute: 'vlhkost', topic: '/roomX/thermometer/hum' },
-]);
-
-function addTopic(mapping) {
-  data.value.push({
-    attribute: mapping.attribute.name,
-    topic: mapping.topic,
+const data = computed(() => {
+  return settings.value.attribute_mapping.map((map) => {
+    const attribute = store.device?.attributes.find(
+      (a) => a.id == map.attribute_id
+    );
+    return {
+      id: attribute?.id,
+      attribute: `${attribute?.name} (${attribute?.type})`,
+      topic: map.topic,
+    };
   });
+});
+
+function addTopic(mapping: IMqttAttributeMap) {
+  settings.value.attribute_mapping.push(mapping);
 }
+
+function setMqttData() {
+  settings.value = getMqttSettings();
+}
+
+function updateSettings() {
+  setMqttSettings(settings.value);
+  updateCurrentDevice();
+}
+
+watch(
+  () => store.device,
+  () => {
+    setMqttData();
+  },
+  { deep: true, immediate: true }
+);
 </script>
 
 <style scoped></style>
