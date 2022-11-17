@@ -57,7 +57,6 @@ const row_status = (status: string) => {
 };
 
 async function clickDevice({}, row: IDeviceListRow) {
-  console.log('clicked device', row.id);
   router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
 </script>
