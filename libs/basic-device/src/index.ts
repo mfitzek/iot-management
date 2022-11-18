@@ -6,7 +6,8 @@ import { APIBasicDevice } from './api/basicDevice';
 
 export class BasicDevice implements ICustomDevice {
   factory(data: IDeviceData, providers: IProvidedServices): IDevice {
-    return new APIBasicDevice(data, providers);
+    const device = new APIBasicDevice(data, providers);
+    return device;
   }
 
   type = 'basic-device';

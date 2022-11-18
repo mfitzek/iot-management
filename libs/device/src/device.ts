@@ -16,10 +16,10 @@ export class Device implements IDevice {
     this.type = data.type;
     this.attributes = data.attributes;
     this.keyValues = data.keyValues;
-    this.owner_id = data.owner_id;
+    this.owner_id = data.owner_id;    
   }
 
-  getData(): IDeviceData {
+  public getData(): IDeviceData {
     return {
       id: this.id,
       name: this.name,
@@ -30,11 +30,11 @@ export class Device implements IDevice {
     };
   }
 
-  async delete() {
+  public async delete() {
     return await this.db.removeDevice(this.id!);
   }
 
-  async update(data: IDeviceData) {
+  public async update(data: IDeviceData) {
     await this.db.updateDevice(this.id!, data);
     await this.fetchData();
     return this.getData();

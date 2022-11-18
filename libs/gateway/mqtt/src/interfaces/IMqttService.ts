@@ -1,6 +1,5 @@
 export interface IMqttClientSettings {
     server: string;
-    port?: number;
     username?: string;
     password?: string;
 }
