@@ -1,6 +1,7 @@
 import { IProvidedServices } from "@iot/custom-device";
-import { Device, IDeviceData } from "@iot/device";
+import { Device, IAttribute, IDeviceData } from "@iot/device";
 import { IMqttClient, IMqttClientSettings } from "@iot/gateway/mqtt";
+import { ITelemetry } from "@iot/telemetry";
 import { getDeviceMqttSettings } from "../common/mqtt/mqtt";
 
 
@@ -41,11 +42,23 @@ export class APIBasicDevice extends Device {
     subscribeMqtt(){
         const mapping = this.getUserMqttSettings()?.attribute_mapping?? [];
         mapping.forEach(map => {
+            const attribute = this.attributes.find(attr=>attr.id === map.attribute_id);
             this.mqtt_client?.subscribe(map.topic, (topic, data)=>{
-                console.log(`${this.id} => MQTT ${topic}: ${data}`);
+                this.saveTelemetry(attribute, data);
             });
         });
+    }
 
+
+    private saveTelemetry(attribute: IAttribute | undefined, data: string){
+        if(attribute){
+            const telemety: ITelemetry = {
+                attribute_id: attribute.id?? "",
+                value: data,
+                createdAt: new Date()
+            }
+            this.providers.telemetry_service.saveTelemetry(telemety);
+        }   
     }
 
     async update(data: IDeviceData) {
