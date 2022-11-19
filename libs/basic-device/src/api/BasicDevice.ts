@@ -39,9 +39,13 @@ export class APIBasicDevice extends Device {
     }
 
     subscribeMqtt(){
-        this.mqtt_client?.subscribe("test", (topic, data)=>{
-            console.log(`${this.id} => MQTT ${topic}: ${data}`);
+        const mapping = this.getUserMqttSettings()?.attribute_mapping?? [];
+        mapping.forEach(map => {
+            this.mqtt_client?.subscribe(map.topic, (topic, data)=>{
+                console.log(`${this.id} => MQTT ${topic}: ${data}`);
+            });
         });
+
     }
 
     async update(data: IDeviceData) {

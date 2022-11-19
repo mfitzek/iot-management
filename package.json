@@ -48,6 +48,7 @@
     "@nrwl/workspace": "^14.7.3",
     "@nx-plus/vue": "^14.1.0",
     "@quasar/vite-plugin": "^1.1.1",
+    "@trellisorg/make-buildable": "^0.0.12",
     "@types/jest": "28.1.1",
     "@types/mqtt": "^2.5.0",
     "@types/node": "16.11.7",
