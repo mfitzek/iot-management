@@ -42,7 +42,6 @@ export function getMqttSettings(): IMqttSettings{
   let settings: IMqttSettings = {
     active: false,
     url: "",
-    client_id: "",
     username: "",
     password: "",
     attribute_mapping: []

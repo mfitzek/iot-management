@@ -3,6 +3,16 @@
   "projectType": "library",
   "sourceRoot": "libs/custom-device/src",
   "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/custom-device",
+        "tsConfig": "libs/custom-device/tsconfig.lib.json",
+        "packageJson": "libs/custom-device/package.json",
+        "main": "libs/custom-device/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

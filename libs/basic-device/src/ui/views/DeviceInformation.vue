@@ -44,7 +44,7 @@ async function removeDevice() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .info_form {
   max-width: 400px;
 }
