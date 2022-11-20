@@ -33,15 +33,14 @@ export class TelemetryService implements ITelemetryService {
   }
   saveTelemetry(telemetry: ITelemetry) {
     this.telemetry.push(telemetry);
-    console.log(telemetry);
-    this.prisma.telemetry.create({data: {
+    this.saveTelemetryToDatabase(telemetry);
+  }
+
+  async saveTelemetryToDatabase(telemetry: ITelemetry){
+    await this.prisma.telemetry.create({data: {
       attributeId: telemetry.attribute_id,
       value: telemetry.value,
       createdAt: telemetry.createdAt
-    }}).then(t=>{
-      console.log("inserted", t);
-    }).catch(e=>{
-      console.log(e);
-    })
+    }});
   }
 }
