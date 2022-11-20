@@ -48,7 +48,7 @@ model KeyValue {
 
 model Telemetry {
   id          String    @id @default(cuid())
-  date        DateTime
+  createdAt   DateTime
   attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
   value       String
   attributeId String
