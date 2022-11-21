@@ -1,0 +1,10 @@
+version: '3.8'
+
+name: 'iot-data-storage'
+
+services:
+  mqtt:
+    image: hivemq/hivemq4
+    ports:
+      - '8080:8080'
+      - '1883:1883'
