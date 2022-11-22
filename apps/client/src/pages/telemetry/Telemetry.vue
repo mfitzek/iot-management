@@ -1,6 +1,8 @@
 <template>
   <div class="row">
-    <div class="col-3">Attributes List</div>
+    <div class="col-3">
+      <AttributesList></AttributesList>
+    </div>
 
     <div class="col-9">
       <q-tabs v-model="currentTab" class="text-primary">
@@ -14,6 +16,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import AttributesList from '../../components/telemetry/attributesList.vue';
 
 const currentTab = ref('overview');
 </script>
