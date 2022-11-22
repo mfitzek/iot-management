@@ -1,6 +1,5 @@
-import { IDevice, IDeviceData } from '@iot/device';
+import { IDevice, IDeviceData, IProvidedServices } from '@iot/device';
 import { Component } from 'vue';
-import { IProvidedServices } from './ProvidedServices';
 
 export interface ICustomDevice {
   type: string;

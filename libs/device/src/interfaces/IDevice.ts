@@ -1,11 +1,13 @@
+import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+
 export interface IDevice {
-
   id: string;
-  owner_id: string
+  owner_id: string;
 
-  getData(): IDeviceData,
-  update(data: IDeviceData): Promise<IDeviceData>,
-  delete(): Promise<boolean>
+  getData(): IDeviceData;
+  update(data: IDeviceData): Promise<IDeviceData>;
+  delete(): Promise<boolean>;
+  getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]>;
 }
 
 export interface IDeviceData {

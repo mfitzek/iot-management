@@ -3,7 +3,7 @@ import { DeviceService } from './device.service';
 import { IDevice, IDeviceData } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
 import { TelemetryService } from '@iot/telemetry';
-import { IProvidedServices } from '@iot/custom-device';
+import { IProvidedServices } from '@iot/device';
 import { MqttService } from '@iot/gateway/mqtt';
 
 @Injectable()
@@ -67,7 +67,7 @@ export class DeviceManager {
     return {
       device_service: this.device_service,
       telemetry_service: this.telemetry_service,
-      mqtt_service: this.mqtt_service
+      mqtt_service: this.mqtt_service,
     };
   }
 }
