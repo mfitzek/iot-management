@@ -40,6 +40,10 @@ import { IDeviceData } from '@iot/device';
 import { reactive, ref } from 'vue';
 import http from '@iot/services/http';
 
+const emit = defineEmits<{
+  (e: 'update', selected: string[]): void;
+}>();
+
 const search = ref('');
 
 const filtered_attributes = ref<IDeviceData[]>([]);
@@ -59,6 +63,8 @@ function click_attr(id: string) {
   } else {
     selected.add(id);
   }
+
+  emit('update', [...selected]);
 }
 
 function is_active(id: string) {

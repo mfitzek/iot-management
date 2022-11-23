@@ -1,9 +1,8 @@
 <template>
   <div class="row">
     <div class="col-3">
-      <AttributesList></AttributesList>
+      <AttributesList @update="updateAttributes"></AttributesList>
     </div>
-
     <div class="col-9">
       <q-tabs v-model="currentTab" class="text-primary">
         <q-tab name="overview" icon="s_view_list" label="Overview" />
@@ -19,6 +18,12 @@ import { ref } from 'vue';
 import AttributesList from '../../components/telemetry/attributesList.vue';
 
 const currentTab = ref('overview');
+
+const selectedAttributes = ref<string[]>([]);
+
+function updateAttributes(ids: string[]) {
+  selectedAttributes.value = ids;
+}
 </script>
 
 <style scoped></style>

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TelemetryController } from './telemetr.controller';
 import { TelemetryService } from './telemetry.service';
 
 @Module({
-  controllers: [],
+  controllers: [TelemetryController],
   providers: [TelemetryService],
   exports: [TelemetryService],
 })
