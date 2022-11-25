@@ -1,10 +1,13 @@
-import { ISearchTelemetry } from '@iot/telemetry';
+import { ISearchTelemetry, TelemetryService } from '@iot/telemetry';
+import { IUser } from '@iot/user';
 import { Controller, Get, UseGuards, Req, Query } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 // @UseGuards(JwtAuthGuard)
 @Controller('telemetry')
 export class TelemetryController {
+  constructor(private telemetryService: TelemetryService) {}
+
   @Get()
   async getTelemetry(
     @Req() req,
@@ -26,15 +29,14 @@ export class TelemetryController {
     }
 
     const search: ISearchTelemetry = {
-      attribute_ids: attributesIds,
+      attribute_ids: attributesIds ?? [],
       date_from: searchFrom,
       date_to: searchTo,
     };
 
-    return {
-      attributesIds,
-      searchFrom,
-      searchTo,
-    };
+    // const user: IUser = req.user;
+    // console.log(user.id, search);
+
+    return await this.telemetryService.getTelemetry(search);
   }
 }
