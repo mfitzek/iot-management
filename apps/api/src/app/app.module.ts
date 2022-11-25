@@ -4,9 +4,10 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TelemetryAPIModule } from '../telemetry/telemetry.module';
 
 @Module({
-  imports: [DeviceModule, AuthModule],
+  imports: [DeviceModule, AuthModule, TelemetryAPIModule],
   controllers: [AppController],
   providers: [AppService],
 })
