@@ -19,6 +19,10 @@ export class TelemetryService implements ITelemetryService {
         attributeId: {
           in: filter.attribute_ids,
         },
+        createdAt: {
+          lte: filter.date_to,
+          gte: filter.date_from,
+        },
       },
     });
 
@@ -30,11 +34,16 @@ export class TelemetryService implements ITelemetryService {
         },
       },
       include: {
-        telemetry: true,
+        telemetry: {
+          where: {
+            createdAt: {
+              lte: filter.date_to,
+              gte: filter.date_from,
+            },
+          },
+        },
       },
     });
-
-    console.log(attr_data);
 
     return data.map((t) => {
       return {
