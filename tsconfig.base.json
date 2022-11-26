@@ -25,7 +25,8 @@
       "@iot/gateway/mqtt": ["libs/gateway/mqtt/src/index.ts"],
       "@iot/services/http": ["libs/services/http/src/index.ts"],
       "@iot/telemetry": ["libs/telemetry/src/index.ts"],
-      "@iot/user": ["libs/user/src/index.ts"]
+      "@iot/user": ["libs/user/src/index.ts"],
+      "@iot/vue-components": ["libs/vue-components/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -13,6 +13,7 @@
     "gateway-mqtt": "libs/gateway/mqtt",
     "services-http": "libs/services/http",
     "telemetry": "libs/telemetry",
-    "user": "libs/user"
+    "user": "libs/user",
+    "vue-components": "libs/vue-components"
   }
 }

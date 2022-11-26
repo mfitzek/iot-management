@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <Line
-      :chart-data="chartData"
-      :chart-options="chartOptions"
-      height="400px"
-    />
+  <div class="graph">
+    <Line :chart-data="chartData" :chart-options="chartOptions" />
   </div>
 </template>
 
@@ -29,6 +25,7 @@ import {
   LinearScale,
   PointElement,
   CategoryScale,
+  ScatterDataPoint,
 } from 'chart.js';
 
 ChartJS.register(
@@ -49,6 +46,7 @@ const props = defineProps<{
 
 const chartOptions: ChartOptions = {
   responsive: true,
+  aspectRatio: false,
   scales: {
     x: {
       type: 'time',
@@ -61,7 +59,7 @@ const chartOptions: ChartOptions = {
   },
 };
 
-const chartData = computed(() => {
+const chartData = computed<ChartData>(() => {
   const displayableData = props.data.map((attr) => {
     return {
       ...attr,
@@ -77,7 +75,11 @@ const chartData = computed(() => {
         label: attr.name,
         borderColor: randomColor(),
         data: attr.telemetry.map((t) => {
-          return { x: t.createdAt, y: Number(t.value) };
+          const point: ScatterDataPoint = {
+            x: t.createdAt,
+            y: Number(t.value),
+          };
+          return point;
         }),
       };
     }),
@@ -90,4 +92,8 @@ function randomColor() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.graph {
+  max-width: 100%;
+}
+</style>

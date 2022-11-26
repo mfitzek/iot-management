@@ -1,0 +1,31 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/vue-components/src",
+  "targets": {
+    "build": {
+      "executor": "@nx-plus/vue:library",
+      "options": {
+        "dest": "dist/libs/vue-components",
+        "entry": "libs/vue-components/src/index.ts",
+        "tsConfig": "libs/vue-components/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/vue-components/**/*.{ts,tsx,vue}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/vue-components"],
+      "options": {
+        "jestConfig": "libs/vue-components/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
