@@ -25,16 +25,17 @@
         <q-tab name="export" icon="s_file_download" label="Export" />
       </q-tabs>
 
-      <!-- <q-table
-        title="Data"
-        :rows="data"
-        :columns="columns"
-        row-key="name"
-        dense
-      /> -->
-
-      <div class="row">
-        <div class="col">
+      <div class="row q-pa-md">
+        <div class="col" v-if="currentTab === 'overview'">
+          <q-table
+            title="Data"
+            :rows="data"
+            :columns="columns"
+            row-key="name"
+            dense
+          />
+        </div>
+        <div class="col" v-if="currentTab === 'graphs'">
           <LineGraph :data="data"></LineGraph>
         </div>
       </div>
