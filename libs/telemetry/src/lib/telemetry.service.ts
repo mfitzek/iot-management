@@ -1,4 +1,4 @@
-import { ITelemetry } from './../interface/ITelemetry';
+import { IAttributeTelemetry, ITelemetry } from './../interface/ITelemetry';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
@@ -13,21 +13,8 @@ export class TelemetryService implements ITelemetryService {
   private telemetry: ITelemetry[] = [];
   private prisma = new PrismaClient();
 
-  async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
-    const data = await this.prisma.telemetry.findMany({
-      where: {
-        attributeId: {
-          in: filter.attribute_ids,
-        },
-        createdAt: {
-          lte: filter.date_to,
-          gte: filter.date_from,
-        },
-      },
-    });
-
-    // TODO: return array of filtered attributes with telemetry filtered by date start and date end
-    const attr_data = await this.prisma.attribute.findMany({
+  async getTelemetry(filter: ISearchTelemetry): Promise<IAttributeTelemetry[]> {
+    const attributesWithData = await this.prisma.attribute.findMany({
       where: {
         id: {
           in: filter.attribute_ids,
@@ -45,13 +32,21 @@ export class TelemetryService implements ITelemetryService {
       },
     });
 
-    return data.map((t) => {
+    const result: IAttributeTelemetry[] = attributesWithData.map(attr=>{
       return {
-        attribute_id: t.attributeId,
-        value: t.value,
-        createdAt: t.createdAt,
-      };
+        ...attr,
+        telemetry: attr.telemetry.map((t) => {
+          return {
+            attribute_id: t.attributeId,
+            value: t.value,
+            createdAt: t.createdAt,
+          };
+        })
+      }
     });
+
+    return result;
+
   }
   saveTelemetry(telemetry: ITelemetry) {
     this.telemetry.push(telemetry);
