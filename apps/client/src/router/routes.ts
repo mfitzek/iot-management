@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/auth', children: authRoutes },
       { path: '/device', children: deviceRoutes, meta: { requiresAuth: true } },
       {
-        path: '/telemtry',
+        path: '/telemetry',
         children: telemetryRoutes,
         meta: { requiresAuth: true },
       },
