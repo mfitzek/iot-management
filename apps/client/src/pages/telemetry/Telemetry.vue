@@ -27,13 +27,7 @@
 
       <div class="row q-pa-md">
         <div class="col" v-if="currentTab === 'overview'">
-          <q-table
-            title="Data"
-            :rows="data"
-            :columns="columns"
-            row-key="name"
-            dense
-          />
+          <AttributesStats :data="data"></AttributesStats>
         </div>
         <div class="col" v-if="currentTab === 'graphs'">
           <LineGraph :data="data"></LineGraph>
@@ -50,6 +44,7 @@ import { date, QTableColumn } from 'quasar';
 
 import { IAttributeTelemetry } from '@iot/telemetry';
 import AttributesList from '../../components/telemetry/attributesList.vue';
+import AttributesStats from '../../components/telemetry/AttributesStats.vue';
 import LineGraph from '../../components/telemetry/LineGraph.vue';
 
 import { InputDatePicker } from '@iot/vue-components';
