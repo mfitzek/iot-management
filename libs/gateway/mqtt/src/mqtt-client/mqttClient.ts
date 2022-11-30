@@ -13,6 +13,7 @@ export class CustomMqttClient implements IMqttClient {
     private settings: IMqttClientSettings;
     private client: MqttClient;
     private subscriptions: ISubscription[] = [];
+    private lastError: any;
 
     constructor(settings: IMqttClientSettings){
         this.settings = settings;
@@ -22,7 +23,9 @@ export class CustomMqttClient implements IMqttClient {
     async connectMqttServer(){
         this.client = connect(this.settings.server);
         this.client.on("message", (topic,data)=>this.onMessage(topic,data));
-        this.client.on("error", (err)=>{console.log(err)});
+        this.client.on("error", (err)=>{
+            this.lastError = err
+        });
     }
 
     subscribe(topic: string, onData: (topic: string, data: any) => void): boolean {
