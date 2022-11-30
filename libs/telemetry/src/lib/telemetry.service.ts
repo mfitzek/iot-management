@@ -1,12 +1,10 @@
 import { ITelemetry } from './../interface/ITelemetry';
+import { ISearchTelemetry } from '../interface/IApi';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
 
-import {
-  ISearchTelemetry,
-  ITelemetryService,
-} from '../interface/ITelemetryService';
+import { ITelemetryService } from '../interface/ITelemetryService';
 
 @Injectable()
 export class TelemetryService implements ITelemetryService {
