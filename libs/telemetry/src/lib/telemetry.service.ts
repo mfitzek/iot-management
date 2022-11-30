@@ -1,4 +1,4 @@
-import { IAttributeTelemetry, ITelemetry } from './../interface/ITelemetry';
+import { ITelemetry } from './../interface/ITelemetry';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
@@ -13,40 +13,59 @@ export class TelemetryService implements ITelemetryService {
   private telemetry: ITelemetry[] = [];
   private prisma = new PrismaClient();
 
-  async getTelemetry(filter: ISearchTelemetry): Promise<IAttributeTelemetry[]> {
-    const attributesWithData = await this.prisma.attribute.findMany({
+  async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
+    // const attributesWithData = await this.prisma.attribute.findMany({
+    //   where: {
+    //     id: {
+    //       in: filter.attribute_ids,
+    //     },
+    //   },
+    //   include: {
+    //     telemetry: {
+    //       where: {
+    //         createdAt: {
+    //           lte: filter.date_to,
+    //           gte: filter.date_from,
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    // const result: IAttributeTelemetry[] = attributesWithData.map(attr=>{
+    //   return {
+    //     ...attr,
+    //     telemetry: attr.telemetry.map((t) => {
+    //       return {
+    //         attribute_id: t.attributeId,
+    //         value: t.value,
+    //         createdAt: t.createdAt,
+    //       };
+    //     })
+    //   }
+    // });
+
+    const data = await this.prisma.telemetry.findMany({
       where: {
-        id: {
-          in: filter.attribute_ids,
+        attributeId: {
+          in: filter.attribute_ids ?? [],
         },
-      },
-      include: {
-        telemetry: {
-          where: {
-            createdAt: {
-              lte: filter.date_to,
-              gte: filter.date_from,
-            },
-          },
+        createdAt: {
+          lte: filter.date_to,
+          gte: filter.date_from,
         },
       },
     });
 
-    const result: IAttributeTelemetry[] = attributesWithData.map(attr=>{
+    const result = data.map((t) => {
       return {
-        ...attr,
-        telemetry: attr.telemetry.map((t) => {
-          return {
-            attribute_id: t.attributeId,
-            value: t.value,
-            createdAt: t.createdAt,
-          };
-        })
-      }
+        attribute_id: t.attributeId,
+        value: t.value,
+        createdAt: t.createdAt,
+      };
     });
 
     return result;
-
   }
   saveTelemetry(telemetry: ITelemetry) {
     this.telemetry.push(telemetry);

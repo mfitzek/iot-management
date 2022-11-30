@@ -1,4 +1,4 @@
-import { IAttributeTelemetry, ITelemetry } from './ITelemetry';
+import { ITelemetry } from './ITelemetry';
 
 export interface ISearchTelemetry {
   attribute_ids?: string[];
@@ -7,6 +7,6 @@ export interface ISearchTelemetry {
 }
 
 export interface ITelemetryService {
-  getTelemetry(filter: ISearchTelemetry): Promise<IAttributeTelemetry[]>;
+  getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]>;
   saveTelemetry(telemetry: ITelemetry);
 }

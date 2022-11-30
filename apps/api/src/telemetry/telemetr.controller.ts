@@ -2,11 +2,15 @@ import { ISearchTelemetry, TelemetryService } from '@iot/telemetry';
 import { IUser } from '@iot/user';
 import { Controller, Get, UseGuards, Req, Query } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { DeviceManager } from '../device/device.manager.service';
 
 // @UseGuards(JwtAuthGuard)
 @Controller('telemetry')
 export class TelemetryController {
-  constructor(private telemetryService: TelemetryService) {}
+  constructor(
+    private telemetryService: TelemetryService,
+    private devManager: DeviceManager
+  ) {}
 
   @Get()
   async getTelemetry(
