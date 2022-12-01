@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { IDevice, IDeviceData } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
-import { TelemetryService } from '@iot/telemetry';
+import { CacheTelemetryCollector } from '@iot/telemetry';
 import { IProvidedServices } from '@iot/device';
 import { MqttService } from '@iot/gateway/mqtt';
 
@@ -12,7 +12,7 @@ export class DeviceManager {
 
   constructor(
     private device_service: DeviceService,
-    private telemetry_service: TelemetryService,
+    private telemetry_service: CacheTelemetryCollector,
     private mqtt_service: MqttService
   ) {
     this.initDevices();
@@ -20,9 +20,7 @@ export class DeviceManager {
 
   async initDevices() {
     const devices_data = await this.device_service.getDeviceList();
-    this.device_list = devices_data.map((device_data) =>
-      this.createCustomDevice(device_data)
-    );
+    this.device_list = devices_data.map((device_data) => this.createCustomDevice(device_data));
   }
 
   async createDevice(data: IDeviceData) {
@@ -33,18 +31,11 @@ export class DeviceManager {
   }
 
   async getUserDeviceList(user_id: string): Promise<IDeviceData[]> {
-    return this.device_list
-      .filter((dev) => dev.owner_id === user_id)
-      .map((dev) => dev.getData());
+    return this.device_list.filter((dev) => dev.owner_id === user_id).map((dev) => dev.getData());
   }
 
-  async getUserDevice(
-    device_id: string,
-    user_id: string
-  ): Promise<IDevice | undefined> {
-    return this.device_list.find(
-      (dev) => dev.id === device_id && dev.owner_id === user_id
-    );
+  async getUserDevice(device_id: string, user_id: string): Promise<IDevice | undefined> {
+    return this.device_list.find((dev) => dev.id === device_id && dev.owner_id === user_id);
   }
 
   async removeUserDevice(device_id: string, user_id: string): Promise<boolean> {

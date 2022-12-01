@@ -4,45 +4,14 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
 
-import { ITelemetryService } from '../interface/ITelemetryService';
+import { TelemetryCollector } from '../interface/TelemetryCollector';
 
 @Injectable()
-export class TelemetryService implements ITelemetryService {
+export class CacheTelemetryCollector implements TelemetryCollector {
   private telemetry: ITelemetry[] = [];
   private prisma = new PrismaClient();
 
   async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
-    // const attributesWithData = await this.prisma.attribute.findMany({
-    //   where: {
-    //     id: {
-    //       in: filter.attribute_ids,
-    //     },
-    //   },
-    //   include: {
-    //     telemetry: {
-    //       where: {
-    //         createdAt: {
-    //           lte: filter.date_to,
-    //           gte: filter.date_from,
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
-
-    // const result: IAttributeTelemetry[] = attributesWithData.map(attr=>{
-    //   return {
-    //     ...attr,
-    //     telemetry: attr.telemetry.map((t) => {
-    //       return {
-    //         attribute_id: t.attributeId,
-    //         value: t.value,
-    //         createdAt: t.createdAt,
-    //       };
-    //     })
-    //   }
-    // });
-
     const data = await this.prisma.telemetry.findMany({
       where: {
         attributeId: {
@@ -65,6 +34,7 @@ export class TelemetryService implements ITelemetryService {
 
     return result;
   }
+
   saveTelemetry(telemetry: ITelemetry) {
     this.telemetry.push(telemetry);
     this.saveTelemetryToDatabase(telemetry);

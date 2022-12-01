@@ -4,7 +4,7 @@ import { Controller, Get, UseGuards, Req, Query } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { TelemetryService } from './telemetry.service';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('telemetry')
 export class TelemetryController {
   constructor(private telemetry: TelemetryService) {}
@@ -35,9 +35,8 @@ export class TelemetryController {
       date_to: searchTo,
     };
 
-    // const user: IUser = req.user;
-    // console.log(user.id, search);
+    const user: IUser = req.user;
 
-    return await this.telemetry.getTelemetry(search);
+    return await this.telemetry.getTelemetry(user, search);
   }
 }

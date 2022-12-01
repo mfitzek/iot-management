@@ -1,4 +1,4 @@
-import { DeviceManager } from './device.manager.service';
+import { DeviceManager } from './device-manager.service';
 import { PrismaModule } from './../prisma/prisma.module';
 import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
