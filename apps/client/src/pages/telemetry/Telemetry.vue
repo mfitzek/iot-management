@@ -38,11 +38,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import api from '@iot/services/http';
-import { date, QTableColumn } from 'quasar';
+import { QTableColumn } from 'quasar';
 
-import { IAttributeTelemetry } from '@iot/telemetry';
+import { ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
 import AttributesList from '../../components/telemetry/attributesList.vue';
 import AttributesStats from '../../components/telemetry/AttributesStats.vue';
 import LineGraph from '../../components/telemetry/LineGraph.vue';
@@ -51,7 +51,7 @@ import { InputDatePicker } from '@iot/vue-components';
 
 const currentTab = ref('overview');
 
-const data = ref<IAttributeTelemetry[]>([]);
+const data = ref<ITelemetryDevice[]>([]);
 
 const selectedAttributes = ref<string[]>([]);
 
@@ -63,20 +63,15 @@ function updateAttributes(ids: string[]) {
   fetchTelemetryData();
 }
 
-const columns: QTableColumn[] = [
-  { label: 'Created at', name: 'created', field: 'createdAt' },
-  { label: 'Value', name: 'value', field: 'value' },
-];
-
 async function fetchTelemetryData() {
-  const req = await api.get<IAttributeTelemetry[]>('/telemetry', {
+  const req = await api.get<ITelemetryResponse>('/telemetry', {
     params: {
       attr: [...selectedAttributes.value],
       start: dateFrom.value?.getTime(),
       end: dateTo.value?.getTime(),
     },
   });
-  data.value = req.data;
+  data.value = req.data.result;
 }
 </script>
 

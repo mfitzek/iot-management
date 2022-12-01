@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { IAttributeTelemetry } from '@iot/telemetry';
+import { ITelemetryDevice } from '@iot/telemetry';
 import { computed } from 'vue';
 
 import 'chartjs-adapter-moment';
@@ -41,12 +41,12 @@ ChartJS.register(
 );
 
 const props = defineProps<{
-  data: IAttributeTelemetry[];
+  data: ITelemetryDevice[];
 }>();
 
 const chartOptions: ChartOptions = {
   responsive: true,
-  aspectRatio: false,
+  aspectRatio: 2,
   scales: {
     x: {
       type: 'time',
@@ -60,7 +60,12 @@ const chartOptions: ChartOptions = {
 };
 
 const chartData = computed<ChartData>(() => {
-  const displayableData = props.data.map((attr) => {
+  const data = [];
+  for (const dev of props.data) {
+    data.push(...dev.attributes);
+  }
+
+  const displayableData = data.map((attr) => {
     return {
       ...attr,
       telemetry: attr.telemetry.filter((t) => {

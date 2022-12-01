@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      class="row q-mt-sm q-col-gutter-md"
-      v-for="dev of mergedDevicesWithTelemetry"
-    >
+    <div class="row q-mt-sm q-col-gutter-md" v-for="dev of $props.data">
       <div class="col">
         Device: {{ dev?.name }}
         <div class="row q-mb-sm">
@@ -27,44 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import { IDeviceData } from '@iot/device';
-import http from '@iot/services/http';
-import { IAttributeTelemetry } from '@iot/telemetry';
-import { computed, ref } from 'vue';
+import { ITelemetryAttribute, ITelemetryDevice } from '@iot/telemetry';
 
 const props = defineProps<{
-  data: IAttributeTelemetry[];
+  data: ITelemetryDevice[];
 }>();
 
-const deviceList = ref<IDeviceData[]>([]);
-
-const mergedDevicesWithTelemetry = computed(() => {
-  return deviceList.value
-    .map((dev) => {
-      const attributes = props.data.filter((attrData) =>
-        dev.attributes.find((attr) => attrData.id === attr.id)
-      );
-      if (attributes.length === 0) {
-        return null;
-      }
-      return {
-        ...dev,
-        attributes,
-      };
-    })
-    .filter((dev) => dev != null);
-});
-
-function getLastData(attribute: IAttributeTelemetry) {
+function getLastData(attribute: ITelemetryAttribute) {
   return attribute.telemetry[attribute.telemetry.length - 1];
 }
-
-async function fetchUserDevices() {
-  const data = (await http.get<IDeviceData[]>('device/list')).data;
-  deviceList.value = data;
-}
-
-fetchUserDevices();
 </script>
 
 <style scoped></style>
