@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CacheTelemetryCollector } from './telemetry.service';
+import { CacheTelemetryCollector } from './CacheTelemetryCollector';
 
 @Module({
   controllers: [],

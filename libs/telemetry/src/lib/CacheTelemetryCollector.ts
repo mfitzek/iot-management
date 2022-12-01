@@ -1,4 +1,4 @@
-import { ITelemetry } from './../interface/ITelemetry';
+import { ITelemetry } from '../interface/ITelemetry';
 import { ISearchTelemetry } from '../interface/IApi';
 import { Injectable } from '@nestjs/common';
 

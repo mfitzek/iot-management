@@ -10,6 +10,7 @@ import { GatewayMqttModule, MqttService } from '@iot/gateway/mqtt';
 @Module({
   controllers: [DeviceController],
   providers: [DeviceService, DeviceManager],
+  exports: [DeviceManager],
   imports: [PrismaModule, AuthModule, TelemetryModule, GatewayMqttModule],
 })
 export class DeviceModule {}

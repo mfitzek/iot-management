@@ -40,3 +40,4 @@ export class TelemetryController {
     return await this.telemetry.getTelemetry(user, search);
   }
 }
+
