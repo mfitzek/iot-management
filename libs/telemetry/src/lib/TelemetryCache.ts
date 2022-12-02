@@ -5,11 +5,26 @@ import { ITelemetry } from '../interface/ITelemetry';
 export class TelemetryCache {
   private prisma = new PrismaClient();
 
+  private primaryActive = true;
+  private cacheCountLimit = 1000;
+  private cacheTimeLimitMS = 5 * 60 * 1000;
   private primaryCache: ITelemetry[] = [];
   private secondaryCache: ITelemetry[] = [];
 
-  private writeCacheToDatabase(cache: ITelemetry[]) {
-    //  TODO:  write cache
+  private async writeCacheToDatabase(cache: ITelemetry[]) {
+    const transactions = cache.map((row) => {
+      return this.prisma.telemetry.create({
+        data: {
+          attributeId: row.attribute_id,
+          createdAt: row.createdAt ?? new Date(),
+          value: row.value,
+        },
+      });
+    });
+
+    await this.prisma.$transaction(transactions);
+
+    return;
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
@@ -26,5 +41,13 @@ export class TelemetryCache {
       }
       return false;
     });
+  }
+
+  public async saveTelemetry(telemetry: ITelemetry) {
+    if (this.primaryActive) {
+      this.primaryCache.push(telemetry);
+    } else {
+      this.secondaryCache.push(telemetry);
+    }
   }
 }
