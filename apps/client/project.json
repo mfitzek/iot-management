@@ -5,24 +5,20 @@
   "tags": [],
   "targets": {
     "serve": {
-      "executor": "nx-plugin-vite:serve",
+      "executor": "@nrwl/vite:dev-server",
+      "defaultConfiguration": "development",
       "options": {
+        "buildTarget": "client:build",
         "configFile": "apps/client/vite.config.ts",
-        "port": 3000,
+        "port": 4200,
         "host": false,
         "https": false
       }
     },
-    "preview": {
-      "executor": "nx-plugin-vite:preview",
-      "options": {
-        "configFile": "apps/client/vite.config.ts"
-      }
-    },
     "build": {
-      "executor": "nx-plugin-vite:build",
+      "executor": "@nrwl/vite:build",
       "options": {
-        "outDir": "dist",
+        "outputPath": "dist/apps/client",
         "configFile": "apps/client/vite.config.ts",
         "watch": false,
         "write": true,
