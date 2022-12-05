@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CacheTelemetryCollector } from './CacheTelemetryCollector';
+import { MainTelemetryCollector } from './MainTelemetryCollector';
 
 @Module({
   controllers: [],
-  providers: [CacheTelemetryCollector],
-  exports: [CacheTelemetryCollector],
+  providers: [MainTelemetryCollector],
+  exports: [MainTelemetryCollector],
 })
 export class TelemetryModule {}

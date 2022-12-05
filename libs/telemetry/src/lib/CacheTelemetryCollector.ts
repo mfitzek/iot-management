@@ -1,52 +1,70 @@
-import { ITelemetry } from '../interface/ITelemetry';
 import { ISearchTelemetry } from '../interface/IApi';
-import { Injectable } from '@nestjs/common';
-
 import { PrismaClient } from '@prisma/client';
+import { ITelemetry } from '../interface/ITelemetry';
 
-import { TelemetryCollector } from '../interface/TelemetryCollector';
-
-@Injectable()
-export class CacheTelemetryCollector implements TelemetryCollector {
-  private telemetry: ITelemetry[] = [];
+export class CacheTelemetryCollector {
   private prisma = new PrismaClient();
 
-  async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
-    const data = await this.prisma.telemetry.findMany({
-      where: {
-        attributeId: {
-          in: filter.attribute_ids ?? [],
-        },
-        createdAt: {
-          lte: filter.date_to,
-          gte: filter.date_from,
-        },
-      },
-    });
+  private primaryActive = true;
+  private cacheRecordsLimit = 1000;
+  private cacheTimeLimitMS = 5 * 60 * 1000; // TODO implement cache timeout to write DB
+  private primaryCache: ITelemetry[] = [];
+  private secondaryCache: ITelemetry[] = [];
 
-    const result = data.map((t) => {
-      return {
-        attribute_id: t.attributeId,
-        value: t.value,
-        createdAt: t.createdAt,
-      };
-    });
+  public getTelemetry(filter: ISearchTelemetry) {
+    const currentCache: ITelemetry[] = []; // TODO: get current cache
 
-    return result;
+    const start = filter.date_from ?? new Date(0);
+    const end = filter.date_to ?? new Date();
+
+    return currentCache.filter((telemetry) => {
+      if (telemetry.createdAt >= start && telemetry.createdAt <= end) {
+        if (filter.attribute_ids.find((attr) => telemetry.attribute_id === attr)) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
-  saveTelemetry(telemetry: ITelemetry) {
-    this.telemetry.push(telemetry);
-    this.saveTelemetryToDatabase(telemetry);
+  public saveTelemetry(telemetry: ITelemetry) {
+    if (this.primaryActive) {
+      this.saveToPrimaryCache(telemetry);
+    } else {
+      this.saveToSecondaryCache(telemetry);
+    }
   }
 
-  async saveTelemetryToDatabase(telemetry: ITelemetry) {
-    await this.prisma.telemetry.create({
-      data: {
-        attributeId: telemetry.attribute_id,
-        value: telemetry.value,
-        createdAt: telemetry.createdAt,
-      },
+  private async saveToPrimaryCache(telemetry: ITelemetry) {
+    this.primaryCache.push(telemetry);
+    if (this.primaryCache.length >= this.cacheRecordsLimit) {
+      this.primaryActive = false;
+      await this.writeCacheToDatabase(this.primaryCache);
+      this.primaryCache = [];
+    }
+  }
+  private async saveToSecondaryCache(telemetry: ITelemetry) {
+    this.secondaryCache.push(telemetry);
+    if (this.secondaryCache.length >= this.cacheRecordsLimit) {
+      this.primaryActive = true;
+      await this.writeCacheToDatabase(this.secondaryCache);
+      this.secondaryCache = [];
+    }
+  }
+
+  private async writeCacheToDatabase(cache: ITelemetry[]) {
+    const transactions = cache.map((row) => {
+      return this.prisma.telemetry.create({
+        data: {
+          attributeId: row.attribute_id,
+          createdAt: row.createdAt ?? new Date(),
+          value: row.value,
+        },
+      });
     });
+
+    await this.prisma.$transaction(transactions);
+
+    return;
   }
 }

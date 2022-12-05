@@ -1,6 +1,6 @@
 import { ITelemetry, ITelemetryAttribute, ITelemetryDevice } from '@iot/telemetry';
 import { IDeviceData } from '@iot/device';
-import { ISearchTelemetry, ITelemetryResponse, CacheTelemetryCollector } from '@iot/telemetry';
+import { ISearchTelemetry, ITelemetryResponse, MainTelemetryCollector } from '@iot/telemetry';
 import { IUser } from '@iot/user';
 import { Injectable } from '@nestjs/common';
 import { DeviceManager } from '../device/device-manager.service';
@@ -10,7 +10,7 @@ export class TelemetryService {
   // TODO: require user to check owner
 
   constructor(
-    private telemetryCollector: CacheTelemetryCollector,
+    private telemetryCollector: MainTelemetryCollector,
     private deviceManager: DeviceManager
   ) {}
 
