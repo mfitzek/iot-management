@@ -27,7 +27,7 @@ export class TelemetryCache {
 
     return this.cache.filter((telemetry) => {
       if (telemetry.createdAt >= start && telemetry.createdAt <= end) {
-        if (filter.attribute_ids == undefined) {
+        if (filter.attribute_ids === undefined) {
           return true;
         }
         if (filter.attribute_ids.find((attr) => telemetry.attribute_id === attr)) {
@@ -66,7 +66,7 @@ export class TelemetryCache {
   }
 
   private async cacheTimeExceeded() {
-    if (this.cache.length == 0) {
+    if (this.cache.length === 0) {
       return;
     }
     this.cacheWriteCb('timeExceeded');
