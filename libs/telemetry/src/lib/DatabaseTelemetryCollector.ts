@@ -1,14 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 import { ISearchTelemetry } from '../interface/IApi';
 import { ITelemetry } from '../interface/ITelemetry';
+import { TelemetryCollector } from './../interface/TelemetryCollector';
 
-import { PrismaClient } from '@prisma/client';
-
-import { TelemetryCollector } from '../interface/TelemetryCollector';
-
-@Injectable()
-export class MainTelemetryCollector implements TelemetryCollector {
-  private telemetry: ITelemetry[] = [];
+export class DatabaseTelemetryCollector implements TelemetryCollector {
   private prisma = new PrismaClient();
 
   async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
@@ -35,14 +30,13 @@ export class MainTelemetryCollector implements TelemetryCollector {
     return result;
   }
 
-  saveTelemetry(telemetry: ITelemetry) {
-    this.telemetry.push(telemetry);
-    this.saveTelemetryToDatabase(telemetry);
+  async saveTelemetry(telemetry: ITelemetry) {
+    await this.prisma.telemetry.create({
+      data: {
+        attributeId: telemetry.attribute_id,
+        value: telemetry.value,
+        createdAt: telemetry.createdAt,
+      },
+    });
   }
-
-  async saveTelemetryToDatabase(telemetry: ITelemetry) {}
-
-  private async searchDatabase(filter: ISearchTelemetry) {}
-
-  private async searchCache(filter: ISearchTelemetry) {}
 }
