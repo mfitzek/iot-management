@@ -56,7 +56,7 @@ export class TelemetryCache {
 
   private startTimeoutCache() {
     clearTimeout(this.cacheTimeout);
-    this.cacheTimeout = setTimeout(this.cacheTimeExceeded, this.cacheTimeLimitMS);
+    this.cacheTimeout = setTimeout(()=>{this.cacheTimeExceeded()}, this.cacheTimeLimitMS);
   }
   private stopTimeoutCache() {
     if (this.cacheTimeout) {
@@ -74,6 +74,8 @@ export class TelemetryCache {
   }
 
   private async writeCacheToDatabase() {
+    console.log("Writing to DB", this.cache.length);
+    
     const transactions = this.cache.map((row) => {
       return this.prisma.telemetry.create({
         data: {

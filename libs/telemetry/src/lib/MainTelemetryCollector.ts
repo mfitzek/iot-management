@@ -1,48 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { ISearchTelemetry } from '../interface/IApi';
 import { ITelemetry } from '../interface/ITelemetry';
-
-import { PrismaClient } from '@prisma/client';
-
 import { TelemetryCollector } from '../interface/TelemetryCollector';
+import { CacheTelemetryCollector } from './CacheTelemetryCollector';
+import { DatabaseTelemetryCollector } from './DatabaseTelemetryCollector';
 
 @Injectable()
 export class MainTelemetryCollector implements TelemetryCollector {
-  private telemetry: ITelemetry[] = [];
-  private prisma = new PrismaClient();
+
+  private cacheCollector: CacheTelemetryCollector;
+  private databaseCollector: DatabaseTelemetryCollector;
+
+  constructor(){
+    this.cacheCollector = new CacheTelemetryCollector();
+    this.databaseCollector = new DatabaseTelemetryCollector();
+  }
 
   async getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
-    const data = await this.prisma.telemetry.findMany({
-      where: {
-        attributeId: {
-          in: filter.attribute_ids ?? [],
-        },
-        createdAt: {
-          lte: filter.date_to,
-          gte: filter.date_from,
-        },
-      },
+    const cachedData = this.cacheCollector.getTelemetry(filter);
+    const dbData = await this.databaseCollector.getTelemetry(filter);
+
+    const merged = [...cachedData, ...dbData];
+    merged.sort((a,b)=>{
+      return a.createdAt.getTime() - b.createdAt.getTime();
     });
 
-    const result = data.map((t) => {
-      return {
-        attribute_id: t.attributeId,
-        value: t.value,
-        createdAt: t.createdAt,
-      };
-    });
+    return merged;
 
-    return result;
   }
 
   saveTelemetry(telemetry: ITelemetry) {
-    this.telemetry.push(telemetry);
-    this.saveTelemetryToDatabase(telemetry);
+    this.cacheCollector.saveTelemetry(telemetry);
   }
-
-  async saveTelemetryToDatabase(telemetry: ITelemetry) {}
-
-  private async searchDatabase(filter: ISearchTelemetry) {}
-
-  private async searchCache(filter: ISearchTelemetry) {}
 }
