@@ -32,6 +32,9 @@
         <div class="col" v-if="currentTab === 'graphs'">
           <LineGraph :data="data"></LineGraph>
         </div>
+        <div class="col" v-if="currentTab === 'export'">
+          <DataExport :filter="filter"></DataExport>
+        </div>
       </div>
     </div>
   </div>
@@ -40,14 +43,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import api from '@iot/services/http';
-import { QTableColumn } from 'quasar';
 
-import { ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
+import { ISearchTelemetry, ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
 import AttributesList from '../../components/telemetry/attributesList.vue';
 import AttributesStats from '../../components/telemetry/AttributesStats.vue';
 import LineGraph from '../../components/telemetry/LineGraph.vue';
 
 import { InputDatePicker } from '@iot/vue-components';
+import DataExport from '../../components/telemetry/DataExport.vue';
 
 const currentTab = ref('overview');
 
@@ -57,6 +60,14 @@ const selectedAttributes = ref<string[]>([]);
 
 const dateFrom = ref<Date | undefined>(undefined);
 const dateTo = ref<Date | undefined>(undefined);
+
+const filter = computed<ISearchTelemetry>(() => {
+  return {
+    attribute_ids: selectedAttributes.value,
+    date_from: dateFrom.value,
+    date_to: dateTo.value,
+  };
+});
 
 function updateAttributes(ids: string[]) {
   selectedAttributes.value = ids;

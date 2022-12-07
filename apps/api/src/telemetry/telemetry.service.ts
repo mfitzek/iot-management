@@ -2,8 +2,9 @@ import { ITelemetry, ITelemetryAttribute, ITelemetryDevice } from '@iot/telemetr
 import { IDeviceData } from '@iot/device';
 import { ISearchTelemetry, ITelemetryResponse, MainTelemetryCollector } from '@iot/telemetry';
 import { IUser } from '@iot/user';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { DeviceManager } from '../device/device-manager.service';
+import { exportToCsv, exportToJson, exportToXml } from './dataFormater';
 
 @Injectable()
 export class TelemetryService {
@@ -15,8 +16,6 @@ export class TelemetryService {
   ) {}
 
   public async getTelemetry(user: IUser, query: ISearchTelemetry): Promise<ITelemetryResponse> {
-
-
     const telemetry = await this.telemetryCollector.getTelemetry(query);
     const telemetryGroups = this.groupTelemetryData(telemetry);
     const userDevices = await this.getUsersOwnedDevices(user);
@@ -28,18 +27,29 @@ export class TelemetryService {
       result: merged,
     };
 
-
     return result;
   }
 
+  public async exportTelemetry(user: IUser, query: ISearchTelemetry) {
+    const data = await this.getTelemetry(user, query);
+    switch (query.exportFormat) {
+      case 'JSON':
+        return exportToJson(data.result);
+      case 'CSV':
+        return exportToCsv(data.result);
+      case 'XML':
+        return exportToXml(data.result);
+    }
+    return 'Format not available';
+  }
 
-  private groupTelemetryData(telemetry: ITelemetry[]){
-    const map = new Map<string, ITelemetry[]>()
-    telemetry.forEach(data=>{
+  private groupTelemetryData(telemetry: ITelemetry[]) {
+    const map = new Map<string, ITelemetry[]>();
+    telemetry.forEach((data) => {
       const id = data.attribute_id;
-      if(map.has(id)){
+      if (map.has(id)) {
         map.get(id).push(data);
-      }else{
+      } else {
         map.set(id, [data]);
       }
     });
@@ -47,28 +57,26 @@ export class TelemetryService {
     return map;
   }
 
-  private mergeDeviceWithData(devices: IDeviceData[], data: Map<string, ITelemetry[]>){
-    const result: ITelemetryDevice[] = devices.map(dev=>{
-      const attributes: ITelemetryAttribute[] = dev.attributes.map(attr=>{
+  private mergeDeviceWithData(devices: IDeviceData[], data: Map<string, ITelemetry[]>) {
+    const result: ITelemetryDevice[] = devices.map((dev) => {
+      const attributes: ITelemetryAttribute[] = dev.attributes.map((attr) => {
         return {
           id: attr.id,
           name: attr.name,
           type: attr.type,
-          telemetry: data.get(attr.id)?? []
-        }
+          telemetry: data.get(attr.id) ?? [],
+        };
       });
       return {
         id: dev.id,
         name: dev.name,
-        attributes: attributes.filter(attr=>attr.telemetry.length)
-      }
+        attributes: attributes.filter((attr) => attr.telemetry.length),
+      };
     });
-    return result.filter(dev=>dev.attributes.length);
+    return result.filter((dev) => dev.attributes.length);
   }
-
 
   private getUsersOwnedDevices(user: IUser) {
     return this.deviceManager.getUserDeviceList(user.id);
   }
-
 }
