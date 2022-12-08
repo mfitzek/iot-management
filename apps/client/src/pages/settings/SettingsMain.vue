@@ -1,60 +1,33 @@
 <template>
   <div>
-    <h2>Settings</h2>
+    <q-toolbar class="bg-green text-white">
+      <q-tabs class="text-teal" dense>
+        <q-route-tab
+          name="dasboard"
+          icon="dashboard"
+          label="Dashboard"
+          :to="{ name: 'SettingsDashboard' }"
+        />
+        <q-route-tab
+          name="settings"
+          icon="settings"
+          label="Settings"
+          :to="{ name: 'SettingsSettings' }"
+        />
+        <q-route-tab
+          name="accounts"
+          icon="people"
+          label="Accounts"
+          :to="{ name: 'SettingsAccounts' }"
+        />
+      </q-tabs>
+    </q-toolbar>
 
-    <section>
-      <DBState></DBState>
-    </section>
-
-    <section class="q-mt-md">
-      <p class="text-h5">Backup Database</p>
-      <q-btn
-        color="primary"
-        icon="cloud_download"
-        label="Backup"
-        @click="backup"
-      />
-    </section>
-
-    <section class="q-mt-md">
-      <p class="text-h5">Restore Database</p>
-      <div class="row items-center q-gutter-md">
-        <div class="col-4">
-          <q-file
-            filled
-            bottom-slots
-            v-model="file"
-            label="Label"
-            counter
-            accept=".zip"
-          >
-            <template v-slot:prepend>
-              <q-icon name="cloud_upload" @click.stop />
-            </template>
-            <template v-slot:append>
-              <q-icon
-                name="close"
-                @click.stop="file = null"
-                class="cursor-pointer"
-              />
-            </template>
-          </q-file>
-        </div>
-        <div class="col-auto">
-          <q-btn
-            color="primary"
-            icon="cloud_upload"
-            label="Restore"
-            @click="restore"
-          />
-        </div>
-      </div>
-    </section>
+    <div class="q-pa-md"><RouterView></RouterView></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import DBState from '../../components/settings/DBState.vue';
 import { ref } from 'vue';
 import api from '@iot/services/http';
 
