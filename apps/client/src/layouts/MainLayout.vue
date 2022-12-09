@@ -13,11 +13,7 @@
     <q-drawer v-model="leftDrawerOpen" showIfAbove side="left" bordered>
       <!-- drawer content -->
       <q-list>
-        <q-item
-          v-for="(link, index) in links_filtered"
-          :key="index"
-          :to="link.route"
-        >
+        <q-item v-for="(link, index) in links_filtered" :key="index" :to="link.route">
           <q-item-section>{{ link.name }}</q-item-section>
           <q-item-section avatar>
             <q-icon :name="link.icon"></q-icon>
@@ -53,9 +49,9 @@ export default defineComponent({
         auth_level: 0,
       },
       {
-        name: 'Settings',
+        name: 'Administration',
         icon: 'sym_o_settings',
-        route: { name: 'SettingsMain' },
+        route: { name: 'SettingsDashboard' },
         auth_level: 2,
       },
     ];

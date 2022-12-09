@@ -1,7 +1,7 @@
 <template>
   <div>
-    <q-toolbar class="bg-green text-white">
-      <q-tabs class="text-teal" dense>
+    <q-toolbar class="bg-light-blue text-white">
+      <q-tabs class="" dense>
         <q-route-tab
           name="dasboard"
           icon="dashboard"

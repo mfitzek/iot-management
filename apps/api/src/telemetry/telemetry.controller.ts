@@ -1,7 +1,6 @@
-import { FormatType } from '../../../../libs/telemetry/src/interface/IApi';
-import { ISearchTelemetry } from '@iot/telemetry';
+import { FormatType, ISearchTelemetry } from '@iot/telemetry';
 import { IUser } from '@iot/user';
-import { Controller, Get, UseGuards, Req, Query } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { TelemetryService } from './telemetry.service';
 

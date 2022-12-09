@@ -12,7 +12,8 @@
         "configFile": "apps/client/vite.config.ts",
         "port": 4200,
         "host": false,
-        "https": false
+        "https": false,
+        "hmr": true
       }
     },
     "build": {

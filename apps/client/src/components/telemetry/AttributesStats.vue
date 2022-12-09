@@ -15,8 +15,8 @@
           <div class="col">{{ a.name }}</div>
           <div class="col">{{ a.type }}</div>
           <div class="col">{{ a.telemetry?.length }}</div>
-          <div class="col">{{ getLastData(a)?.createdAt ?? 'NA' }}</div>
-          <div class="col">{{ getLastData(a)?.value ?? 'NA' }}</div>
+          <div class="col">{{ getLastDate(a) }}</div>
+          <div class="col">{{ getLastValue(a) }}</div>
         </div>
       </div>
     </div>
@@ -30,7 +30,23 @@ const props = defineProps<{
   data: ITelemetryDevice[];
 }>();
 
-function getLastData(attribute: ITelemetryAttribute) {
+function getLastDate(attribute: ITelemetryAttribute) {
+  const last = getLast(attribute);
+  if (!last) {
+    return 'NA';
+  }
+
+  const lastDate = new Date(last.createdAt);
+
+  return lastDate.toLocaleString();
+}
+
+function getLastValue(attribute: ITelemetryAttribute) {
+  const last = getLast(attribute);
+  return last.value ?? 'NA';
+}
+
+function getLast(attribute: ITelemetryAttribute) {
   return attribute.telemetry[attribute.telemetry.length - 1];
 }
 </script>

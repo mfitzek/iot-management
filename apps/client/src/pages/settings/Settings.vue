@@ -22,6 +22,14 @@
       label="Time (seconds) after which the records are stored in the database"
     />
   </section>
+
+  <q-btn
+    class="fixed-bottom-right q-ma-md"
+    color="primary"
+    icon="edit"
+    label="Save settings"
+    @click="void"
+  />
 </template>
 
 <script setup lang="ts">

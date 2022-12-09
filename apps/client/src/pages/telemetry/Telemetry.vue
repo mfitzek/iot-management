@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row q-mx-md">
     <div class="col-3">
       <AttributesList @update="updateAttributes"></AttributesList>
     </div>
