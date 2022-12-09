@@ -27,42 +27,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import api from '@iot/services/http';
-
-const file = ref(null);
-
-async function restore() {
-  if (file.value) {
-    let form = new FormData();
-    form.append('backup', file.value);
-    try {
-      await api.post('/settings/restore', form);
-      // this.$store.dispatch("user_settings/fetch");
-      // this.$store.commit("app/Push", { message: "Databáze úspěšně obnovena", type: "success" });
-    } catch (error) {
-      // this.$store.commit("app/Push", {
-      //     message: "Chyba při obnovování dat.",
-      //     type: "error",
-      // });
-      console.log(error);
-    }
-  }
-}
-async function backup() {
-  const res = await api.post('/settings/backup', null, {
-    responseType: 'blob',
-  });
-  const filename = res.headers['content-disposition'].split('=')[1];
-  const url = window.URL.createObjectURL(new Blob([res.data]));
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>
