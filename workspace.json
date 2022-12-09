@@ -5,6 +5,7 @@
     "api": "apps/api",
     "basic-device": "libs/basic-device",
     "client": "apps/client",
+    "configuration": "libs/configuration",
     "constants": "libs/constants",
     "custom-device": "libs/custom-device",
     "custom-device-manager": "libs/custom-device-manager",
