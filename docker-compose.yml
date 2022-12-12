@@ -9,3 +9,21 @@ services:
       - '8080:8080'
       - '1883:1883'
     restart: unless-stopped
+
+  client:
+    image: iot-client
+    build:
+      dockerfile: ./Dockerfile.client
+    ports:
+      - 4200:4200
+    volumes:
+      - .:/app
+
+  api:
+    image: iot-api
+    build:
+      dockerfile: ./Dockerfile.api
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
