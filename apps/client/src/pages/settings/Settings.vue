@@ -28,17 +28,44 @@
     color="primary"
     icon="edit"
     label="Save settings"
-    @click="void"
+    @click="saveSettings()"
   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import api from '@iot/services/http';
+import { Settings } from '@iot/configuration';
 
-const dbSizeMb = ref(4096);
+const dbSizeMb = ref(0);
 
-const cacheRecordsLimit = ref(100);
-const cacheTimeoutSec = ref(300);
+const cacheRecordsLimit = ref(0);
+const cacheTimeoutSec = ref(0);
+
+async function fetchSettings() {
+  const res = await api.get<Settings>('settings');
+  const data = res.data;
+
+  dbSizeMb.value = data.database.maxDatabaseSizeMB;
+  cacheRecordsLimit.value = data.telemetryCache.maxNumberOfRecords;
+  cacheTimeoutSec.value = data.telemetryCache.cacheTimeoutMs / 1000;
+}
+
+async function saveSettings() {
+  const settings: Settings = {
+    database: {
+      maxDatabaseSizeMB: Number(dbSizeMb.value),
+    },
+    telemetryCache: {
+      maxNumberOfRecords: Number(cacheRecordsLimit.value),
+      cacheTimeoutMs: Number(cacheTimeoutSec.value * 1000),
+    },
+  };
+
+  await api.post('settings', settings);
+}
+
+fetchSettings();
 </script>
 
 <style scoped>
