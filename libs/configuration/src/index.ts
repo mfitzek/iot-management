@@ -4,9 +4,9 @@ import { JsonSettingsStorage } from './settings-storage/jsonSettingsStorage';
 import { SettingsStorage } from './settings-storage/settingsStorage';
 
 @Injectable()
-export class Configuration {
+export class ConfiguratioProvider {
   private settings?: Settings;
-  public storage: SettingsStorage;
+  private storage: SettingsStorage;
 
   constructor() {
     this.storage = new JsonSettingsStorage();
@@ -14,7 +14,7 @@ export class Configuration {
 
   public async getSettings(): Promise<Settings> {
     if (!this.settings) {
-      this.settings = await this.storage.getSettings();
+      this.settings = await this.getSettingsFromStorageOrCreateNew();
     }
     return { ...this.settings };
   }
@@ -23,4 +23,27 @@ export class Configuration {
     this.settings = settings;
     await this.storage.saveSettings(settings);
   }
+
+  private async getSettingsFromStorageOrCreateNew() {
+    const storagedSettings = await this.storage.getSettings();
+    if (storagedSettings) {
+      return storagedSettings;
+    }
+    return this.getDefaultConfig();
+  }
+
+  private getDefaultConfig() {
+    const config: Settings = {
+      database: {
+        maxDatabaseSizeMB: 4000,
+      },
+      telemetryCache: {
+        maxNumberOfRecords: 100,
+        cacheTimeoutMs: 5 * 60 * 1000,
+      },
+    };
+    return config;
+  }
 }
+
+export * from './dataObjects';
