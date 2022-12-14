@@ -1,5 +1,5 @@
 export interface Observer {
-  onUpdate(observable: Observer): void;
+  onUpdate(): void;
 }
 
 export interface Observable {

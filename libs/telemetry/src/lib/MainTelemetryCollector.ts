@@ -10,8 +10,8 @@ export class MainTelemetryCollector implements TelemetryCollector {
   private cacheCollector: CacheTelemetryCollector;
   private databaseCollector: DatabaseTelemetryCollector;
 
-  constructor(private configuration: ConfiguratioProvider) {
-    this.cacheCollector = new CacheTelemetryCollector();
+  constructor(private configurationProvider: ConfiguratioProvider) {
+    this.cacheCollector = new CacheTelemetryCollector(configurationProvider);
     this.databaseCollector = new DatabaseTelemetryCollector();
   }
 

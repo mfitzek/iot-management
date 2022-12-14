@@ -1,8 +1,9 @@
 import { TelemetryCache } from './TelemetryCache';
 import { ISearchTelemetry } from '../interface/IApi';
 import { ITelemetry } from '../interface/ITelemetry';
-
-export class CacheTelemetryCollector {
+import { ConfiguratioProvider } from '@iot/configuration';
+import { Observer } from '@iot/utility';
+export class CacheTelemetryCollector implements Observer {
   private primaryActive = true;
 
   private cacheRecordsLimit = 1000; // TODO: STATE MANAGER
@@ -11,7 +12,7 @@ export class CacheTelemetryCollector {
   private primaryCache: TelemetryCache;
   private secondaryCache: TelemetryCache;
 
-  constructor() {
+  constructor(private configurationProvider: ConfiguratioProvider) {
     this.primaryCache = new TelemetryCache(
       this.cacheRecordsLimit,
       this.cacheTimeLimitMS,
@@ -22,6 +23,9 @@ export class CacheTelemetryCollector {
       this.cacheTimeLimitMS,
       this.currentCacheWriting
     );
+  }
+  onUpdate(): void {
+    this.configurationProvider.getSettings();
   }
 
   public getTelemetry(filter: ISearchTelemetry) {

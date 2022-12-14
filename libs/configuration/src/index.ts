@@ -1,15 +1,30 @@
+import { Observable, Observer } from '@iot/utility';
 import { Injectable } from '@nestjs/common';
 import { Settings } from './dataObjects';
 import { JsonSettingsStorage } from './settings-storage/jsonSettingsStorage';
 import { SettingsStorage } from './settings-storage/settingsStorage';
 
 @Injectable()
-export class ConfiguratioProvider {
+export class ConfiguratioProvider implements Observable {
   private settings?: Settings;
   private storage: SettingsStorage;
 
+  private observers: Set<Observer>;
+
   constructor() {
     this.storage = new JsonSettingsStorage();
+    this.observers = new Set<Observer>();
+  }
+  notify(): void {
+    this.observers.forEach((obs) => {
+      obs.onUpdate();
+    });
+  }
+  register(observer: Observer): void {
+    this.observers.add(observer);
+  }
+  unregister(observer: Observer): void {
+    this.observers.delete(observer);
   }
 
   public async getSettings(): Promise<Settings> {
