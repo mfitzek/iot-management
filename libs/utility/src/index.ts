@@ -1,1 +1,1 @@
-export * from './lib/utility';
+export * from './observer/index';
