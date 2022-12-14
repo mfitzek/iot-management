@@ -1,4 +1,4 @@
-import { Settings } from '../dataObjects';
+import { Settings } from '@iot/configuration';
 
 export interface SettingsStorage {
   saveSettings(settings: Settings): Promise<boolean>;

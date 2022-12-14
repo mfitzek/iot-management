@@ -1,4 +1,4 @@
-import { Settings } from '../dataObjects';
+import { Settings } from '@iot/configuration';
 import { SettingsStorage } from './settingsStorage';
 
 import { writeFile, readFile } from 'fs/promises';

@@ -1,4 +1,4 @@
-import { ConfiguratioProvider } from '@iot/configuration';
+import { ConfiguratioProvider } from './settings-provider.service';
 
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { Settings } from '@iot/configuration';

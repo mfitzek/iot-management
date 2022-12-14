@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { IDevice, IDeviceData } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
-import { MainTelemetryCollector } from '@iot/telemetry';
+import { MainTelemetryCollector } from '../telemetry/telemety-collector/telemetry-collector';
 import { IProvidedServices } from '@iot/device';
 import { MqttService } from '@iot/gateway/mqtt';
 

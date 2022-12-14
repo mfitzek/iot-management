@@ -1,10 +1,16 @@
-import { ITelemetry, ITelemetryAttribute, ITelemetryDevice } from '@iot/telemetry';
 import { IDeviceData } from '@iot/device';
-import { ISearchTelemetry, ITelemetryResponse, MainTelemetryCollector } from '@iot/telemetry';
+import {
+  ISearchTelemetry,
+  ITelemetry,
+  ITelemetryAttribute,
+  ITelemetryDevice,
+  ITelemetryResponse,
+} from '@iot/telemetry';
 import { IUser } from '@iot/user';
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DeviceManager } from '../device/device-manager.service';
 import { exportToCsv, exportToJson, exportToXml } from './dataFormater';
+import { MainTelemetryCollector } from './telemety-collector/telemetry-collector';
 
 @Injectable()
 export class TelemetryService {

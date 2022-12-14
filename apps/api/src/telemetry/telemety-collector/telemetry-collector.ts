@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ISearchTelemetry } from '../interface/IApi';
-import { ITelemetry } from '../interface/ITelemetry';
-import { TelemetryCollector } from '../interface/TelemetryCollector';
+
+import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+import { TelemetryCollector } from '@iot/telemetry';
 import { CacheTelemetryCollector } from './CacheTelemetryCollector';
 import { DatabaseTelemetryCollector } from './DatabaseTelemetryCollector';
-import { ConfiguratioProvider } from '@iot/configuration';
+import { ConfiguratioProvider } from '../../settings/settings-provider.service';
 @Injectable()
 export class MainTelemetryCollector implements TelemetryCollector {
   private cacheCollector: CacheTelemetryCollector;

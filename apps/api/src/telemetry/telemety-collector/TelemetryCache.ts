@@ -1,24 +1,25 @@
-import { ISearchTelemetry } from '../interface/IApi';
 import { PrismaClient } from '@prisma/client';
-import { ITelemetry } from '../interface/ITelemetry';
+import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+import { TelemetryCacheSettings } from '@iot/configuration';
 
 export class TelemetryCache {
   private prisma = new PrismaClient();
 
-  private cacheRecordsLimit;
-  private cacheTimeLimitMS;
+  private cacheRecordsLimit = 1000;
+  private cacheTimeLimitMS = 5 * 60 * 1000;
   private cacheWriteCb: (event: string) => void;
   private cacheTimeout: NodeJS.Timeout;
   private cache: ITelemetry[] = [];
 
-  constructor(
-    cacheCountLimit = 1000,
-    cacheTimeLimitMS = 5 * 60 * 1000,
-    onCacheDBWrite: (event: string) => void
-  ) {
-    this.cacheRecordsLimit = cacheCountLimit;
-    this.cacheTimeLimitMS = cacheTimeLimitMS;
+  constructor(onCacheDBWrite: (event: string) => void) {
     this.cacheWriteCb = onCacheDBWrite;
+  }
+
+  public changeSettings(settings: TelemetryCacheSettings) {
+    this.cacheRecordsLimit = settings.maxNumberOfRecords;
+    this.cacheTimeLimitMS = settings.cacheTimeoutMs;
+
+    this.cacheTimeExceeded();
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
@@ -56,7 +57,9 @@ export class TelemetryCache {
 
   private startTimeoutCache() {
     clearTimeout(this.cacheTimeout);
-    this.cacheTimeout = setTimeout(()=>{this.cacheTimeExceeded()}, this.cacheTimeLimitMS);
+    this.cacheTimeout = setTimeout(() => {
+      this.cacheTimeExceeded();
+    }, this.cacheTimeLimitMS);
   }
   private stopTimeoutCache() {
     if (this.cacheTimeout) {
@@ -66,6 +69,7 @@ export class TelemetryCache {
   }
 
   private async cacheTimeExceeded() {
+    console.log('Cache timeout 🚀 🌙');
     if (this.cache.length === 0) {
       return;
     }
@@ -74,8 +78,8 @@ export class TelemetryCache {
   }
 
   private async writeCacheToDatabase() {
-    console.log("Writing to DB", this.cache.length);
-    
+    console.log('Writing to DB', this.cache.length);
+
     const transactions = this.cache.map((row) => {
       return this.prisma.telemetry.create({
         data: {

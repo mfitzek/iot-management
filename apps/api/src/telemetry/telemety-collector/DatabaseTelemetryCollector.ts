@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { ISearchTelemetry } from '../interface/IApi';
-import { ITelemetry } from '../interface/ITelemetry';
-import { TelemetryCollector } from './../interface/TelemetryCollector';
+
+import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+import { TelemetryCollector } from '@iot/telemetry';
 
 export class DatabaseTelemetryCollector implements TelemetryCollector {
   private prisma = new PrismaClient();

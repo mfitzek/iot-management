@@ -1,31 +1,24 @@
 import { TelemetryCache } from './TelemetryCache';
-import { ISearchTelemetry } from '../interface/IApi';
-import { ITelemetry } from '../interface/ITelemetry';
-import { ConfiguratioProvider } from '@iot/configuration';
+
+import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+import { ConfiguratioProvider } from '../../settings/settings-provider.service';
+
 import { Observer } from '@iot/utility';
 export class CacheTelemetryCollector implements Observer {
   private primaryActive = true;
-
-  private cacheRecordsLimit = 1000; // TODO: STATE MANAGER
-  private cacheTimeLimitMS = 5 * 60 * 1000;
 
   private primaryCache: TelemetryCache;
   private secondaryCache: TelemetryCache;
 
   constructor(private configurationProvider: ConfiguratioProvider) {
-    this.primaryCache = new TelemetryCache(
-      this.cacheRecordsLimit,
-      this.cacheTimeLimitMS,
-      this.currentCacheWriting
-    );
-    this.secondaryCache = new TelemetryCache(
-      this.cacheRecordsLimit,
-      this.cacheTimeLimitMS,
-      this.currentCacheWriting
-    );
+    this.primaryCache = new TelemetryCache(this.currentCacheWriting);
+    this.secondaryCache = new TelemetryCache(this.currentCacheWriting);
+
+    this.configureCollectors();
   }
-  onUpdate(): void {
-    this.configurationProvider.getSettings();
+
+  public onUpdate(): void {
+    this.configureCollectors();
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
@@ -44,7 +37,11 @@ export class CacheTelemetryCollector implements Observer {
     this.primaryActive = !this.primaryActive;
     if (reason === 'countLimit') {
       console.warn('Cache reaches the limit, adjust time or cache capacity.');
-      // TODO: some state manager for administration?
     }
+  }
+  private async configureCollectors() {
+    const settings = await this.configurationProvider.getSettings();
+    this.primaryCache.changeSettings(settings.telemetryCache);
+    this.secondaryCache.changeSettings(settings.telemetryCache);
   }
 }

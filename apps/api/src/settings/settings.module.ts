@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfiguratioProvider } from '@iot/configuration';
+import { ConfiguratioProvider } from './settings-provider.service';
 import { SettingsController } from './settings.controller';
 
 @Module({
