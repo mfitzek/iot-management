@@ -15,6 +15,7 @@
     "services-http": "libs/services/http",
     "telemetry": "libs/telemetry",
     "user": "libs/user",
+    "utility": "libs/utility",
     "vue-components": "libs/vue-components"
   }
 }
