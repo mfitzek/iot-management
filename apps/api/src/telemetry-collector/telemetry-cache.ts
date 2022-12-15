@@ -19,7 +19,11 @@ export class TelemetryCache {
     this.cacheRecordsLimit = settings.maxNumberOfRecords;
     this.cacheTimeLimitMS = settings.cacheTimeoutMs;
 
-    this.cacheTimeExceeded();
+    console.log('Update settings');
+
+    if (this.cache.length > 0) {
+      this.writeCacheToDatabase();
+    }
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
@@ -56,6 +60,7 @@ export class TelemetryCache {
   }
 
   private startTimeoutCache() {
+    console.log('Start new timeout ', this.cacheTimeLimitMS);
     clearTimeout(this.cacheTimeout);
     this.cacheTimeout = setTimeout(() => {
       this.cacheTimeExceeded();

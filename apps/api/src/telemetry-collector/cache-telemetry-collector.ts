@@ -14,6 +14,8 @@ export class CacheTelemetryCollector implements Observer {
     this.primaryCache = new TelemetryCache(this.currentCacheWriting);
     this.secondaryCache = new TelemetryCache(this.currentCacheWriting);
 
+    this.configurationProvider.register(this);
+
     this.configureCollectors();
   }
 

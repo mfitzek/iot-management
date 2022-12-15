@@ -36,6 +36,7 @@ export class ConfiguratioProvider implements Observable {
 
   public async saveSettings(settings: Settings) {
     this.settings = settings;
+    this.notify();
     await this.storage.saveSettings(settings);
   }
 
