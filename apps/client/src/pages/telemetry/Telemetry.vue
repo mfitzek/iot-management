@@ -4,7 +4,7 @@
       <AttributesList @update="updateAttributes"></AttributesList>
     </div>
     <div class="col-9 q-mt-md">
-      <div class="row q-gutter-md justify-center">
+      <div class="row q-gutter-md justify-center items-center">
         <InputDatePicker
           v-model="dateFrom"
           filled
@@ -17,6 +17,11 @@
           label="Search to date"
           @update:modelValue="fetchTelemetryData()"
         />
+        <div>
+          <q-btn color="primary" icon="s_sync" round @click="fetchTelemetryData">
+            <q-tooltip> Refresh data </q-tooltip>
+          </q-btn>
+        </div>
       </div>
 
       <q-tabs v-model="currentTab" class="text-primary">
