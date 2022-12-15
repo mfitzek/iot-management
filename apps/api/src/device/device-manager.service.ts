@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { IDevice, IDeviceData } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
-import { MainTelemetryCollector } from '../telemetry/telemety-collector/telemetry-collector';
+
 import { IProvidedServices } from '@iot/device';
 import { MqttService } from '@iot/gateway/mqtt';
+import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class DeviceManager {
@@ -12,7 +13,7 @@ export class DeviceManager {
 
   constructor(
     private device_service: DeviceService,
-    private telemetry_service: MainTelemetryCollector,
+    private telemetry_service: TelemetryCollectorService,
     private mqtt_service: MqttService
   ) {
     this.initDevices();

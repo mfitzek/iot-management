@@ -10,14 +10,14 @@ import { IUser } from '@iot/user';
 import { Injectable } from '@nestjs/common';
 import { DeviceManager } from '../device/device-manager.service';
 import { exportToCsv, exportToJson, exportToXml } from './dataFormater';
-import { MainTelemetryCollector } from './telemety-collector/telemetry-collector';
+import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class TelemetryService {
   // TODO: require user to check owner
 
   constructor(
-    private telemetryCollector: MainTelemetryCollector,
+    private telemetryCollector: TelemetryCollectorService,
     private deviceManager: DeviceManager
   ) {}
 
