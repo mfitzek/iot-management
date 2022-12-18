@@ -1,3 +1,4 @@
+import { SettingsModule } from './../settings/settings.module';
 import { TelemetryCollectorModule } from './../telemetry-collector/collector.module';
 import { DeviceManager } from './device-manager.service';
 import { PrismaModule } from './../prisma/prisma.module';
@@ -12,6 +13,6 @@ import { GatewayMqttModule } from '@iot/gateway/mqtt';
   controllers: [DeviceController],
   providers: [DeviceService, DeviceManager],
   exports: [DeviceManager],
-  imports: [PrismaModule, AuthModule, TelemetryCollectorModule, GatewayMqttModule],
+  imports: [PrismaModule, AuthModule, TelemetryCollectorModule, GatewayMqttModule, SettingsModule],
 })
 export class DeviceModule {}

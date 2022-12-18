@@ -6,16 +6,24 @@ import { DeviceTypeManager } from '@iot/custom-device-manager';
 import { IProvidedServices } from '@iot/device';
 import { MqttService } from '@iot/gateway/mqtt';
 import { TelemetryCollectorService } from '../telemetry-collector';
+import { BackupService } from '../settings/backup/backup.service';
+import { Observer } from '@iot/utility';
 
 @Injectable()
-export class DeviceManager {
+export class DeviceManager implements Observer {
   device_list: IDevice[] = [];
 
   constructor(
     private device_service: DeviceService,
     private telemetry_service: TelemetryCollectorService,
-    private mqtt_service: MqttService
+    private mqtt_service: MqttService,
+    private backupServicer: BackupService
   ) {
+    this.initDevices();
+    this.backupServicer.register(this);
+  }
+  onUpdate(): void {
+    // TODO: disconnect all devices from gateways
     this.initDevices();
   }
 

@@ -41,3 +41,4 @@ Thumbs.db
 *.env
 *.db
 *.db-journal
+*.bak

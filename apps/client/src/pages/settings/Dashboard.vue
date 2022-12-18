@@ -36,9 +36,9 @@ const file = ref(null);
 async function restore() {
   if (file.value) {
     let form = new FormData();
-    form.append('backup', file.value);
+    form.append('file', file.value);
     try {
-      await api.post('/settings/restore', form);
+      await api.post('/backup', form);
       // this.$store.dispatch("user_settings/fetch");
       // this.$store.commit("app/Push", { message: "Databáze úspěšně obnovena", type: "success" });
     } catch (error) {
@@ -51,7 +51,7 @@ async function restore() {
   }
 }
 async function backup() {
-  const res = await api.post('/settings/backup', null, {
+  const res = await api.get('/backup', {
     responseType: 'blob',
   });
   const filename = res.headers['content-disposition'].split('=')[1];
