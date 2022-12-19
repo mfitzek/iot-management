@@ -23,7 +23,8 @@ export class DeviceManager implements Observer {
     this.backupServicer.register(this);
   }
   onUpdate(): void {
-    // TODO: disconnect all devices from gateways
+    this.mqtt_service.quitService();
+
     this.initDevices();
   }
 
