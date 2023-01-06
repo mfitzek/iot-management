@@ -26,6 +26,7 @@
       "@iot/gateway/http": ["libs/gateway/http/src/index.ts"],
       "@iot/gateway/mqtt": ["libs/gateway/mqtt/src/index.ts"],
       "@iot/services/http": ["libs/services/http/src/index.ts"],
+      "@iot/stores/messages": ["libs/stores/messages/src/index.ts"],
       "@iot/telemetry": ["libs/telemetry/src/index.ts"],
       "@iot/user": ["libs/user/src/index.ts"],
       "@iot/utility": ["libs/utility/src/index.ts"],

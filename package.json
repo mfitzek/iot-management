@@ -31,6 +31,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pinia": "^2.0.28",
     "qs": "^6.11.0",
     "quasar": "^2.7.7",
     "reflect-metadata": "^0.1.13",
