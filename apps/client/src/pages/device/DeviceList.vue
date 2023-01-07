@@ -6,7 +6,7 @@
       </div>
       <div class="col-auto">
         <q-btn color="green" icon-right="add" :to="{ name: 'DeviceCreate' }"
-          >Add device</q-btn
+          >Create new device</q-btn
         >
       </div>
     </div>
