@@ -34,10 +34,15 @@ export class BackupController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    if (file?.buffer) {
-      this.backupService.restore(file.buffer);
+  uploadFile(@UploadedFile() file: Express.Multer.File, @Res() res: Response) {
+    try {
+      if (file?.buffer) {
+        this.backupService.restore(file.buffer);
+      }
+      return 'OK';
+    } catch (error) {
+      res.statusCode = 400;
+      return 'Restore failed';
     }
-    return 'OK';
   }
 }

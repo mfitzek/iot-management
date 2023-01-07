@@ -13,29 +13,37 @@
     </section>
 
     <section class="q-mt-md">
-      <p class="text-h5">Backup Database</p>
-      <q-btn color="primary" icon="cloud_download" label="Backup" @click="backup" />
-    </section>
-
-    <section class="q-mt-md">
-      <p class="text-h5">Restore Database</p>
-      <div class="row items-center q-gutter-md">
-        <div class="col-4">
-          <q-file filled bottom-slots v-model="file" label="Label" counter accept=".zip">
-            <template v-slot:prepend>
-              <q-icon name="cloud_upload" @click.stop />
-            </template>
-            <template v-slot:append>
-              <q-icon name="close" @click.stop="file = null" class="cursor-pointer" />
-            </template>
-          </q-file>
-        </div>
-        <div class="col-auto">
-          <q-btn color="primary" icon="cloud_upload" label="Restore" @click="restore" />
-        </div>
+      <p class="text-h5">Backup &amp; Restore Database</p>
+      <div class="q-gutter-sm">
+        <q-btn color="primary" icon="cloud_download" label="Backup" @click="backup" />
+        <q-btn color="primary" icon="cloud_upload" label="Restore" @click="restoreDialog = true" />
       </div>
     </section>
   </div>
+
+  <q-dialog v-model="restoreDialog">
+    <q-card style="min-width: 350px">
+      <q-card-section>
+        <div class="text-h6">Upload backup file</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-file filled bottom-slots v-model="file" label="Backup file" counter accept=".zip">
+          <template v-slot:prepend>
+            <q-icon name="cloud_upload" @click.stop />
+          </template>
+          <template v-slot:append>
+            <q-icon name="close" @click.stop="file = null" class="cursor-pointer" />
+          </template>
+        </q-file>
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat label="Cancel" v-close-popup />
+        <q-btn flat label="Restore database" v-close-popup @click="restore()" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
@@ -43,9 +51,12 @@ import { ref } from 'vue';
 import api from '@iot/services/http';
 import DBState from '../../components/settings/DBState.vue';
 import { Statistics } from '@iot/administration';
+import { useQuasar } from 'quasar';
 
 const file = ref(null);
 const stats = ref<Statistics | null>(null);
+const restoreDialog = ref(false);
+const { notify } = useQuasar();
 
 async function getStats() {
   const res = await api.get<Statistics>('/administration/statistics');
@@ -58,14 +69,17 @@ async function restore() {
     form.append('file', file.value);
     try {
       await api.post('/backup', form);
-      // this.$store.dispatch("user_settings/fetch");
-      // this.$store.commit("app/Push", { message: "Databáze úspěšně obnovena", type: "success" });
+      notify({
+        message: 'Database has been restored',
+        icon: 'notification',
+        color: 'positive',
+      });
     } catch (error) {
-      // this.$store.commit("app/Push", {
-      //     message: "Chyba při obnovování dat.",
-      //     type: "error",
-      // });
-      console.log(error);
+      notify({
+        message: 'Error occurred while restoring database',
+        icon: 'warning',
+        color: 'negative',
+      });
     }
   }
 }
