@@ -18,20 +18,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { Statistics } from '@iot/administration';
+import { computed, ref } from 'vue';
+import api from '@iot/services/http';
 
-const maxSize = 4000;
-const currentSize = 400;
+const maxSize = ref(1);
+const currentSize = ref(0);
 
 const progress = computed(() => {
-  return currentSize / maxSize;
+  return currentSize.value / maxSize.value;
 });
 
 const progressLabel = computed(() => {
   const percent = Math.floor(progress.value * 100);
 
-  return `${currentSize} / ${maxSize} MB (${percent}%)`;
+  return `${currentSize.value} / ${maxSize.value} MB (${percent}%)`;
 });
+
+async function getStats() {
+  const res = await api.get<Statistics>('/administration/statistics');
+  const data = res.data;
+  maxSize.value = data.maxSizeMB;
+  currentSize.value = data.currentSizeMB;
+}
+
+getStats();
 
 const color = computed(() => {
   if (progress.value >= 0.9) return 'red';

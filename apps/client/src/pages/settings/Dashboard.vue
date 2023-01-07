@@ -1,6 +1,17 @@
 <template>
   <div>
-    <h4>Overview</h4>
+    <section></section>
+
+    <section>
+      <div class="column">
+        <p class="text-h5">Size of database</p>
+        <DBState></DBState>
+        <div class="">{{ stats?.users }} Users</div>
+        <div class="">{{ stats?.devices }} Devices</div>
+        <div class="">{{ stats?.records }} Records</div>
+      </div>
+    </section>
+
     <section class="q-mt-md">
       <p class="text-h5">Backup Database</p>
       <q-btn color="primary" icon="cloud_download" label="Backup" @click="backup" />
@@ -30,8 +41,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import api from '@iot/services/http';
+import DBState from '../../components/settings/DBState.vue';
+import { Statistics } from '@iot/administration';
 
 const file = ref(null);
+const stats = ref<Statistics | null>(null);
+
+async function getStats() {
+  const res = await api.get<Statistics>('/administration/statistics');
+  stats.value = res.data;
+}
 
 async function restore() {
   if (file.value) {
@@ -63,6 +82,8 @@ async function backup() {
   link.click();
   document.body.removeChild(link);
 }
+
+getStats();
 </script>
 
 <style scoped></style>
