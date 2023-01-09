@@ -24,17 +24,11 @@ export class APIBasicDevice extends Device {
       this.mqtt_client.disconnect();
     }
     const mqttUserSettings = this.getUserMqttSettings();
-    if (mqttUserSettings && mqttUserSettings.active) {
+    if (mqttUserSettings?.active) {
       const settings: IMqttClientSettings = {
         server: mqttUserSettings.url,
-        password:
-          mqttUserSettings.password.length > 0
-            ? mqttUserSettings.username
-            : undefined,
-        username:
-          mqttUserSettings.username.length > 0
-            ? mqttUserSettings.username
-            : undefined,
+        password: mqttUserSettings.password.length > 0 ? mqttUserSettings.username : undefined,
+        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined
       };
       this.mqtt_client = this.providers.mqtt_service.createClient(settings);
       this.subscribeMqtt();
@@ -44,9 +38,7 @@ export class APIBasicDevice extends Device {
   subscribeMqtt() {
     const mapping = this.getUserMqttSettings()?.attribute_mapping ?? [];
     mapping.forEach((map) => {
-      const attribute = this.attributes.find(
-        (attr) => attr.id === map.attribute_id
-      );
+      const attribute = this.attributes.find((attr) => attr.id === map.attribute_id);
       this.mqtt_client?.subscribe(map.topic, (topic, data) => {
         this.saveTelemetry(attribute, data);
       });
@@ -58,7 +50,7 @@ export class APIBasicDevice extends Device {
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,
-        createdAt: new Date(),
+        createdAt: new Date()
       };
       this.providers.telemetry_service.saveTelemetry(telemety);
     }
