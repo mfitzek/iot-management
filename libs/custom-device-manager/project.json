@@ -19,14 +19,6 @@
       "options": {
         "lintFilePatterns": ["libs/custom-device-manager/**/*.ts"]
       }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/custom-device-manager"],
-      "options": {
-        "jestConfig": "libs/custom-device-manager/jest.config.ts",
-        "passWithNoTests": true
-      }
     }
   },
   "tags": []

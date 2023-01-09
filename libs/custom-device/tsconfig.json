@@ -5,16 +5,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "types": ["webpack-env", "node"],
-    "strict": true
+    "strict": true,
+    "outDir": "../../dist/out-tsc",
   },
-  "include": [],
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
+  "files": []
 }
