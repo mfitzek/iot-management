@@ -23,13 +23,7 @@
     <div class="col">
       <div class="q-gutter-sm q-mb-sm">
         <q-input v-model="selected.name" type="text" label="Name" filled />
-        <q-select
-          v-model="selected.type"
-          type="text"
-          label="Type"
-          filled
-          :options="typeOptions"
-        />
+        <q-select v-model="selected.type" type="text" label="Type" filled :options="typeOptions" />
         <div v-if="selected.id" class="q-gutter-sm">
           <q-btn color="green" label="Update" @click="updateCurrent()" />
           <q-btn color="red" label="Remove " @click="removeCurrent()" />
@@ -58,9 +52,7 @@ const columns: QTableColumn[] = [
   { name: 'type', label: 'Type', field: 'type', align: 'right' },
 ];
 
-const filterAttriubutes = computed(() =>
-  data.value.filter((attr) => !attr.to_be_deleted)
-);
+const filterAttriubutes = computed(() => data.value.filter((attr) => !attr.to_be_deleted));
 
 function rowClick({}, row: IAttribute) {
   selected.value = { ...row };

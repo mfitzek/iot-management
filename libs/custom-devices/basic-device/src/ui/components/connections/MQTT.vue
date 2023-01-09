@@ -7,11 +7,7 @@
           <q-toggle v-model="settings.active" color="green" />
         </div>
         <div class="col-auto">
-          <q-btn
-            color="green"
-            label="Update settings"
-            @click="updateSettings()"
-          />
+          <q-btn color="green" label="Update settings" @click="updateSettings()" />
         </div>
       </div>
     </section>
@@ -19,13 +15,7 @@
     <section>
       <div class="row q-mt-sm q-gutter-x-sm">
         <div class="col">
-          <q-input
-            v-model="settings.url"
-            type="text"
-            label="URL"
-            required
-            filled
-          />
+          <q-input v-model="settings.url" type="text" label="URL" required filled />
         </div>
         <!-- <div class="col">
           <q-input
@@ -39,32 +29,16 @@
 
       <div class="row q-mt-sm q-gutter-x-sm">
         <div class="col">
-          <q-input
-            v-model="settings.username"
-            type="text"
-            label="Username"
-            filled
-          />
+          <q-input v-model="settings.username" type="text" label="Username" filled />
         </div>
         <div class="col">
-          <q-input
-            v-model="settings.password"
-            type="password"
-            label="Password"
-            filled
-          />
+          <q-input v-model="settings.password" type="password" label="Password" filled />
         </div>
       </div>
     </section>
 
     <section>
-      <q-table
-        :rows="data"
-        :columns="columns"
-        row-key="name"
-        flat
-        @row-click="openEditDialog"
-      >
+      <q-table :rows="data" :columns="columns" row-key="name" flat @row-click="openEditDialog">
         <template #top>
           <div class="col text-h5">Mqtt attribute mapping</div>
           <q-btn color="primary" label="Add attribute" @click="openAddDialog" />
@@ -88,11 +62,7 @@ import { IMqttAttributeMap } from 'libs/basic-device/src/common/mqtt/IMqttSettin
 import { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
 import MqttMapDialog from './mqttMapDialog.vue';
-import store, {
-  getMqttSettings,
-  setMqttSettings,
-  updateCurrentDevice,
-} from '../../store';
+import store, { getMqttSettings, setMqttSettings, updateCurrentDevice } from '../../store';
 
 const settings = ref(getMqttSettings());
 
@@ -107,9 +77,7 @@ const columns: QTableColumn[] = [
 
 const data = computed(() => {
   return settings.value.attribute_mapping.map((map) => {
-    const attribute = store.device?.attributes.find(
-      (a) => a.id == map.attribute_id
-    );
+    const attribute = store.device?.attributes.find((a) => a.id == map.attribute_id);
     return {
       id: attribute?.id,
       attribute: `${attribute?.name} (${attribute?.type})`,

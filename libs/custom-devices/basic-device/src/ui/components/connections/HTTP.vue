@@ -13,13 +13,7 @@
       </q-input>
     </div>
     <div class="col">
-      <q-btn
-        color="primary"
-        icon="s_refresh"
-        label="Refresh token"
-        @click="refresh"
-      >
-      </q-btn>
+      <q-btn color="primary" icon="s_refresh" label="Refresh token" @click="refresh"> </q-btn>
     </div>
   </section>
   <section>

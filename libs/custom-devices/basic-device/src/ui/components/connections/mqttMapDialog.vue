@@ -86,9 +86,7 @@ function removeTopic() {
 function initValues() {
   if (props.mapping) {
     attribute.value =
-      store.device?.attributes.find(
-        (attr) => attr.id === props.mapping?.attribute_id
-      ) ?? null;
+      store.device?.attributes.find((attr) => attr.id === props.mapping?.attribute_id) ?? null;
     topic.value = props.mapping.topic;
   }
 }

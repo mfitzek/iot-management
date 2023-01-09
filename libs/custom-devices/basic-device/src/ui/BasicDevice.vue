@@ -5,11 +5,7 @@
         <q-tabs v-model="tab" dense>
           <q-tab name="info" icon="info" label="Information" />
           <q-tab name="attributes" icon="s_category" label="Attributes" />
-          <q-tab
-            name="connection"
-            icon="s_settings_input_antenna"
-            label="Connection"
-          />
+          <q-tab name="connection" icon="s_settings_input_antenna" label="Connection" />
         </q-tabs>
       </q-card-section>
       <q-card-section>

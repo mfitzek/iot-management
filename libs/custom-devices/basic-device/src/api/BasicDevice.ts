@@ -28,7 +28,7 @@ export class APIBasicDevice extends Device {
       const settings: IMqttClientSettings = {
         server: mqttUserSettings.url,
         password: mqttUserSettings.password.length > 0 ? mqttUserSettings.username : undefined,
-        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined
+        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined,
       };
       this.mqtt_client = this.providers.mqtt_service.createClient(settings);
       this.subscribeMqtt();
@@ -50,7 +50,7 @@ export class APIBasicDevice extends Device {
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       this.providers.telemetry_service.saveTelemetry(telemety);
     }

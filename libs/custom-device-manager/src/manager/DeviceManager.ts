@@ -1,5 +1,5 @@
 import { ICustomDevice } from '@iot/custom-device';
-import { BasicDevice } from '@iot/basic-device';
+import { BasicDevice } from '@iot/custom-devices/basic-device';
 import {
   CustomDeviceAlreadyExistsError,
   CustomDeviceIsNotDefinedError,

@@ -4,12 +4,12 @@
   "projects": {
     "administration": "libs/administration",
     "api": "apps/api",
-    "basic-device": "libs/basic-device",
     "client": "apps/client",
     "configuration": "libs/configuration",
     "constants": "libs/constants",
     "custom-device": "libs/custom-device",
     "custom-device-manager": "libs/custom-device-manager",
+    "custom-devices-basic-device": "libs/custom-devices/basic-device",
     "device": "libs/device",
     "gateway-http": "libs/gateway/http",
     "gateway-mqtt": "libs/gateway/mqtt",

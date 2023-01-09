@@ -20,10 +20,7 @@ export async function fetchDevice(id: string) {
 export async function updateCurrentDevice() {
   const id = store.device!.id!;
 
-  const req = await http_api.post<IDeviceData | null>(
-    `/device/${id}`,
-    store.device
-  );
+  const req = await http_api.post<IDeviceData | null>(`/device/${id}`, store.device);
   store.device = req.data;
 }
 
@@ -38,27 +35,27 @@ export async function removeCurrentDevice() {
   return req.data;
 }
 
-export function getMqttSettings(): IMqttSettings{
+export function getMqttSettings(): IMqttSettings {
   let settings: IMqttSettings = {
     active: false,
-    url: "",
-    username: "",
-    password: "",
-    attribute_mapping: []
-  }
+    url: '',
+    username: '',
+    password: '',
+    attribute_mapping: [],
+  };
 
-  if(store.device){
+  if (store.device) {
     const parsed = getDeviceMqttSettings(store.device);
-    if(parsed){
+    if (parsed) {
       settings = parsed;
     }
   }
-  
+
   return settings;
 }
 
-export function setMqttSettings(settings: IMqttSettings){
-  if(store.device){
+export function setMqttSettings(settings: IMqttSettings) {
+  if (store.device) {
     setDeviceMqttsettings(store.device, settings);
   }
 }
