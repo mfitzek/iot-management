@@ -38,8 +38,8 @@ const progressLabel = computed(() => {
 async function getStats() {
   const res = await api.get<Statistics>('/administration/statistics');
   const data = res.data;
-  maxSize.value = data.maxSizeMB;
-  currentSize.value = data.currentSizeMB;
+  maxSize.value = Math.round(data.maxSizeMB * 100) / 100;
+  currentSize.value = Math.round(data.currentSizeMB * 100) / 100;
 }
 
 getStats();

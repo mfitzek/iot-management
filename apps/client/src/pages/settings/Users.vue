@@ -3,7 +3,19 @@
 </template>
 
 <script setup lang="ts">
-const userList = [
+import { UserStats } from '@iot/administration';
+import api from '@iot/services/http';
+import { ref } from 'vue';
+
+const userList = ref<UserStats[]>([]);
+
+async function fetchUsers() {
+  const users = await api.get<UserStats[]>('/administration/users');
+
+  userList.value = users.data;
+}
+
+const test = [
   {
     username: 'JohnyB',
     email: 'john.doe@example.com',
@@ -26,6 +38,8 @@ const userList = [
     records: Math.round(Math.random() * 1000),
   },
 ];
+
+fetchUsers();
 </script>
 
 <style scoped></style>

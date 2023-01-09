@@ -1,7 +1,8 @@
-import { AdminsitrationService } from './administation.service';
 import { Statistics } from '@iot/administration';
+import { Controller, Get, UseGuards, Query } from '@nestjs/common';
+import { UserStats } from '@iot/administration';
 import { JwtAuthGuard } from './../auth/guards/jwt.guard';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AdminsitrationService } from './administation.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('administration')
@@ -11,5 +12,10 @@ export class AdministrationController {
   @Get('statistics')
   async getStatistics(): Promise<Statistics> {
     return await this.statisticsProvider.databaseStatistics();
+  }
+
+  @Get('users')
+  async getUsers(): Promise<UserStats[]> {
+    return await this.statisticsProvider.usersStats();
   }
 }

@@ -1,3 +1,7 @@
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
 export interface IUser {
   id?: string;
   username: string;
