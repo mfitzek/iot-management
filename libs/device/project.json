@@ -19,14 +19,6 @@
       "options": {
         "lintFilePatterns": ["libs/device/**/*.ts"]
       }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/device"],
-      "options": {
-        "jestConfig": "libs/device/jest.config.ts",
-        "passWithNoTests": true
-      }
     }
   },
   "tags": []
