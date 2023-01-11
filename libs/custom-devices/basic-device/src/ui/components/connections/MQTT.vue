@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { IMqttAttributeMap } from 'libs/basic-device/src/common/mqtt/IMqttSettings';
+import { IMqttAttributeMap } from '../../../common/mqtt/IMqttSettings';
 import { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
 import MqttMapDialog from './mqttMapDialog.vue';

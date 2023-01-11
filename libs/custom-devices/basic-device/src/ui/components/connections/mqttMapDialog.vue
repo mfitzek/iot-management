@@ -47,8 +47,7 @@
 
 <script setup lang="ts">
 import { IAttribute } from '@iot/device';
-import { IMqttAttributeMap } from 'libs/basic-device/src/common/mqtt/IMqttSettings';
-import { emit } from 'process';
+import { IMqttAttributeMap } from '../../../common/mqtt/IMqttSettings';
 import { ref } from 'vue';
 import store from '../../store';
 
