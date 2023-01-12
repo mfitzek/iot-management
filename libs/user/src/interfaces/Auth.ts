@@ -1,4 +1,4 @@
-import { IUserInfo } from "./User";
+import { IUserInfo } from './User';
 
 export interface ILoginPost {
   username: string;
@@ -10,7 +10,6 @@ export interface IRegisterPost {
   email: string;
   password: string;
 }
-
 
 export interface ILoginResponse {
   token: string;

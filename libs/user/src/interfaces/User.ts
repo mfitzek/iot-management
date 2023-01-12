@@ -8,10 +8,12 @@ export interface IUser {
   email: string;
   password: string;
   salt: string;
+  role: UserRole;
 }
 
 export interface IUserInfo {
   id: string;
   username: string;
   email: string;
+  role: UserRole;
 }

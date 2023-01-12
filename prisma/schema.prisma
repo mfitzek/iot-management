@@ -16,6 +16,7 @@ model User {
   email    String
   password String
   salt     String
+  role     Int      @default(0)
   Device   Device[]
 }
 

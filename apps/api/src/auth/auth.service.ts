@@ -1,4 +1,4 @@
-import { CreatingUserError, ILoginResponse } from '@iot/user';
+import { CreatingUserError, ILoginResponse, UserRole, IUser } from '@iot/user';
 
 import { Injectable } from '@nestjs/common';
 import { IRegisterPost, ILoginPost } from '@iot/user';
@@ -33,7 +33,7 @@ export class AuthService {
     };
   }
 
-  async login(user: User): Promise<ILoginResponse> {
+  async login(user: IUser): Promise<ILoginResponse> {
     const payload = { id: user.id, username: user.username, email: user.email };
 
     const token = await this.jwtService.signAsync(payload);
@@ -45,26 +45,22 @@ export class AuthService {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     };
   }
 
-  async validateUser(data: ILoginPost): Promise<User | null> {
+  async validateUser(data: ILoginPost): Promise<IUser | null> {
     const user = await this.users.getUser(data.username);
 
-    if (
-      user &&
-      (await this.comparePasswords(data.password, user.password, user.salt))
-    ) {
+    if (user && (await this.comparePasswords(data.password, user.password, user.salt))) {
       return user;
     }
 
     return null;
   }
 
-  private createPasswordHash(
-    password: string
-  ): Promise<{ hash: string; salt: string }> {
+  private createPasswordHash(password: string): Promise<{ hash: string; salt: string }> {
     return new Promise((resolve, reject) => {
       const salt = randomBytes(16).toString('hex');
       pbkdf2(password, salt, 1000, 64, 'sha512', (err, result) => {

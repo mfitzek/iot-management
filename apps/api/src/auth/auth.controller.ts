@@ -1,14 +1,6 @@
-import { JwtAuthGuard } from './guards/jwt.guard';
-import { AuthService } from './auth.service';
 import { IRegisterPost } from '@iot/user';
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.guard';
 
 @Controller('auth')
@@ -24,15 +16,5 @@ export class AuthController {
   @Post('register')
   async register(@Body() credentials: IRegisterPost) {
     return this.auth.register(credentials);
-  }
-
-  // TODO: Delete this method
-  @UseGuards(JwtAuthGuard)
-  @Get('test')
-  test(@Request() req) {
-    return {
-      message: 'Very secret information about the user.',
-      user: req.user,
-    };
   }
 }
