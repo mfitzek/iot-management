@@ -18,13 +18,8 @@
   </q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import SignupForm from '@components/auth/SignupForm.vue';
-export default defineComponent({
-  components: { SignupForm },
-  setup() {},
-});
 </script>
 
 <style scoped></style>
