@@ -1,25 +1,36 @@
 <template>
-  <div class="q-gutter-md info_form">
-    <q-input v-model="name" type="text" label="Device name" filled />
-    <q-input v-model="type" readonly label="Device type" filled />
+  <div class="q-gutter-md row">
+    <q-input v-model="name" type="text" label="Device name" filled class="col-lg-4 col-md-6 col" />
+    <q-btn color="primary" icon-right="check" @click="saveInformation()">
+      <q-tooltip> Update device information </q-tooltip>
+    </q-btn>
+  </div>
 
-    <q-btn color="primary" icon-right="check" label="Save information" @click="saveInformation()" />
-
-    <q-btn color="red" icon="remove" label="Remove device" @click="removeDevice()" />
+  <div row class="device-info">
+    <div>Attributes: {{ store.device?.attributes.length }}</div>
+    <div>Status:</div>
+    <div>Last data:</div>
+    <div>HTTP <q-badge rounded :color="connectionStateColor(http)"></q-badge></div>
+    <div>MQTT <q-badge rounded :color="connectionStateColor(mqtt)"></q-badge></div>
+  </div>
+  <div class="row justify-end q-mt-md">
+    <q-btn color="red" icon="delete" @click="removeDevice()" round>
+      <q-tooltip> Remove device </q-tooltip>
+    </q-btn>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import store, { updateCurrentDevice, removeCurrentDevice } from '../store';
-import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { getDeviceMqttSettings } from '../../common/mqtt/mqtt';
+import store, { removeCurrentDevice, updateCurrentDevice } from '../store';
 
 const router = useRouter();
 const $q = useQuasar();
 
 const name = ref(store.device?.name ?? '');
-const type = ref(store.device?.type);
 
 async function saveInformation() {
   const device = store.device;
@@ -60,10 +71,28 @@ async function removeDevice() {
     });
   }
 }
+
+const mqtt = computed(() => {
+  if (store.device) {
+    const settings = getDeviceMqttSettings(store.device);
+    return settings?.active ? true : false;
+  }
+  return false;
+});
+const http = computed(() => {
+  return false;
+});
+
+function connectionStateColor(online: boolean) {
+  return online ? 'green' : 'red';
+}
+function connectionState(online: boolean) {
+  return online ? 'On' : 'Off';
+}
 </script>
 
 <style scoped>
-.info_form {
-  max-width: 400px;
+.device-info {
+  font-family: 'Roboto Mono', monospace;
 }
 </style>

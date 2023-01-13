@@ -40,6 +40,9 @@ router.beforeEach((to, from) => {
       return { name: 'Login' };
     }
   }
+  if (to.meta.isAdmin) {
+    if (authStore.is_admin() === false) return { name: 'DeviceList' };
+  }
 });
 
 export default router;

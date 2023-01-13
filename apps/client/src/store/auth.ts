@@ -1,4 +1,4 @@
-import { ILoginPost, ILoginResponse, IUserInfo } from '@iot/user';
+import { ILoginPost, ILoginResponse, IUserInfo, UserRole } from '@iot/user';
 import { readonly, ref } from 'vue';
 import api from '@iot/services/http';
 import { AxiosError } from 'axios';
@@ -19,6 +19,10 @@ const state = ref<IAuthStore | null>(null);
 function is_authenticated(): boolean {
   if (state.value?.expiration) return state?.value?.expiration > Date.now();
   return false;
+}
+
+function is_admin(): boolean {
+  return is_authenticated() && state.value?.user.role === UserRole.ADMIN;
 }
 
 function logout() {
@@ -52,18 +56,6 @@ async function login(username: string, password: string): Promise<LoginStatus> {
       }
     }
   }
-
-  // if (response.data) {
-  //   status.success = true;
-  //   state.value = response.data;
-  //   setHttpClientAuthToken(response.data.token);
-  //   setAuthStoreToLocalStorage();
-  // } else if (response.status >= 500) {
-  //   status.error = 'server';
-  // } else {
-  //   status.error = 'credentials';
-  // }
-
   return status;
 }
 
@@ -96,6 +88,7 @@ export default {
   state: readonly(state),
   loadAuthStoreFromLocalStorage,
   is_authenticated,
+  is_admin,
   logout,
   login,
 };

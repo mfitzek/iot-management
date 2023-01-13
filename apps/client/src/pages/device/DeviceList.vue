@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md test-table">
     <div class="row items-center justify-between">
       <div class="col-auto">
         <h3>Device list</h3>
@@ -61,4 +61,9 @@ async function clickDevice({}, row: IDeviceListRow) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.test-table {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style>
