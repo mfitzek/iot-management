@@ -1,19 +1,19 @@
-import { CreatingUserError, ILoginResponse, UserRole, IUser } from '@iot/user';
+import { ILoginResponse, IRegisterResponse, IUser } from '@iot/user';
 
+import { ILoginPost, IRegisterPost } from '@iot/user';
 import { Injectable } from '@nestjs/common';
-import { IRegisterPost, ILoginPost } from '@iot/user';
 
-import { randomBytes, pbkdf2 } from 'crypto';
-import { UserService } from '../user/user.service';
-import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { pbkdf2, randomBytes } from 'crypto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(private users: UserService, private jwtService: JwtService) {}
 
-  async register(data: IRegisterPost) {
+  async register(data: IRegisterPost): Promise<IRegisterResponse> {
     const { hash, salt } = await this.createPasswordHash(data.password);
+
     const result = await this.users.createUser({
       username: data.username,
       email: data.email,
@@ -21,15 +21,25 @@ export class AuthService {
       salt: salt,
     });
 
-    const user = result as User;
-    const errors = result as CreatingUserError[];
-
-    if (user.username) {
-      return { id: user.id, username: user.username, email: user.email };
+    const { errors } = result;
+    if (errors) {
+      return {
+        success: false,
+        errors: {
+          usernameExists: errors.username,
+          emailExists: errors.email,
+        },
+      };
     }
 
     return {
-      errors: errors.map((err) => err.message),
+      success: true,
+      user: {
+        id: result.user.id,
+        username: result.user.username,
+        email: result.user.email,
+        role: result.user.role,
+      },
     };
   }
 

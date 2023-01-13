@@ -1,4 +1,4 @@
-import { IRegisterPost } from '@iot/user';
+import { IRegisterPost, IRegisterResponse } from '@iot/user';
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.guard';
@@ -14,7 +14,7 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() credentials: IRegisterPost) {
+  async register(@Body() credentials: IRegisterPost): Promise<IRegisterResponse> {
     return this.auth.register(credentials);
   }
 }

@@ -3,7 +3,6 @@ import { PrismaService } from './../prisma/prisma.service';
 import { IUser } from '@iot/user';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { CreatingUserError, EmaillreadyExists, UsernameAlreadyExists } from '@iot/user';
 
 export type CreateUser = {
   username: string;
@@ -12,6 +11,16 @@ export type CreateUser = {
   salt: string;
   role?: UserRole;
 };
+
+export type CreateUserResult = {
+  success: boolean;
+  user?: IUser;
+  errors?: {
+    username: boolean;
+    email: boolean;
+  };
+};
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -31,49 +40,53 @@ export class UserService {
     return this.parseUser(user);
   }
 
-  public async createUser(user: CreateUser): Promise<User | CreatingUserError[]> {
+  public async createUser(user: CreateUser): Promise<CreateUserResult> {
     const role = user.role === UserRole.ADMIN ? 1 : 0;
 
-    const checkExistingData = await this.isUserAlreadyExists(user);
-    if (checkExistingData.length === 0) {
-      try {
-        return this.prisma.user.create({
-          data: {
-            ...user,
-            role: role,
-          },
-        });
-      } catch (error) {
-        checkExistingData.push(new CreatingUserError('DB error'));
-      }
-    }
-    return checkExistingData;
-  }
+    const usernameCheck = await this.isUsernameExists(user.username);
+    const emailCheck = await this.isEmailExists(user.email);
 
-  private async isUserAlreadyExists(user: CreateUser): Promise<CreatingUserError[]> {
-    const errors: CreatingUserError[] = [];
-    const data = await this.prisma.user.findMany({
-      where: {
-        OR: [
-          {
-            username: user.username,
-          },
-          {
-            email: user.email,
-          },
-        ],
+    if (emailCheck || usernameCheck) {
+      return {
+        success: false,
+        errors: {
+          username: usernameCheck,
+          email: emailCheck,
+        },
+      };
+    }
+
+    const data = await this.prisma.user.create({
+      data: {
+        ...user,
+        role: role,
       },
     });
 
-    for (const record of data) {
-      if (record.username === user.username) {
-        errors.push(new UsernameAlreadyExists());
-      }
-      if (record.email === user.email) {
-        errors.push(new EmaillreadyExists());
-      }
-    }
-    return errors;
+    return {
+      success: true,
+      user: this.parseUser(data),
+    };
+  }
+
+  private async isUsernameExists(username: string): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+
+    return !!user;
+  }
+
+  private async isEmailExists(email: string): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    return !!user;
   }
 
   private parseUser(user: User): IUser {

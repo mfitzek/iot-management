@@ -16,3 +16,12 @@ export interface ILoginResponse {
   expiration: number;
   user: IUserInfo;
 }
+
+export interface IRegisterResponse {
+  success: boolean;
+  user?: IUserInfo;
+  errors?: {
+    usernameExists: boolean;
+    emailExists: boolean;
+  };
+}

@@ -5,9 +5,8 @@
       name="username"
       autocomplete="username"
       label="Username"
-      :rules="[(val) => (val && val.length > 0) || 'Username is required']"
-      :error-message="existing_username"
-      :error="existing_username != undefined"
+      :rules="usernameRules"
+      @update:model-value="usernameExists = false"
     ></q-input>
     <q-input
       v-model="email"
@@ -15,9 +14,8 @@
       label="Email"
       type="email"
       autocomplete="email"
-      :rules="[(val) => (val && val.length > 0) || 'Email is required']"
-      :error-message="existing_email"
-      :error="existing_email != undefined"
+      :rules="emailRules"
+      @update:model-value="emailExists = false"
     ></q-input>
     <q-input
       v-model="password"
@@ -38,108 +36,65 @@
     ></q-input>
 
     <div class="q-mt-lg row justify-between">
-      <q-btn
-        class="col-12"
-        label="Sign up"
-        type="submit"
-        color="primary"
-      ></q-btn>
+      <q-btn class="col-12" label="Sign up" type="submit" color="primary"></q-btn>
     </div>
   </q-form>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, reactive, ref, watch } from 'vue';
-import { QForm } from 'quasar';
+<script setup lang="ts">
 import http from '@iot/services/http';
-import { IRegisterPost } from '@iot/user';
+import { IRegisterPost, IRegisterResponse } from '@iot/user';
+import { QForm } from 'quasar';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  emits: ['signUp'],
+const myForm = ref<QForm | null>(null);
 
-  setup(_, ctx) {
-    const myForm = ref<QForm | null>(null);
+const username = ref('');
+const email = ref('');
+const password_confirm = ref('');
+const password = ref('');
 
-    const username = ref('');
-    const email = ref('');
-    const password_confirm = ref('');
-    const password = ref('');
+const usernameExists = ref(false);
+const emailExists = ref(false);
 
-    let first = true;
+const router = useRouter();
 
-    let errors = reactive<{ email?: string; username?: string }>({});
+function password_confirmation() {
+  return !password.value || password.value == password_confirm.value || 'Passwords must match';
+}
 
-    let existing_email = computed(() => {
-      return errors.email;
-    });
+const usernameRules = [
+  (value: string) => (value && value.length > 0) || 'Username is required',
+  () => (usernameExists.value ? 'Username already exists' : true),
+];
+const emailRules = [
+  (value: string) => (value && value.length > 0) || 'Email is required',
+  () => (emailExists.value ? 'Email already exists' : true),
+];
 
-    let existing_username = computed(() => {
-      return errors.username;
-    });
+async function signup() {
+  usernameExists.value = false;
+  emailExists.value = false;
 
-    watch(email, (newEmail) => {
-      errors.email = undefined;
-    });
+  const registerData: IRegisterPost = {
+    email: email.value,
+    username: username.value,
+    password: password.value,
+  };
+  const response = await http.post<IRegisterResponse>('auth/register', registerData);
 
-    watch(username, (newUsername) => {
-      errors.username = undefined;
-    });
+  if (response.data.success) {
+    router.push({ name: 'Login' });
+  }
 
-    function password_confirmation() {
-      return (
-        !password.value ||
-        password.value == password_confirm.value ||
-        'Passwords must match'
-      );
-    }
+  emailExists.value = response.data.errors?.emailExists ?? false;
+  usernameExists.value = response.data.errors?.usernameExists ?? false;
 
-    async function signup() {
-      first = false;
-      let valid = false;
-      if (myForm.value) {
-        valid = await myForm.value.validate();
-      }
+  await myForm.value?.validate();
 
-      if (valid) {
-        const requestData: IRegisterPost = {
-          email: email.value,
-          username: username.value,
-          password: password.value,
-        };
-        const req = await http.post('auth/register', requestData);
-
-        if (req.data.username) {
-          ctx.emit('signUp', req.data);
-        } else {
-          parseRegisterErrors(req.data.errors);
-        }
-      }
-    }
-
-    function parseRegisterErrors(data: string[]) {
-      for (const err of data) {
-        if (err.includes('Username')) {
-          errors.username = err;
-        }
-        if (err.includes('Email')) {
-          errors.email = err;
-        }
-      }
-    }
-
-    return {
-      myForm,
-      username,
-      password,
-      email,
-      password_confirm,
-      existing_email,
-      existing_username,
-      signup,
-      password_confirmation,
-    };
-  },
-});
+  return false;
+}
 </script>
 
 <style scoped>

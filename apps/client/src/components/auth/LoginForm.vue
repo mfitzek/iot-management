@@ -2,7 +2,6 @@
   <q-form @submit="login" class="login-form">
     <q-input
       v-model="username"
-      required
       name="username"
       autocomplete="username"
       label="Username"
@@ -10,7 +9,6 @@
     ></q-input>
     <q-input
       v-model="password"
-      required
       name="password"
       autocomplete="password"
       lazyRules
@@ -48,7 +46,7 @@ async function login() {
 
   if (response.error) {
     const messages = {
-      credentials: 'Wrong credentials',
+      credentials: 'Wrong username or password',
       server: 'Server error',
     };
 

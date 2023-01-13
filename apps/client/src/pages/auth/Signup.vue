@@ -7,7 +7,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-section>
-          <signup-form @signUp="signUp"></signup-form>
+          <signup-form></signup-form>
         </q-card-section>
         <q-card-section class="text-center">
           Already have account?
@@ -20,17 +20,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useRouter } from 'vue-router';
 import SignupForm from '@components/auth/SignupForm.vue';
 export default defineComponent({
   components: { SignupForm },
-  setup() {
-    const router = useRouter();
-    async function signUp() {
-      router.push({ name: 'Login' });
-    }
-    return { signUp };
-  },
+  setup() {},
 });
 </script>
 
