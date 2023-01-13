@@ -1,12 +1,18 @@
 import { ILoginPost, ILoginResponse, IUserInfo } from '@iot/user';
 import { readonly, ref } from 'vue';
 import api from '@iot/services/http';
+import { AxiosError } from 'axios';
 
 export interface IAuthStore {
   expiration: number;
   token: string;
   user: IUserInfo;
 }
+
+export type LoginStatus = {
+  success: boolean;
+  error?: 'credentials' | 'server';
+};
 
 const state = ref<IAuthStore | null>(null);
 
@@ -21,23 +27,44 @@ function logout() {
   removeLocalStorageAuthToken();
 }
 
-async function login(username: string, password: string): Promise<boolean> {
+async function login(username: string, password: string): Promise<LoginStatus> {
   const login: ILoginPost = {
     username,
     password,
   };
 
-  return api
-    .post<ILoginResponse>('/auth/login', login)
-    .then((response) => {
-      state.value = response.data;
-      setHttpClientAuthToken(response.data.token);
-      setAuthStoreToLocalStorage();
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+  const status: LoginStatus = {
+    success: false,
+  };
+
+  try {
+    const response = await api.post<ILoginResponse>('/auth/login', login);
+    status.success = true;
+    state.value = response.data;
+    setHttpClientAuthToken(response.data.token);
+    setAuthStoreToLocalStorage();
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.code === 'ERR_NETWORK') {
+        status.error = 'server';
+      } else {
+        status.error = 'credentials';
+      }
+    }
+  }
+
+  // if (response.data) {
+  //   status.success = true;
+  //   state.value = response.data;
+  //   setHttpClientAuthToken(response.data.token);
+  //   setAuthStoreToLocalStorage();
+  // } else if (response.status >= 500) {
+  //   status.error = 'server';
+  // } else {
+  //   status.error = 'credentials';
+  // }
+
+  return status;
 }
 
 function setHttpClientAuthToken(token: string) {

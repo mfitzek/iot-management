@@ -2,7 +2,6 @@
   <q-form @submit="login" class="login-form">
     <q-input
       v-model="username"
-      @change="dataChanged"
       required
       name="username"
       autocomplete="username"
@@ -11,7 +10,6 @@
     ></q-input>
     <q-input
       v-model="password"
-      @change="dataChanged"
       required
       name="password"
       autocomplete="password"
@@ -19,66 +17,53 @@
       label="Password"
       type="password"
       :rules="[(val) => (val && val.length > 0) || 'Password is required']"
-      :error="verify"
+      :error="loginResponseError"
       :errorMessage="err_message"
     ></q-input>
 
     <div class="q-mt-lg row justify-between">
-      <q-btn
-        class="col-12"
-        label="Log in"
-        type="submit"
-        color="primary"
-      ></q-btn>
+      <q-btn class="col-12" label="Log in" type="submit" color="primary"></q-btn>
     </div>
   </q-form>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
-
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import { QForm } from 'quasar';
-
-import auth from '../../store/auth';
-
+import auth, { LoginStatus } from '../../store/auth';
 import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  setup() {
-    const username = ref('');
-    const password = ref('');
-    const router = useRouter();
+const username = ref('');
+const password = ref('');
+const router = useRouter();
 
-    const verified = ref<Boolean | null>(null);
+const err_message = ref<string | undefined>(undefined);
 
-    const dataChanged = () => {
-      verified.value = null;
+const loginResponseError = computed(() => {
+  return err_message.value !== undefined;
+});
+
+async function login() {
+  const response = await auth.login(username.value, password.value);
+
+  if (response.error) {
+    const messages = {
+      credentials: 'Wrong credentials',
+      server: 'Server error',
     };
 
-    const verify = computed(() => {
-      return verified.value === false;
-    });
+    err_message.value = messages[response.error];
 
-    const err_message = computed(() =>
-      verified.value === false ? 'Wrong username or wrong password' : undefined
-    );
+    return;
+  }
 
-    async function login() {
-      if (verified.value === false) return;
-      verified.value = await auth.login(username.value, password.value);
-
-      if (verified) {
-        const redir = router.currentRoute.value.query['redirect'];
-        if (redir && redir.toString() != 'Login') {
-          router.push({ name: redir.toString() });
-        } else {
-          router.push({ name: 'DeviceList' });
-        }
-      }
-    }
-    return { username, password, login, verify, dataChanged, err_message };
-  },
-});
+  const redir = router.currentRoute.value.query['redirect'];
+  if (redir && redir.toString() != 'Login') {
+    router.push({ name: redir.toString() });
+  } else {
+    router.push({ name: 'DeviceList' });
+  }
+}
 </script>
 
 <style scoped>
