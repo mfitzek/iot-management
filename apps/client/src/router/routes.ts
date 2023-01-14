@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/settings',
         children: settingsRoutes,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, isAdmin: true },
       },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ],

@@ -8,6 +8,7 @@
     <q-scroll-area style="height: 80vh">
       <q-list bordered separator>
         <q-expansion-item
+          v-if="filterDevices.length"
           class="text-weight-medium"
           v-for="dev in filterDevices"
           :label="dev.name"
@@ -30,6 +31,9 @@
             </q-item>
           </q-list>
         </q-expansion-item>
+        <q-item v-else>
+          <q-item-section> No Devices</q-item-section>
+        </q-item>
       </q-list>
     </q-scroll-area>
   </div>

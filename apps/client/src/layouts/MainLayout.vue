@@ -31,6 +31,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import UserInfo from '@components/toolbar/UserInfo.vue';
+import auth from '../store/auth';
 export default defineComponent({
   name: 'MainLayout',
   setup() {
@@ -40,23 +41,27 @@ export default defineComponent({
         name: 'Device',
         icon: 'sym_o_table_lamp',
         route: { name: 'DeviceList' },
-        auth_level: 0,
+        isAdmin: false,
       },
       {
         name: 'Data',
         icon: 'sym_o_monitoring',
         route: { name: 'Telemetry' },
-        auth_level: 0,
+        isAdmin: false,
       },
       {
         name: 'Administration',
         icon: 'sym_o_settings',
         route: { name: 'SettingsDashboard' },
-        auth_level: 2,
+        isAdmin: true,
       },
     ];
     const links_filtered = computed(() => {
+      const userIsAdmin = auth.is_admin();
       return links.filter((link) => {
+        if (link.isAdmin) {
+          return userIsAdmin;
+        }
         return true;
       });
     });
