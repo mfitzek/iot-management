@@ -10,7 +10,7 @@ export class DeviceTypeManager {
   private static _instance = new DeviceTypeManager();
 
   private constructor() {
-    this.registerDeviceType('basic-device', new BasicDevice());
+    this.registerDeviceType(new BasicDevice());
   }
 
   public static get instance() {
@@ -20,7 +20,8 @@ export class DeviceTypeManager {
     return this._instance;
   }
 
-  public registerDeviceType(type: string, device: ICustomDevice) {
+  public registerDeviceType(device: ICustomDevice) {
+    const type = device.getType();
     if (this.devices.has(type)) {
       throw new CustomDeviceAlreadyExistsError(type);
     }

@@ -61,7 +61,7 @@ export class DeviceManager implements Observer {
 
   private createCustomDevice(data: IDeviceData) {
     const custom_device = DeviceTypeManager.instance.getDevice(data.type);
-    return custom_device.factory(data, this.getServiceProviders());
+    return custom_device.getDevice(data, this.getServiceProviders());
   }
 
   private getServiceProviders(): IProvidedServices {
