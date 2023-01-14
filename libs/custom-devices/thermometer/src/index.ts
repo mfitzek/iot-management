@@ -1,6 +1,6 @@
 import { CustomDevice } from '@iot/custom-device';
-import { IDeviceData, IProvidedServices, IDevice } from '@iot/device';
-import { Component, ComputedOptions, defineAsyncComponent, MethodOptions } from 'vue';
+import { Device, IDevice, IDeviceData, IProvidedServices } from '@iot/device';
+import { Component, defineAsyncComponent } from 'vue';
 
 export class Thermometer implements CustomDevice {
   getType(): string {
@@ -11,6 +11,7 @@ export class Thermometer implements CustomDevice {
   }
 
   getDevice(data: IDeviceData, providers: IProvidedServices): IDevice {
-    throw new Error('Method not implemented.');
+    const device = new Device(data, providers);
+    return device;
   }
 }

@@ -1,16 +1,18 @@
-import { ICustomDevice } from '@iot/custom-device';
+import { CustomDevice } from '@iot/custom-device';
 import { BasicDevice } from '@iot/custom-devices/basic-device';
+import { Thermometer } from '@iot/custom-devices/thermometer';
 import {
   CustomDeviceAlreadyExistsError,
   CustomDeviceIsNotDefinedError,
 } from '../errors/DeviceManagerErrors';
 
 export class DeviceTypeManager {
-  private devices = new Map<string, ICustomDevice>();
+  private devices = new Map<string, CustomDevice>();
   private static _instance = new DeviceTypeManager();
 
   private constructor() {
     this.registerDeviceType(new BasicDevice());
+    this.registerDeviceType(new Thermometer());
   }
 
   public static get instance() {
@@ -20,7 +22,7 @@ export class DeviceTypeManager {
     return this._instance;
   }
 
-  public registerDeviceType(device: ICustomDevice) {
+  public registerDeviceType(device: CustomDevice) {
     const type = device.getType();
     if (this.devices.has(type)) {
       throw new CustomDeviceAlreadyExistsError(type);
@@ -29,7 +31,7 @@ export class DeviceTypeManager {
     return this;
   }
 
-  public getDevice(type: string): ICustomDevice {
+  public getDevice(type: string): CustomDevice {
     const device = this.devices.get(type);
     if (device === undefined) {
       throw new CustomDeviceIsNotDefinedError(type);
