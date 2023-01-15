@@ -15,7 +15,9 @@ import '@quasar/extras/material-symbols-rounded/material-symbols-rounded.css';
 import '@quasar/extras/material-symbols-sharp/material-symbols-sharp.css';
 
 import 'quasar/dist/quasar.css';
+import { createPinia } from 'pinia';
 
+const pinia = createPinia();
 const app = createApp(App);
 
 app.use(Quasar, {
@@ -24,6 +26,8 @@ app.use(Quasar, {
     notify: {},
   },
 });
+
+app.use(pinia);
 
 app.use(router);
 
