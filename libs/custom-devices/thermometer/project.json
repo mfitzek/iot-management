@@ -3,6 +3,14 @@
   "sourceRoot": "libs/custom-devices/thermometer/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx-plus/vue:library",
+      "options": {
+        "dest": "dist/libs/custom-devices/thermometer",
+        "entry": "libs/custom-devices/thermometer/src/index.ts",
+        "tsConfig": "libs/custom-devices/thermometer/tsconfig.lib.json"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
