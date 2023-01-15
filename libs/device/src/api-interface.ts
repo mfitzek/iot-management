@@ -15,7 +15,7 @@ export interface DeviceData {
   keyValues: IKeyValue[];
 }
 
-export interface DeviceList {
+export interface DeviceStatusInfo {
   id: string;
   name: string;
   type: string;

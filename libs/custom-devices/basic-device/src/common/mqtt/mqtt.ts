@@ -1,15 +1,15 @@
-import { IDeviceData, IKeyValue } from '@iot/device';
+import { DeviceData, IKeyValue } from '@iot/device';
 import { IMqttSettings } from './IMqttSettings';
 
 const MQTT_JSON_KEY = 'mqtt-settings';
 
-export function getDeviceMqttSettings(device: IDeviceData) {
+export function getDeviceMqttSettings(device: DeviceData) {
   const keyValue = device.keyValues.find((kv) => kv.key === MQTT_JSON_KEY);
 
   return keyValue ? getMqttSettingsFromKeyValue(keyValue) : undefined;
 }
 
-export function setDeviceMqttsettings(device: IDeviceData, settings: IMqttSettings) {
+export function setDeviceMqttsettings(device: DeviceData, settings: IMqttSettings) {
   const jsonData = JSON.stringify(settings);
 
   const keyValue = device.keyValues.find((kv) => kv.key === MQTT_JSON_KEY);

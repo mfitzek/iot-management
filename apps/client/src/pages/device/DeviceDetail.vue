@@ -5,14 +5,14 @@
 <script setup lang="ts">
 import api from '@iot/services/http';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
-import { IDeviceData } from '@iot/device';
+import { DeviceData } from '@iot/device';
 
 const props = defineProps({
   id: { type: String, required: true },
 });
 
 async function getDevice(id: string) {
-  const req = await api.get<IDeviceData>(`device/${id}`);
+  const req = await api.get<DeviceData>(`device/${id}`);
   return req.data;
 }
 

@@ -1,5 +1,5 @@
 import { IProvidedServices } from '@iot/device';
-import { Device, IAttribute, IDeviceData } from '@iot/device';
+import { Device, IAttribute, DeviceData } from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
 import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
@@ -8,7 +8,7 @@ export class APIBasicDevice extends Device {
   providers: IProvidedServices;
   mqtt_client?: IMqttClient;
 
-  constructor(data: IDeviceData, providers: IProvidedServices) {
+  constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
     this.providers = providers;
     this.connectToMqtt();
@@ -56,7 +56,7 @@ export class APIBasicDevice extends Device {
     }
   }
 
-  async update(data: IDeviceData) {
+  async update(data: DeviceData) {
     const updated = await super.update(data);
     this.connectToMqtt();
     return updated;

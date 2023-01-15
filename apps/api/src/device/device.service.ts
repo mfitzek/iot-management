@@ -1,13 +1,7 @@
-import { IAttribute, IDeviceData, IDeviceService } from '@iot/device';
+import { IAttribute, DeviceData, IDeviceService, CreateUserDevice } from '@iot/device';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-
-export interface ICreateDeviceData {
-  user_id: string;
-  name: string;
-  type: string;
-}
 
 type DeviceInclude = Prisma.DeviceGetPayload<{
   include: {
@@ -20,7 +14,7 @@ type DeviceInclude = Prisma.DeviceGetPayload<{
 export class DeviceService implements IDeviceService {
   constructor(private prisma: PrismaService) {}
 
-  async createDevice(data: IDeviceData): Promise<IDeviceData> {
+  async createDevice(data: CreateUserDevice): Promise<DeviceData> {
     const device = await this.prisma.device.create({
       data: {
         name: data.name,
@@ -35,10 +29,7 @@ export class DeviceService implements IDeviceService {
 
     return this.parseToIDevice(device);
   }
-  async updateDevice(
-    id: string,
-    data: IDeviceData
-  ): Promise<IDeviceData | null> {
+  async updateDevice(id: string, data: DeviceData): Promise<DeviceData | null> {
     await this.updateDeviceAttributes(data);
     await this.updateDeviceKeyValues(data);
     const device = await this.prisma.device.update({
@@ -69,7 +60,7 @@ export class DeviceService implements IDeviceService {
     return device != null;
   }
 
-  async getDeviceList(): Promise<IDeviceData[]> {
+  async getDeviceList(): Promise<DeviceData[]> {
     const devices = await this.prisma.device.findMany({
       include: {
         Attribute: true,
@@ -79,7 +70,7 @@ export class DeviceService implements IDeviceService {
     return devices.map((device) => this.parseToIDevice(device));
   }
 
-  async getDevice(device_id: string): Promise<IDeviceData | null> {
+  async getDevice(device_id: string): Promise<DeviceData | null> {
     const dev = await this.prisma.device.findFirst({
       where: { id: device_id },
       include: {
@@ -93,7 +84,7 @@ export class DeviceService implements IDeviceService {
     return this.parseToIDevice(dev);
   }
 
-  private parseToIDevice(device: DeviceInclude): IDeviceData {
+  private parseToIDevice(device: DeviceInclude): DeviceData {
     return {
       id: device.id,
       name: device.name,
@@ -104,7 +95,7 @@ export class DeviceService implements IDeviceService {
     };
   }
 
-  private updateDeviceAttributes(device: IDeviceData) {
+  private updateDeviceAttributes(device: DeviceData) {
     const attrToUpdate = device.attributes
       .filter((attr) => attr.id != null && attr.to_be_deleted == null)
       .map((attr) => this.updateAttribute(attr.id, attr));
@@ -125,20 +116,16 @@ export class DeviceService implements IDeviceService {
       },
     });
 
-    return this.prisma.$transaction([
-      deleteAttributes,
-      ...attrToCreate,
-      ...attrToUpdate,
-    ]);
+    return this.prisma.$transaction([deleteAttributes, ...attrToCreate, ...attrToUpdate]);
   }
 
-  private async updateDeviceKeyValues(device: IDeviceData) {
+  private async updateDeviceKeyValues(device: DeviceData) {
     const toUpsert = device.keyValues
       .filter((kv) => kv.to_be_deleted == null)
       .map((kv) =>
         this.prisma.keyValue.upsert({
           where: {
-            id: kv.id?? "",
+            id: kv.id ?? '',
           },
           create: {
             key: kv.key,

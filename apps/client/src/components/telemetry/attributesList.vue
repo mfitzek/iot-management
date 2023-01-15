@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { IDeviceData } from '@iot/device';
+import { DeviceData } from '@iot/device';
 import { computed, reactive, ref } from 'vue';
 import http from '@iot/services/http';
 
@@ -50,7 +50,7 @@ const emit = defineEmits<{
 
 const search = ref('');
 
-const devices = ref<IDeviceData[]>([]);
+const devices = ref<DeviceData[]>([]);
 
 const filterDevices = computed(() => {
   const find = search.value.trim();
@@ -66,7 +66,7 @@ const filterDevices = computed(() => {
   });
 });
 
-function filterDeviceAttributes(device: IDeviceData) {
+function filterDeviceAttributes(device: DeviceData) {
   const find = search.value.trim();
   return device.attributes.filter((attr) => {
     if (find.length === 0) {

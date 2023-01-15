@@ -1,19 +1,20 @@
+import { CreateDevice, DeviceData } from '@iot/device';
+import { IUser } from '@iot/user';
 import {
-  Controller,
-  Get,
-  UseGuards,
-  Req,
   Body,
-  Put,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
   Param,
   Post,
-  Delete,
-  NotFoundException,
+  Put,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { ICreateDevicePost, IDeviceData } from '@iot/device';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { DeviceService } from './device.service';
 import { DeviceManager } from './device-manager.service';
+import { DeviceService } from './device.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('device')
@@ -26,12 +27,12 @@ export class DeviceController {
   }
 
   @Put('create')
-  createDevice(@Req() req, @Body() data: ICreateDevicePost) {
+  createDevice(@Req() req, @Body() data: CreateDevice) {
+    const user: IUser = req.user;
     return this.device_manager.createDevice({
-      ...data,
-      owner_id: req.user.id as string,
-      attributes: [],
-      keyValues: [],
+      name: data.name,
+      type: data.type,
+      owner_id: user.id,
     });
   }
 
@@ -45,7 +46,7 @@ export class DeviceController {
   }
 
   @Post(':id')
-  async updateDevice(@Req() req, @Param() params, @Body() data: IDeviceData) {
+  async updateDevice(@Req() req, @Param() params, @Body() data: DeviceData) {
     const device = await this.device_manager.getUserDevice(params.id, req.user.id);
     if (!device) throw new NotFoundException();
     return device.update(data);

@@ -1,4 +1,4 @@
-import { IDeviceData } from '@iot/device';
+import { DeviceData } from '@iot/device';
 import {
   ISearchTelemetry,
   ITelemetry,
@@ -63,7 +63,7 @@ export class TelemetryService {
     return map;
   }
 
-  private mergeDeviceWithData(devices: IDeviceData[], data: Map<string, ITelemetry[]>) {
+  private mergeDeviceWithData(devices: DeviceData[], data: Map<string, ITelemetry[]>) {
     const result: ITelemetryDevice[] = devices.map((dev) => {
       const attributes: ITelemetryAttribute[] = dev.attributes.map((attr) => {
         return {

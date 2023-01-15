@@ -1,32 +1,35 @@
 import { IProvidedServices } from './interfaces/ProvidedServices';
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
-import {
-  IAttribute,
-  IDevice,
-  IDeviceData,
-  IKeyValue,
-} from './interfaces/IDevice';
+import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
+import { DeviceData } from './api-interface';
 
 export class Device implements IDevice {
-  id: string;
+  private id: string;
+  private owner_id: string;
   name: string;
   type: string;
-  owner_id: string;
 
   attributes: IAttribute[];
   keyValues: IKeyValue[];
 
   db: IDeviceService;
 
-  constructor(data: IDeviceData, protected providers: IProvidedServices) {
+  constructor(data: DeviceData, protected providers: IProvidedServices) {
     this.db = providers.device_service;
-    this.id = data.id!;
+    this.id = data.id;
     this.name = data.name;
     this.type = data.type;
     this.attributes = data.attributes;
     this.keyValues = data.keyValues;
     this.owner_id = data.owner_id;
+  }
+
+  getId(): string {
+    return this.id;
+  }
+  getOwnerId(): string {
+    return this.owner_id;
   }
 
   public getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]> {
@@ -40,7 +43,7 @@ export class Device implements IDevice {
     return this.providers.telemetry_service.getTelemetry(_filter);
   }
 
-  public getData(): IDeviceData {
+  public getData(): DeviceData {
     return {
       id: this.id,
       name: this.name,
@@ -52,17 +55,17 @@ export class Device implements IDevice {
   }
 
   public async delete() {
-    return await this.db.removeDevice(this.id!);
+    return await this.db.removeDevice(this.id);
   }
 
-  public async update(data: IDeviceData) {
-    await this.db.updateDevice(this.id!, data);
+  public async update(data: DeviceData) {
+    await this.db.updateDevice(this.id, data);
     await this.fetchData();
     return this.getData();
   }
 
   private async fetchData() {
-    const data = await this.db.getDevice(this.id!);
+    const data = await this.db.getDevice(this.id);
     if (data) {
       this.name = data.name;
       this.type = data.type;
