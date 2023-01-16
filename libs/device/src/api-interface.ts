@@ -20,6 +20,6 @@ export interface DeviceStatusInfo {
   name: string;
   type: string;
 
-  lastData: Date;
-  status: string;
+  lastData?: Date;
+  status?: string;
 }

@@ -1,9 +1,12 @@
+import { DeviceStatusInfo } from './../api-interface';
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { DeviceData } from '../api-interface';
 
 export interface IDevice {
   getId(): string;
   getOwnerId(): string;
+
+  getShortInfo(): DeviceStatusInfo;
 
   getData(): DeviceData;
   update(data: DeviceData): Promise<DeviceData>;

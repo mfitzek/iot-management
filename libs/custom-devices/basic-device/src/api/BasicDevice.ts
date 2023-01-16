@@ -1,4 +1,4 @@
-import { IProvidedServices } from '@iot/device';
+import { DeviceStatusInfo, IProvidedServices } from '@iot/device';
 import { Device, IAttribute, DeviceData } from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
@@ -14,12 +14,32 @@ export class APIBasicDevice extends Device {
     this.connectToMqtt();
   }
 
-  private getUserMqttSettings() {
-    const data = this.getData();
-    return getDeviceMqttSettings(data);
+  async update(data: DeviceData) {
+    const updated = await super.update(data);
+    this.connectToMqtt();
+    return updated;
   }
 
-  connectToMqtt() {
+  getShortInfo(): DeviceStatusInfo {
+    return {
+      id: this.getId(),
+      name: this.name,
+      type: this.type,
+      lastData: new Date(),
+      status: this.getStatus()
+    };
+  }
+
+  private getStatus() {
+    const mqttSettings = this.getUserMqttSettings();
+
+    if (mqttSettings?.active) {
+      return 'online';
+    }
+    return 'offline';
+  }
+
+  private connectToMqtt() {
     if (this.mqtt_client) {
       this.mqtt_client.disconnect();
     }
@@ -28,14 +48,14 @@ export class APIBasicDevice extends Device {
       const settings: IMqttClientSettings = {
         server: mqttUserSettings.url,
         password: mqttUserSettings.password.length > 0 ? mqttUserSettings.username : undefined,
-        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined,
+        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined
       };
       this.mqtt_client = this.providers.mqtt_service.createClient(settings);
       this.subscribeMqtt();
     }
   }
 
-  subscribeMqtt() {
+  private subscribeMqtt() {
     const mapping = this.getUserMqttSettings()?.attribute_mapping ?? [];
     mapping.forEach((map) => {
       const attribute = this.attributes.find((attr) => attr.id === map.attribute_id);
@@ -50,15 +70,13 @@ export class APIBasicDevice extends Device {
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,
-        createdAt: new Date(),
+        createdAt: new Date()
       };
       this.providers.telemetry_service.saveTelemetry(telemety);
     }
   }
-
-  async update(data: DeviceData) {
-    const updated = await super.update(data);
-    this.connectToMqtt();
-    return updated;
+  private getUserMqttSettings() {
+    const data = this.getData();
+    return getDeviceMqttSettings(data);
   }
 }

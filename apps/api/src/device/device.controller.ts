@@ -1,4 +1,4 @@
-import { CreateDevice, DeviceData } from '@iot/device';
+import { CreateDevice, DeviceData, DeviceStatusInfo } from '@iot/device';
 import { IUser } from '@iot/user';
 import {
   Body,
@@ -24,6 +24,12 @@ export class DeviceController {
   @Get('list')
   getDevices(@Req() req) {
     return this.device_manager.getUserDeviceList(req.user.id);
+  }
+
+  @Get('shortlist')
+  async getDevicesShort(@Req() req): Promise<DeviceStatusInfo[]> {
+    const devices = await this.device_manager.getUserDevices(req.user.id);
+    return devices.map((device) => device.getShortInfo());
   }
 
   @Put('create')

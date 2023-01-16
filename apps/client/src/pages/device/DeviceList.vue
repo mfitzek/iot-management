@@ -14,7 +14,9 @@
       <q-table :columns="columns" :rows="rows" @row-click="clickDevice">
         <template #body-cell-status="{ row }">
           <q-td class="text-right">
-            <q-badge rounded :color="row_status(row.status)"></q-badge>
+            <q-badge rounded :color="rowStatus(row.status).color">
+              <q-tooltip>{{ rowStatus(row.status).status }}</q-tooltip>
+            </q-badge>
           </q-td>
         </template>
       </q-table>
@@ -25,14 +27,14 @@
 <script setup lang="ts">
 import { QTableColumn } from 'quasar';
 import { useRouter } from 'vue-router';
-import { IDeviceListRow } from '@iot/device';
+import { DeviceStatusInfo, IDeviceListRow } from '@iot/device';
 import http from '@iot/services/http';
 import { reactive } from 'vue';
 
-const rows = reactive<IDeviceListRow[]>([]);
+const rows = reactive<DeviceStatusInfo[]>([]);
 
 async function getRows() {
-  const req = await http.get('device/list');
+  const req = await http.get('device/shortlist');
   rows.push(...req.data);
 }
 
@@ -47,14 +49,24 @@ const columns: QTableColumn[] = [
   { name: 'status', label: 'Status', field: 'status' },
 ];
 
-const row_status = (status: string) => {
-  const colors: { [state: string]: string } = {
-    online: 'green',
-    warning: 'orange',
-    offline: 'red',
+type DeviceStatus = {
+  color: string;
+  status: string;
+};
+function rowStatus(status?: string) {
+  if (!status)
+    return {
+      color: 'grey',
+      status: 'unknown',
+    };
+
+  const colors: { [state: string]: DeviceStatus } = {
+    online: { color: 'green', status: 'online' },
+    warning: { color: 'orange', status: 'problems occured' },
+    offline: { color: 'red', status: 'offline' },
   };
   return colors[status] ?? 'red';
-};
+}
 
 async function clickDevice({}, row: IDeviceListRow) {
   router.push({ name: 'DeviceDetail', params: { id: row.id } });

@@ -2,7 +2,7 @@ import { IProvidedServices } from './interfaces/ProvidedServices';
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
 import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
-import { DeviceData } from './api-interface';
+import { DeviceData, DeviceStatusInfo } from './api-interface';
 
 export class Device implements IDevice {
   private id: string;
@@ -23,6 +23,13 @@ export class Device implements IDevice {
     this.attributes = data.attributes;
     this.keyValues = data.keyValues;
     this.owner_id = data.owner_id;
+  }
+  getShortInfo(): DeviceStatusInfo {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+    };
   }
 
   getId(): string {
