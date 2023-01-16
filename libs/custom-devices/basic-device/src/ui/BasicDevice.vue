@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-px-md">
     <q-card class="q-ma-lg device-card q-mx-auto">
       <q-card-section horizontal>
         <q-item>

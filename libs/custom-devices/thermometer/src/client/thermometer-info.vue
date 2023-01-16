@@ -6,6 +6,9 @@
     <span> Home / Living room </span>
     <q-btn color="primary" icon="edit" flat rounded @click="startEditLocation" />
   </div>
+  <div class="row justify-end">
+    <remove-device-button />
+  </div>
 
   <q-dialog v-model="editLocation">
     <q-card>
@@ -23,6 +26,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useThermometerStore } from './store';
+import removeDeviceButton from './components/remove-device-button.vue';
 
 const store = useThermometerStore();
 

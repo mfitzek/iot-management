@@ -13,9 +13,23 @@ export const useThermometerStore = defineStore('thermometer', () => {
     device.value = res.data;
   }
 
+  async function removeDevice() {
+    if (device.value == null) return false;
+
+    const id = device.value.id;
+
+    const req = await http.delete<boolean>(`/device/${id}`);
+    if (req.data) {
+      device.value = null;
+    }
+
+    return req.data;
+  }
+
   return {
     device,
     fetchData,
     name,
+    removeDevice,
   };
 });
