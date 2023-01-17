@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
-import api from '@iot/services/http';
 import { CreateDevice } from '@iot/device';
+import api from '@iot/services/http';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const types = DeviceTypeManager.instance.getTypesList();

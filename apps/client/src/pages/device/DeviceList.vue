@@ -25,11 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { QTableColumn } from 'quasar';
-import { useRouter } from 'vue-router';
-import { DeviceStatusInfo, IDeviceListRow } from '@iot/device';
+import { DeviceStatusInfo } from '@iot/device';
 import http from '@iot/services/http';
+import { QTableColumn } from 'quasar';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 const rows = reactive<DeviceStatusInfo[]>([]);
 
@@ -68,7 +68,7 @@ function rowStatus(status?: string) {
   return colors[status] ?? 'red';
 }
 
-async function clickDevice({}, row: IDeviceListRow) {
+async function clickDevice({}, row: DeviceStatusInfo) {
   router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
 </script>
