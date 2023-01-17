@@ -11,6 +11,7 @@
     "custom-devices-basic-device": "libs/custom-devices/basic-device",
     "custom-devices-thermometer": "libs/custom-devices/thermometer",
     "device": "libs/device",
+    "gateway-gateway": "libs/gateway/gateway",
     "gateway-http": "libs/gateway/http",
     "gateway-mqtt": "libs/gateway/mqtt",
     "services-http": "libs/services/http",

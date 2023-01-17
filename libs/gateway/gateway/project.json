@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/gateway/gateway/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/gateway/gateway",
+        "main": "libs/gateway/gateway/src/index.ts",
+        "tsConfig": "libs/gateway/gateway/tsconfig.lib.json",
+        "assets": ["libs/gateway/gateway/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/gateway/gateway/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
