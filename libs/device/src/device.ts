@@ -1,8 +1,9 @@
-import { IProvidedServices } from './interfaces/ProvidedServices';
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
+import { DeviceData, DeviceStatusInfo } from './api-interface';
+import { CustomRequest, CustomRouteResponse } from './interfaces/CustomRoute';
 import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
-import { DeviceData, DeviceStatusInfo } from './api-interface';
+import { IProvidedServices } from './interfaces/ProvidedServices';
 
 export class Device implements IDevice {
   private id: string;
@@ -24,6 +25,11 @@ export class Device implements IDevice {
     this.keyValues = data.keyValues;
     this.owner_id = data.owner_id;
   }
+
+  async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
+    return 'not defined';
+  }
+
   getShortInfo(): DeviceStatusInfo {
     return {
       id: this.id,

@@ -2,16 +2,21 @@ import { DeviceStatusInfo } from './../api-interface';
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { DeviceData } from '../api-interface';
 
+import { CustomRequest, CustomRouteResponse } from './CustomRoute';
+
 export interface IDevice {
   getId(): string;
   getOwnerId(): string;
 
   getShortInfo(): DeviceStatusInfo;
-
   getData(): DeviceData;
+
   update(data: DeviceData): Promise<DeviceData>;
   delete(): Promise<boolean>;
+
   getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]>;
+
+  handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse | 'not defined'>;
 }
 
 export interface IAttribute {

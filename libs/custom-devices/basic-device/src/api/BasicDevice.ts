@@ -1,5 +1,13 @@
-import { DeviceStatusInfo, IProvidedServices } from '@iot/device';
-import { Device, IAttribute, DeviceData } from '@iot/device';
+import {
+  CustomRequestMethod,
+  Device,
+  DeviceData,
+  DeviceStatusInfo,
+  IAttribute,
+  IProvidedServices,
+  CustomRequest,
+  CustomRouteResponse,
+} from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
 import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
@@ -14,6 +22,13 @@ export class APIBasicDevice extends Device {
     this.connectToMqtt();
   }
 
+  async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
+    const { path, method } = request;
+    if (method === CustomRequestMethod.POST && path === 'refresh-http-token') {
+      return 'No!';
+    }
+  }
+
   async update(data: DeviceData) {
     const updated = await super.update(data);
     this.connectToMqtt();
@@ -26,7 +41,7 @@ export class APIBasicDevice extends Device {
       name: this.name,
       type: this.type,
       lastData: new Date(),
-      status: this.getStatus()
+      status: this.getStatus(),
     };
   }
 
@@ -48,7 +63,7 @@ export class APIBasicDevice extends Device {
       const settings: IMqttClientSettings = {
         server: mqttUserSettings.url,
         password: mqttUserSettings.password.length > 0 ? mqttUserSettings.username : undefined,
-        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined
+        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined,
       };
       this.mqtt_client = this.providers.mqtt_service.createClient(settings);
       this.subscribeMqtt();
@@ -70,7 +85,7 @@ export class APIBasicDevice extends Device {
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       this.providers.telemetry_service.saveTelemetry(telemety);
     }
