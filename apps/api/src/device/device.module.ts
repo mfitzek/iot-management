@@ -6,13 +6,12 @@ import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
 import { DeviceController } from './device.controller';
 import { DeviceService } from './device.service';
-
-import { GatewayMqttModule } from '@iot/gateway/mqtt';
+import { GatewayModule } from '../gateway/gateway.module';
 
 @Module({
   controllers: [DeviceController],
   providers: [DeviceService, DeviceManager],
   exports: [DeviceManager],
-  imports: [PrismaModule, AuthModule, TelemetryCollectorModule, GatewayMqttModule, SettingsModule],
+  imports: [PrismaModule, AuthModule, TelemetryCollectorModule, SettingsModule, GatewayModule],
 })
 export class DeviceModule {}

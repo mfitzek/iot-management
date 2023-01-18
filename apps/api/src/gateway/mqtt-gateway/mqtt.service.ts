@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IMqttService, IMqttClient, IMqttClientSettings } from '../interfaces/IMqttService';
-import { CustomMqttClient } from '../mqtt-client/mqttClient';
+import { IMqttService, IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
+import { CustomMqttClient } from '@iot/gateway/mqtt';
 
 @Injectable()
 export class MqttService implements IMqttService {

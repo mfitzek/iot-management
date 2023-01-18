@@ -6,4 +6,4 @@ import { MqttService } from './mqtt.service';
   providers: [MqttService],
   exports: [MqttService],
 })
-export class GatewayMqttModule {}
+export class MqttGatewayModule {}

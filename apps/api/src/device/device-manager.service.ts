@@ -4,10 +4,11 @@ import { IDevice, DeviceData, CreateUserDevice, Device } from '@iot/device';
 import { DeviceTypeManager } from '@iot/custom-device-manager';
 
 import { IProvidedServices } from '@iot/device';
-import { MqttService } from '@iot/gateway/mqtt';
+
 import { TelemetryCollectorService } from '../telemetry-collector';
 import { BackupService } from '../settings/backup/backup.service';
 import { Observer } from '@iot/utility';
+import { MqttService } from '../gateway/mqtt-gateway/mqtt.service';
 
 @Injectable()
 export class DeviceManager implements Observer {
