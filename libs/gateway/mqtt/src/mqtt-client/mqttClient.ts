@@ -1,6 +1,15 @@
-import { IMqttClient, IMqttClientSettings } from '../interfaces/IMqttService';
-
 import { connect, MqttClient } from 'mqtt';
+
+export interface IMqttClient {
+  subscribe(topic: string, onData: (topic, data) => void): boolean;
+  publish(topic: string, data: string): boolean;
+  disconnect();
+}
+export interface IMqttClientSettings {
+  server: string;
+  username?: string;
+  password?: string;
+}
 
 interface ISubscription {
   topic: string;
