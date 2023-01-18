@@ -18,14 +18,13 @@
   </section>
   <section>
     <p>
-      To send data via HTTP send POST request to <br />
-      POST localhost:3000/telemetry/SOMEID <br />
-      set header <br />
-      "access_token"={{ token }} <br />
-      and body with name of parameters eg.<br />
-      temp=24.6&hum=45.5 <br />
-      or send attributes in JSON format <br />
-      <code> { "temp": 24.6, "hum": 33.4 } </code>
+      Usage: <br />
+      send <span class="text-bold">POST</span> request to <br />
+      <span class="text-italic">api-server/api/gateway/{{ store.device?.id }}</span> <br />
+      with header<br />
+      <code>Authorization: {{ token }}</code> <br />
+      with body as JSON format: <br />
+      <code> { "attribute_name": value, "temperature": 24.2 } </code>
     </p>
   </section>
 </template>
