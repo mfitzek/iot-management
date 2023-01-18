@@ -1,3 +1,4 @@
+import { HttpGatewayService } from './../gateway/http-gateway/http-gateway.service';
 import { Injectable } from '@nestjs/common';
 import { DeviceService } from './device.service';
 import { IDevice, DeviceData, CreateUserDevice, Device } from '@iot/device';
@@ -18,6 +19,7 @@ export class DeviceManager implements Observer {
     private device_service: DeviceService,
     private telemetry_service: TelemetryCollectorService,
     private mqtt_service: MqttService,
+    private http_service: HttpGatewayService,
     private backupServicer: BackupService
   ) {
     this.initDevices();
@@ -31,12 +33,15 @@ export class DeviceManager implements Observer {
 
   async initDevices() {
     const devices_data = await this.device_service.getDeviceList();
-    this.device_list = devices_data.map((device_data) => this.createCustomDevice(device_data));
+    for (const deviceData of devices_data) {
+      const device = await this.createCustomDevice(deviceData);
+      this.device_list.push(device);
+    }
   }
 
   async createDevice(data: CreateUserDevice) {
     const created = await this.device_service.createDevice(data);
-    const device = this.createCustomDevice(created);
+    const device = await this.createCustomDevice(created);
     this.device_list.push(device);
     return device.getData();
   }
@@ -78,6 +83,7 @@ export class DeviceManager implements Observer {
       device_service: this.device_service,
       telemetry_service: this.telemetry_service,
       mqtt_service: this.mqtt_service,
+      http_service: this.http_service,
     };
   }
 }

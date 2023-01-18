@@ -94,7 +94,7 @@ export class DeviceController {
     console.log('Custom request', { id, customRoute, method: CustomRequestMethod.POST, data });
     const device = await this.device_manager.getUserDevice(id, req.user.id);
     if (!device) throw new NotFoundException();
-    const result = device.handleCustomRoute({
+    const result = await device.handleCustomRoute({
       path: customRoute,
       method: CustomRequestMethod.POST,
       body: data,

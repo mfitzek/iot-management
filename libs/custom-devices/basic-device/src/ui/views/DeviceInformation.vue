@@ -24,6 +24,7 @@
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { getHttpSettings } from '../../common/http/HttpSettings';
 import { getDeviceMqttSettings } from '../../common/mqtt/mqtt';
 import store, { removeCurrentDevice, updateCurrentDevice } from '../store';
 
@@ -80,6 +81,10 @@ const mqtt = computed(() => {
   return false;
 });
 const http = computed(() => {
+  if (store.device) {
+    const settings = getHttpSettings(store.device);
+    return settings?.active ? true : false;
+  }
   return false;
 });
 

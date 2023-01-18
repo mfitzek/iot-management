@@ -10,7 +10,7 @@ export class Thermometer implements CustomDevice {
     return defineAsyncComponent(() => import('./client/thermometer.vue'));
   }
 
-  getDevice(data: DeviceData, providers: IProvidedServices): IDevice {
+  async getDevice(data: DeviceData, providers: IProvidedServices): Promise<IDevice> {
     const device = new Device(data, providers);
     return device;
   }

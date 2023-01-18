@@ -1,7 +1,7 @@
 export type CustomRequest = {
   path: string;
   method: CustomRequestMethod;
-  body?: object;
+  body?: unknown;
 };
 
 export enum CustomRequestMethod {

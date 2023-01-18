@@ -1,7 +1,7 @@
 <template>
   <section>
     <span class="text-h4">HTTP connection</span>
-    <q-toggle v-model="enabled" color="green" />
+    <q-toggle v-model="enabled" color="green" @update:model-value="toggleHttp()" />
   </section>
 
   <section class="row q-gutter-md items-end">
@@ -31,13 +31,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import api from '@iot/services/http';
+import store, { getHttpGatewaySettings } from '../../store';
 
-const enabled = ref(false);
-const token = ref('axasda=axsdsadsad/asdsad4@#');
+const enabled = computed(() => {
+  return settings.value?.active ?? false;
+});
+
+const settings = computed(() => {
+  return getHttpGatewaySettings();
+});
+
+const token = computed(() => {
+  return settings.value?.accessToken ?? '';
+});
+
+async function toggleHttp() {
+  if (store.device) {
+    const res = await api.post(
+      `device/${store.device.id}/custom`,
+      {
+        active: !enabled.value,
+      },
+      {
+        params: {
+          path: 'set-http-active',
+        },
+      }
+    );
+    store.device = res.data;
+  }
+}
 
 async function refresh() {
-  // todo: referesh
+  if (store.device) {
+    const res = await api.post(
+      `device/${store.device.id}/custom`,
+      {},
+      {
+        params: {
+          path: 'refresh-http-token',
+        },
+      }
+    );
+    store.device = res.data;
+  }
 }
 
 function clipboard_copy() {

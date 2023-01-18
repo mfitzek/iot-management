@@ -1,8 +1,7 @@
 import { CustomDevice } from '@iot/custom-device';
-import { IDevice, DeviceData } from '@iot/device';
+import { IDevice, DeviceData, Device } from '@iot/device';
 import { IProvidedServices } from '@iot/device';
 import { Component, defineAsyncComponent } from 'vue';
-import { APIBasicDevice } from './api/BasicDevice';
 
 export class BasicDevice implements CustomDevice {
   getType(): string {
@@ -11,10 +10,9 @@ export class BasicDevice implements CustomDevice {
   getMainComponent(): Component {
     return defineAsyncComponent(() => import('./ui/BasicDevice.vue'));
   }
-  getDevice(data: DeviceData, providers: IProvidedServices): IDevice {
-    const device = new APIBasicDevice(data, providers);
-    return device;
+  async getDevice(data: DeviceData, providers: IProvidedServices): Promise<IDevice> {
+    const deviceModule = await import('./api/BasicDevice');
+    return new deviceModule.APIBasicDevice(data, providers);
   }
 }
-export * from './api/BasicDevice';
 export default new BasicDevice();

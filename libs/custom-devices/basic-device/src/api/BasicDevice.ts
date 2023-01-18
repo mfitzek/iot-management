@@ -10,6 +10,12 @@ import {
 } from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
+import { randomUUID } from 'crypto';
+import {
+  getHttpSettings,
+  setHttpAccessToken,
+  setHttpGatewayActive,
+} from '../common/http/HttpSettings';
 import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
 
 export class APIBasicDevice extends Device {
@@ -20,12 +26,32 @@ export class APIBasicDevice extends Device {
     super(data, providers);
     this.providers = providers;
     this.connectToMqtt();
+    this.setupHttpGateway();
   }
 
   async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
+    function generateAccessToken() {
+      return randomUUID();
+    }
+
     const { path, method } = request;
     if (method === CustomRequestMethod.POST && path === 'refresh-http-token') {
-      return 'No!';
+      const token = generateAccessToken();
+      const updateSettings = setHttpAccessToken(this.getData(), token);
+      const response = await this.update(updateSettings);
+      this.setupHttpGateway();
+      return response;
+    }
+    if (method === CustomRequestMethod.POST && path === 'set-http-active') {
+      if (request.body && typeof request.body === 'object' && 'active' in request.body) {
+        const converted = request.body as { active: boolean };
+        const active = Boolean(converted.active);
+        const updateSettings = setHttpGatewayActive(this.getData(), active);
+        const response = await this.update(updateSettings);
+        this.setupHttpGateway();
+        return response;
+      }
+      return 'Missing active boolen in body';
     }
   }
 
@@ -93,5 +119,27 @@ export class APIBasicDevice extends Device {
   private getUserMqttSettings() {
     const data = this.getData();
     return getDeviceMqttSettings(data);
+  }
+
+  private setupHttpGateway() {
+    const httpSettings = getHttpSettings(this.getData());
+    if (!httpSettings || !httpSettings.active) {
+      this.providers.http_service.unregisterDevice(this.getId());
+      return;
+    }
+
+    this.providers.http_service.registerDevice(this.getId(), {
+      accessToken: httpSettings.accessToken,
+      onTelemetryHandler: (telemetryData) => {
+        const attribute = this.attributes.find((attr) => attr.name === telemetryData.attributeName);
+        if (!attribute) return;
+
+        this.providers.telemetry_service.saveTelemetry({
+          attribute_id: attribute.id || 'wtf',
+          value: telemetryData.value,
+          createdAt: new Date(),
+        });
+      },
+    });
   }
 }
