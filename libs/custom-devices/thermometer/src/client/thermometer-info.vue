@@ -1,6 +1,6 @@
 <template>
-  <div class="text-h4">23 °C</div>
-  <div>Humidity 60%</div>
+  <div class="text-h4">{{ store.temperature }} °C</div>
+  <div>Humidity {{ store.humidity }}%</div>
   <div>
     <span> Location: </span>
     <span> Home / Living room </span>
@@ -32,6 +32,9 @@ const store = useThermometerStore();
 
 const editLocation = ref(false);
 const editNameText = ref(store.name);
+setInterval(() => {
+  store.fetchTelemetry();
+}, 60 * 1000);
 
 function startEditLocation() {
   editLocation.value = true;

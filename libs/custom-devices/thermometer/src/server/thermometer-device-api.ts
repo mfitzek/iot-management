@@ -1,4 +1,10 @@
-import { Device, DeviceData, DeviceStatusInfo, IAttribute, IProvidedServices } from '@iot/device';
+import {
+  CreateAttribute,
+  Device,
+  DeviceData,
+  DeviceStatusInfo,
+  IProvidedServices,
+} from '@iot/device';
 import { IMqttClient } from '@iot/gateway/mqtt';
 
 export class ThermometerDevice extends Device {
@@ -6,17 +12,31 @@ export class ThermometerDevice extends Device {
 
   constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
+    this.setupMqttGateway();
   }
 
-  public override onCreate(): void {
-    const temperature: IAttribute = {
+  public override onCreate() {
+    console.log('On create !');
+    const temperature: CreateAttribute = {
       name: 'temperature',
       type: 'number',
     };
-    const humidity: IAttribute = {
-      name: 'temperature',
+    const humidity: CreateAttribute = {
+      name: 'humidity',
       type: 'number',
     };
+
+    this.update({
+      id: this.getId(),
+      name: this.name,
+      attributes: {
+        create: [temperature, humidity],
+        update: [],
+        remove: [],
+      },
+    }).then(() => {
+      this.setupMqttGateway();
+    });
   }
 
   public override getShortInfo(): DeviceStatusInfo {
@@ -28,13 +48,29 @@ export class ThermometerDevice extends Device {
   }
 
   private setupMqttGateway() {
+    const data = this.getData();
+    const temperature = data.attributes.find((a) => a.name === 'temperature');
+    const humidity = data.attributes.find((a) => a.name === 'humidity');
+    if (!humidity || !temperature) return;
+
     this.mqtt_client = this.providers.mqtt_service.createClient({
       server: 'mqtt://localhost:1883',
     });
 
     this.mqtt_client.subscribe('esp/temp', (_, temp) => {
-      // this.providers.telemetry_service.saveTelemetry({
-      // })
+      this.providers.telemetry_service.saveTelemetry({
+        attribute_id: temperature.id,
+        value: temp,
+        createdAt: new Date(),
+      });
+    });
+
+    this.mqtt_client.subscribe('esp/hum', (_, hum) => {
+      this.providers.telemetry_service.saveTelemetry({
+        attribute_id: humidity.id,
+        value: hum,
+        createdAt: new Date(),
+      });
     });
   }
 }

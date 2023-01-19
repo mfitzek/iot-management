@@ -1,5 +1,5 @@
 import { CustomDevice } from '@iot/custom-device';
-import { Device, IDevice, DeviceData, IProvidedServices } from '@iot/device';
+import { DeviceData, IDevice, IProvidedServices } from '@iot/device';
 import { Component, defineAsyncComponent } from 'vue';
 
 export class Thermometer implements CustomDevice {
@@ -11,7 +11,7 @@ export class Thermometer implements CustomDevice {
   }
 
   async getDevice(data: DeviceData, providers: IProvidedServices): Promise<IDevice> {
-    const device = new Device(data, providers);
-    return device;
+    const deviceModule = await import('./server/thermometer-device-api');
+    return new deviceModule.ThermometerDevice(data, providers);
   }
 }
