@@ -3,6 +3,7 @@ import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { DeviceData } from '../api-interface';
 
 import { CustomRequest, CustomRouteResponse } from './CustomRoute';
+import { UpdateDevice } from './DeviceApi';
 
 export interface IDevice {
   getId(): string;
@@ -11,7 +12,8 @@ export interface IDevice {
   getShortInfo(): DeviceStatusInfo;
   getData(): DeviceData;
 
-  update(data: DeviceData): Promise<DeviceData>;
+  onCreate(): void;
+  update(data: UpdateDevice): Promise<DeviceData>;
   delete(): Promise<boolean>;
 
   getTelemetry(filter: ISearchTelemetry): Promise<ITelemetry[]>;
@@ -20,14 +22,14 @@ export interface IDevice {
 }
 
 export interface IAttribute {
-  id?: string;
+  id: string;
   name: string;
   type: string;
   to_be_deleted?: boolean;
 }
 
 export interface IKeyValue {
-  id?: string;
+  id: string;
   key: string;
   value: string;
   to_be_deleted?: boolean;

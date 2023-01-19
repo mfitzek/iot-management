@@ -42,6 +42,7 @@ export class DeviceManager implements Observer {
   async createDevice(data: CreateUserDevice) {
     const created = await this.device_service.createDevice(data);
     const device = await this.createCustomDevice(created);
+    device.onCreate();
     this.device_list.push(device);
     return device.getData();
   }

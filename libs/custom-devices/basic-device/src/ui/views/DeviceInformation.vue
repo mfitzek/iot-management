@@ -37,7 +37,6 @@ async function saveInformation() {
   const device = store.device;
   if (device) {
     device.name = name.value;
-    device.keyValues = [{ key: 'test', value: 'done' }];
     try {
       await updateCurrentDevice();
       $q.notify({

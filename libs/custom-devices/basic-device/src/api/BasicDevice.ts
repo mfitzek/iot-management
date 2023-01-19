@@ -6,7 +6,8 @@ import {
   DeviceData,
   DeviceStatusInfo,
   IAttribute,
-  IProvidedServices
+  IProvidedServices,
+  UpdateDevice,
 } from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
@@ -14,7 +15,7 @@ import { randomUUID } from 'crypto';
 import {
   getHttpSettings,
   setHttpAccessToken,
-  setHttpGatewayActive
+  setHttpGatewayActive,
 } from '../common/http/HttpSettings';
 import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
 
@@ -36,24 +37,24 @@ export class APIBasicDevice extends Device {
     if (method === CustomRequestMethod.POST && path === 'refresh-http-token') {
       const token = generateAccessToken();
       const updateSettings = setHttpAccessToken(this.getData(), token);
-      const response = await this.update(updateSettings);
+      await this.setKeyValue(updateSettings.key, updateSettings.value);
       this.setupHttpGateway();
-      return response;
+      return this.getData();
     }
     if (method === CustomRequestMethod.POST && path === 'set-http-active') {
       if (request.body && typeof request.body === 'object' && 'active' in request.body) {
         const converted = request.body as { active: boolean };
         const active = Boolean(converted.active);
         const updateSettings = setHttpGatewayActive(this.getData(), active);
-        const response = await this.update(updateSettings);
+        await this.setKeyValue(updateSettings.key, updateSettings.value);
         this.setupHttpGateway();
-        return response;
+        return this.getData();
       }
       return 'Missing active boolen in body';
     }
   }
 
-  async update(data: DeviceData) {
+  async update(data: UpdateDevice) {
     const updated = await super.update(data);
     this.connectToMqtt();
     return updated;
@@ -65,7 +66,7 @@ export class APIBasicDevice extends Device {
       name: this.name,
       type: this.type,
       lastData: new Date(),
-      status: this.getStatus()
+      status: this.getStatus(),
     };
   }
 
@@ -87,7 +88,7 @@ export class APIBasicDevice extends Device {
       const settings: IMqttClientSettings = {
         server: mqttUserSettings.url,
         password: mqttUserSettings.password.length > 0 ? mqttUserSettings.username : undefined,
-        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined
+        username: mqttUserSettings.username.length > 0 ? mqttUserSettings.username : undefined,
       };
       this.mqtt_client = this.providers.mqtt_service.createClient(settings);
       this.subscribeMqtt();
@@ -109,7 +110,7 @@ export class APIBasicDevice extends Device {
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       this.providers.telemetry_service.saveTelemetry(telemety);
     }
@@ -135,9 +136,9 @@ export class APIBasicDevice extends Device {
         this.providers.telemetry_service.saveTelemetry({
           attribute_id: attribute.id || 'wtf',
           value: telemetryData.value,
-          createdAt: new Date()
+          createdAt: new Date(),
         });
-      }
+      },
     });
   }
 }

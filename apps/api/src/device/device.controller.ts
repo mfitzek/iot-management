@@ -1,4 +1,4 @@
-import { CreateDevice, CustomRequestMethod, DeviceData, DeviceStatusInfo } from '@iot/device';
+import { CreateDevice, CustomRequestMethod, DeviceStatusInfo, UpdateDevice } from '@iot/device';
 import { IUser } from '@iot/user';
 import {
   Body,
@@ -53,7 +53,7 @@ export class DeviceController {
   }
 
   @Post(':id')
-  async updateDevice(@Req() req, @Param() params, @Body() data: DeviceData) {
+  async updateDevice(@Req() req, @Param() params, @Body() data: UpdateDevice) {
     const device = await this.device_manager.getUserDevice(params.id, req.user.id);
     if (!device) throw new NotFoundException();
     return device.update(data);

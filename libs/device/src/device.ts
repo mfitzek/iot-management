@@ -1,3 +1,4 @@
+import { UpdateDevice } from './interfaces/DeviceApi';
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
 import { DeviceData, DeviceStatusInfo } from './api-interface';
 import { CustomRequest, CustomRouteResponse } from './interfaces/CustomRoute';
@@ -25,12 +26,15 @@ export class Device implements IDevice {
     this.keyValues = data.keyValues;
     this.owner_id = data.owner_id;
   }
+  onCreate() {
+    return;
+  }
 
-  async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
+  public async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
     return 'not defined';
   }
 
-  getShortInfo(): DeviceStatusInfo {
+  public getShortInfo(): DeviceStatusInfo {
     return {
       id: this.id,
       name: this.name,
@@ -38,10 +42,10 @@ export class Device implements IDevice {
     };
   }
 
-  getId(): string {
+  public getId(): string {
     return this.id;
   }
-  getOwnerId(): string {
+  public getOwnerId(): string {
     return this.owner_id;
   }
 
@@ -71,10 +75,19 @@ export class Device implements IDevice {
     return await this.db.removeDevice(this.id);
   }
 
-  public async update(data: DeviceData) {
+  public async update(data: UpdateDevice) {
     await this.db.updateDevice(this.id, data);
     await this.fetchData();
     return this.getData();
+  }
+
+  public async setKeyValue(key: string, value: string) {
+    await this.providers.device_service.updateDevice(this.id, {
+      id: this.id,
+      name: this.name,
+      keyValues: [{ key: key, value: value }],
+    });
+    await this.fetchData();
   }
 
   private async fetchData() {

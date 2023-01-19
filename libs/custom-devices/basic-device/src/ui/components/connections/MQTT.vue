@@ -17,14 +17,6 @@
         <div class="col">
           <q-input v-model="settings.url" type="text" label="URL" required filled />
         </div>
-        <!-- <div class="col">
-          <q-input
-            v-model="settings.client_id"
-            type="text"
-            label="Client ID"
-            filled
-          />
-        </div> -->
       </div>
 
       <div class="row q-mt-sm q-gutter-x-sm">
@@ -62,7 +54,8 @@ import { IMqttAttributeMap } from '../../../common/mqtt/IMqttSettings';
 import { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
 import MqttMapDialog from './mqttMapDialog.vue';
-import store, { getMqttSettings, setMqttSettings, updateCurrentDevice } from '../../store';
+import store, { getMqttSettings, updateKeyValues } from '../../store';
+import { getAsKeyValue } from '../../../common/mqtt/mqtt';
 
 const settings = ref(getMqttSettings());
 
@@ -109,8 +102,9 @@ function setMqttData() {
 }
 
 function updateSettings() {
-  setMqttSettings(settings.value);
-  updateCurrentDevice();
+  if (!store.device) return;
+  const updatedKeyValue = getAsKeyValue(settings.value);
+  updateKeyValues([updatedKeyValue]);
 }
 
 function openEditDialog({}, {}, index: number) {

@@ -1,4 +1,4 @@
-import { DeviceData } from '@iot/device';
+import { DeviceData, UpdateKeyValue } from '@iot/device';
 
 export type HttpSettings = {
   active: boolean;
@@ -17,17 +17,12 @@ export function getHttpSettings(device: DeviceData) {
   return settings;
 }
 
-function createOrUpdateKeyValue(device: DeviceData, settings: HttpSettings) {
+function getAsKeyValue(settings: HttpSettings): UpdateKeyValue {
   const value = JSON.stringify(settings);
-  const keyValue = getHttpGatewayKeyValue(device);
-  if (keyValue) {
-    keyValue.value = value;
-  } else {
-    device.keyValues.push({
-      key: 'http-gateway-settings',
-      value: value,
-    });
-  }
+  return {
+    key: 'http-gateway-settings',
+    value: value,
+  };
 }
 
 export function setHttpAccessToken(device: DeviceData, accessToken: string) {
@@ -38,8 +33,7 @@ export function setHttpAccessToken(device: DeviceData, accessToken: string) {
     accessToken: accessToken,
   };
 
-  createOrUpdateKeyValue(device, settings);
-  return device;
+  return getAsKeyValue(settings);
 }
 
 export function setHttpGatewayActive(device: DeviceData, active: boolean) {
@@ -50,6 +44,5 @@ export function setHttpGatewayActive(device: DeviceData, active: boolean) {
     accessToken: currentSettings?.accessToken ?? '',
   };
 
-  createOrUpdateKeyValue(device, settings);
-  return device;
+  return getAsKeyValue(settings);
 }

@@ -37,15 +37,24 @@
 </template>
 
 <script setup lang="ts">
-import { IAttribute } from '@iot/device';
+import { IAttribute, UpdateDevice } from '@iot/device';
+import api from '@iot/services/http';
 import { QTableColumn } from 'quasar';
 import { computed, ref } from 'vue';
-import store, { updateCurrentDevice } from '../store';
+import store, { fetchDevice } from '../store';
 
-const data = ref<IAttribute[]>(store.device?.attributes ?? []);
+type Attribute = {
+  id?: string;
+  name: string;
+  type: string;
+};
+
+const data = computed(() => {
+  return store.device?.attributes ?? [];
+});
 
 const typeOptions = ['string', 'number', 'object'];
-const selected = ref<IAttribute>({ name: '', type: 'number' });
+const selected = ref<Attribute>({ name: '', type: 'number' });
 
 const columns: QTableColumn[] = [
   { name: 'name', label: 'Name', field: 'name', align: 'left' },
@@ -58,40 +67,64 @@ function rowClick({}, row: IAttribute) {
   selected.value = { ...row };
 }
 
-function removeCurrent() {
+async function removeCurrent() {
   const attr = selected.value;
-  if (attr) {
-    const idx = data.value.findIndex((a) => a.id === attr.id);
-    data.value[idx].to_be_deleted = true;
-    updateDevice();
+  if (attr && attr.id && store.device) {
+    const id = store.device.id;
+    const updateDevice: UpdateDevice = {
+      id: id,
+      name: store.device.name,
+      attributes: {
+        create: [],
+        update: [],
+        remove: [{ id: attr.id }],
+      },
+    };
+    await api.post(`device/${id}`, updateDevice);
+    await fetchDevice(id);
   }
+
   selected.value = { name: '', type: 'number' };
 }
 
-function createCurrent() {
-  data.value.push({ ...selected.value });
-  updateDevice();
-}
-
-function updateCurrent() {
-  const attr = { ...selected.value };
-  if (attr) {
-    const idx = data.value.findIndex((a) => a.id === attr.id);
-    data.value[idx] = attr;
-    updateDevice();
+async function createCurrent() {
+  const attr = selected.value;
+  if (attr && store.device) {
+    const id = store.device.id;
+    const updateDevice: UpdateDevice = {
+      id: id,
+      name: store.device.name,
+      attributes: {
+        create: [{ name: attr.name, type: attr.type }],
+        update: [],
+        remove: [],
+      },
+    };
+    await api.post(`device/${id}`, updateDevice);
+    await fetchDevice(id);
   }
 }
 
-async function updateDevice() {
-  if (store.device) {
-    store.device.attributes = [...data.value];
-    await updateCurrentDevice();
-    data.value = store.device.attributes;
+async function updateCurrent() {
+  const attr = selected.value;
+  if (attr && attr.id && store.device) {
+    const id = store.device.id;
+    const updateDevice: UpdateDevice = {
+      id: id,
+      name: store.device.name,
+      attributes: {
+        create: [],
+        update: [{ id: attr.id, name: attr.name, type: attr.type }],
+        remove: [],
+      },
+    };
+    await api.post(`device/${id}`, updateDevice);
+    await fetchDevice(id);
   }
 }
 
 function addAttribute() {
-  const attr: IAttribute = { name: '', type: 'number' };
+  const attr: Attribute = { name: '', type: 'number' };
   selected.value = attr;
 }
 </script>

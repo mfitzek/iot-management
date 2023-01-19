@@ -1,15 +1,10 @@
 import { DeviceData } from '../api-interface';
-
-export interface CreateUserDevice {
-  name: string;
-  type: string;
-  owner_id: string;
-}
+import { CreateUserDevice, UpdateDevice } from './DeviceApi';
 
 export interface IDeviceService {
   getDeviceList(): Promise<DeviceData[]>;
   getDevice(id: string): Promise<DeviceData | null>;
   createDevice(data: CreateUserDevice): Promise<DeviceData | null>;
-  updateDevice(id: string, data: DeviceData): Promise<DeviceData | null>;
+  updateDevice(id: string, data: UpdateDevice): Promise<DeviceData | null>;
   removeDevice(id: string): Promise<boolean>;
 }

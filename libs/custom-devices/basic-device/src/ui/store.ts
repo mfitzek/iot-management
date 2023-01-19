@@ -1,9 +1,9 @@
-import { IMqttSettings } from './../common/mqtt/IMqttSettings';
-import { DeviceData } from '@iot/device';
-import { reactive, ref } from 'vue';
+import { DeviceData, UpdateDevice, UpdateKeyValue } from '@iot/device';
 import http_api from '@iot/services/http';
-import { getDeviceMqttSettings, setDeviceMqttsettings } from '../common/mqtt/mqtt';
+import { reactive } from 'vue';
 import { getHttpSettings, HttpSettings } from '../common/http/HttpSettings';
+import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
+import { IMqttSettings } from './../common/mqtt/IMqttSettings';
 
 interface IDeviceStore {
   device: DeviceData | null;
@@ -22,7 +22,12 @@ export async function updateCurrentDevice() {
   if (!store.device) return;
   const id = store.device.id;
 
-  const req = await http_api.post<DeviceData | null>(`/device/${id}`, store.device);
+  const update: UpdateDevice = {
+    id: id,
+    name: store.device.name,
+  };
+
+  const req = await http_api.post<DeviceData | null>(`/device/${id}`, update);
   store.device = req.data;
 }
 
@@ -62,10 +67,18 @@ export function getHttpGatewaySettings(): HttpSettings | undefined {
   return getHttpSettings(store.device);
 }
 
-export function setMqttSettings(settings: IMqttSettings) {
-  if (store.device) {
-    setDeviceMqttsettings(store.device, settings);
-  }
+export async function updateKeyValues(keyValues: UpdateKeyValue[]) {
+  if (!store.device) return;
+  const { id, name } = store.device;
+
+  const update: UpdateDevice = {
+    id: id,
+    name: name,
+    keyValues: keyValues,
+  };
+
+  const res = await http_api.post<DeviceData | null>(`/device/${id}`, update);
+  store.device = res.data;
 }
 
 export default store;

@@ -5,3 +5,5 @@ export * from './interfaces/ProvidedServices';
 export * from './device';
 export * from './api-interface';
 export * from './interfaces/CustomRoute';
+
+export * from './interfaces/DeviceApi';
