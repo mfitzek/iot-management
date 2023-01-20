@@ -16,7 +16,7 @@
         <q-input v-model="editNameText" type="text" label="Location" />
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="Update" color="primary" v-close-popup />
+        <q-btn flat label="Update" color="primary" v-close-popup @click="updateDevice()" />
         <q-btn flat label="Cancel" color="primary" v-close-popup />
       </q-card-actions>
     </q-card>
@@ -27,6 +27,8 @@
 import { ref } from 'vue';
 import { useThermometerStore } from './store';
 import removeDeviceButton from './components/remove-device-button.vue';
+import http from '@iot/services/http';
+import { UpdateDevice } from '@iot/device';
 
 const store = useThermometerStore();
 
@@ -38,6 +40,16 @@ setInterval(() => {
 
 function startEditLocation() {
   editLocation.value = true;
+}
+
+async function updateDevice() {
+  if (!store.device) return;
+  const update: UpdateDevice = {
+    id: store.device.id,
+    name: editNameText.value,
+  };
+  const res = await http.post(`device/${store.device.id}`, update);
+  store.fetchData(store.device.id);
 }
 </script>
 

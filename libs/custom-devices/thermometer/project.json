@@ -15,7 +15,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/custom-devices/thermometer/**/*.ts"]
+        "lintFilePatterns": ["libs/custom-devices/thermometer/**/*.{ts,tsx,vue}"]
       }
     }
   },
