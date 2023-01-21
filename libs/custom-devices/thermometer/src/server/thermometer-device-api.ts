@@ -1,9 +1,11 @@
+import { MQTT_KEY } from './../common/device-configuration';
 import {
   CreateAttribute,
   Device,
   DeviceData,
   DeviceStatusInfo,
   IProvidedServices,
+  UpdateDevice,
 } from '@iot/device';
 import { IMqttClient } from '@iot/gateway/mqtt';
 
@@ -13,6 +15,12 @@ export class ThermometerDevice extends Device {
   constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
     this.setupMqttGateway();
+  }
+
+  public override update(data: UpdateDevice): Promise<DeviceData> {
+    const update = super.update(data);
+    this.setupMqttGateway();
+    return update;
   }
 
   public override onCreate() {
@@ -53,8 +61,12 @@ export class ThermometerDevice extends Device {
     const humidity = data.attributes.find((a) => a.name === 'humidity');
     if (!humidity || !temperature) return;
 
+    const connectionString = data.keyValues.find((kv) => kv.key === MQTT_KEY)?.value;
+    if (!connectionString || connectionString.length == 0) return;
+
+    this.mqtt_client?.disconnect();
     this.mqtt_client = this.providers.mqtt_service.createClient({
-      server: 'mqtt://localhost:1883',
+      server: connectionString,
     });
 
     this.mqtt_client.subscribe('esp/temp', (_, temp) => {

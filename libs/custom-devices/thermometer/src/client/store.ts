@@ -1,8 +1,9 @@
-import { computed, ref } from 'vue';
-import { defineStore } from 'pinia';
+import { MQTT_KEY } from './../common/device-configuration';
 import { DeviceData } from '@iot/device';
 import http from '@iot/services/http';
 import { ITelemetryResponse } from '@iot/telemetry';
+import { acceptHMRUpdate, defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 export const useThermometerStore = defineStore('thermometer', () => {
   const device = ref<DeviceData | null>(null);
@@ -13,6 +14,9 @@ export const useThermometerStore = defineStore('thermometer', () => {
   let humiId: string | undefined;
 
   const name = computed(() => device.value?.name ?? 'Not available');
+  const mqtt = computed(
+    () => device.value?.keyValues.find((kv) => kv.key === MQTT_KEY)?.value ?? ''
+  );
 
   async function fetchData(id: string) {
     const res = await http.get<DeviceData>(`device/${id}`);
@@ -56,9 +60,14 @@ export const useThermometerStore = defineStore('thermometer', () => {
     device,
     fetchData,
     name,
+    mqtt,
     removeDevice,
     temperature,
     humidity,
     fetchTelemetry,
   };
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useThermometerStore, import.meta.hot));
+}
