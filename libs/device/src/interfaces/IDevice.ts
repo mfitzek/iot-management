@@ -9,7 +9,7 @@ export interface IDevice {
   getId(): string;
   getOwnerId(): string;
 
-  getShortInfo(): DeviceStatusInfo;
+  getShortInfo(): Promise<DeviceStatusInfo>;
   getData(): DeviceData;
 
   onCreate(): void;

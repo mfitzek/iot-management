@@ -45,7 +45,7 @@ const router = useRouter();
 const columns: QTableColumn[] = [
   { name: 'name', label: 'Name', field: 'name', align: 'left' },
   { name: 'type', label: 'Type', field: 'type', align: 'left' },
-  { name: 'lastdata', label: 'Last data', field: 'last_data', align: 'left' },
+  { name: 'lastdata', label: 'Last data', field: 'lastData', align: 'left' },
   { name: 'status', label: 'Status', field: 'status' },
 ];
 

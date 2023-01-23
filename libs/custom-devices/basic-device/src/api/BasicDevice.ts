@@ -60,7 +60,7 @@ export class APIBasicDevice extends Device {
     return updated;
   }
 
-  getShortInfo(): DeviceStatusInfo {
+  public override async getShortInfo(): Promise<DeviceStatusInfo> {
     return {
       id: this.getId(),
       name: this.name,

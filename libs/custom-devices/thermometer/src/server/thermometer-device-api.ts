@@ -1,4 +1,3 @@
-import { MQTT_KEY } from './../common/device-configuration';
 import {
   CreateAttribute,
   Device,
@@ -8,6 +7,7 @@ import {
   UpdateDevice,
 } from '@iot/device';
 import { IMqttClient } from '@iot/gateway/mqtt';
+import { MQTT_KEY } from './../common/device-configuration';
 
 export class ThermometerDevice extends Device {
   private mqtt_client?: IMqttClient;
@@ -47,11 +47,25 @@ export class ThermometerDevice extends Device {
     });
   }
 
-  public override getShortInfo(): DeviceStatusInfo {
-    const part = super.getShortInfo();
+  public override async getShortInfo(): Promise<DeviceStatusInfo> {
+    const part = await super.getShortInfo();
+
+    const ids = this.getData().attributes.map((attr) => attr.id);
+
+    const telemetry = await this.providers.telemetry_service.getTelemetry({
+      attribute_ids: ids,
+    });
+
+    let lastData: Date | undefined = undefined;
+    if (telemetry.length) {
+      const last = telemetry[telemetry.length - 1];
+      lastData = last.createdAt;
+    }
+
     return {
       ...part,
       status: this.mqtt_client ? 'online' : 'ofline',
+      lastData,
     };
   }
 

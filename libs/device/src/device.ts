@@ -34,7 +34,7 @@ export class Device implements IDevice {
     return 'not defined';
   }
 
-  public getShortInfo(): DeviceStatusInfo {
+  public async getShortInfo(): Promise<DeviceStatusInfo> {
     return {
       id: this.id,
       name: this.name,
