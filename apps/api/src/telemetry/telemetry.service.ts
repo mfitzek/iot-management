@@ -14,8 +14,6 @@ import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class TelemetryService {
-  // TODO: require user to check owner
-
   constructor(
     private telemetryCollector: TelemetryCollectorService,
     private deviceManager: DeviceManager

@@ -20,25 +20,18 @@ export class HttpGatewayController {
     @Body() body: unknown,
     @Headers('Authorization') token: string
   ) {
-    console.log({ id, token, body });
-
     if (typeof body !== 'object') return new BadRequestException();
-
     const telemetry: TelemetryData[] = [];
-
     for (const [key, value] of Object.entries(body)) {
       telemetry.push({
         attributeName: key,
         value: String(value),
       });
     }
-
     const data: RequestData = {
       accessToken: token,
       telemetry: telemetry,
     };
-
-    console.log(id, data);
 
     const result = this.gatewayService.onTelemetry(id, data);
 
