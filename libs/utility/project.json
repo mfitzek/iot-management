@@ -19,14 +19,6 @@
       "options": {
         "lintFilePatterns": ["libs/utility/**/*.ts"]
       }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/utility"],
-      "options": {
-        "jestConfig": "libs/utility/jest.config.ts",
-        "passWithNoTests": true
-      }
     }
   },
   "tags": []
