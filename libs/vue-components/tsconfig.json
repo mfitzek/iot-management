@@ -4,17 +4,17 @@
     "jsx": "preserve",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["webpack-env", "node"],
-    "strict": true
+    "types": [
+      "webpack-env",
+      "node"
+    ],
+    "strict": true,
+    "outDir": "../../dist/out-tsc",
   },
-  "include": [],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.vue"
+  ],
   "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
 }

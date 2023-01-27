@@ -17,14 +17,6 @@
       "options": {
         "lintFilePatterns": ["libs/vue-components/**/*.{ts,tsx,vue}"]
       }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/vue-components"],
-      "options": {
-        "jestConfig": "libs/vue-components/jest.config.ts",
-        "passWithNoTests": true
-      }
     }
   },
   "tags": []
