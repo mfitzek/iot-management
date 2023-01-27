@@ -8,7 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/custom-device",
-        "tsConfig": "libs/custom-device/tsconfig.lib.json",
+        "tsConfig": "libs/custom-device/tsconfig.json",
         "packageJson": "libs/custom-device/package.json",
         "main": "libs/custom-device/src/index.ts"
       }

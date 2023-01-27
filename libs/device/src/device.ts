@@ -1,7 +1,7 @@
-import { UpdateDevice } from './interfaces/DeviceApi';
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
 import { DeviceData, DeviceStatusInfo } from './api-interface';
 import { CustomRequest, CustomRouteResponse } from './interfaces/CustomRoute';
+import { UpdateDevice } from './interfaces/DeviceApi';
 import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
 import { IProvidedServices } from './interfaces/ProvidedServices';

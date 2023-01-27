@@ -5,8 +5,6 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import path from 'path';
 
-import base from '../../tsconfig.base.json';
-
 const getPath = (short) => path.resolve(__dirname, short);
 
 // https://vitejs.dev/config/

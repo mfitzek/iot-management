@@ -9,7 +9,7 @@
       "options": {
         "outputPath": "dist/libs/device",
         "main": "libs/device/src/index.ts",
-        "tsConfig": "libs/device/tsconfig.lib.json",
+        "tsConfig": "libs/device/tsconfig.json",
         "assets": ["libs/device/*.md"]
       }
     },

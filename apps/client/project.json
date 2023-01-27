@@ -21,7 +21,6 @@
       "options": {
         "outputPath": "dist/apps/client",
         "configFile": "apps/client/vite.config.ts",
-        "watch": false,
         "write": true,
         "emitAtRootLevel": false,
         "manifest": true

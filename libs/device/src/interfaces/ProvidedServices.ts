@@ -1,7 +1,7 @@
 import { HttpGateway } from '@iot/gateway/http';
+import { IMqttService } from '@iot/gateway/mqtt';
 import { TelemetryCollector } from '@iot/telemetry';
 import { IDeviceService } from './IDeviceService';
-import { IMqttService } from '@iot/gateway/mqtt';
 
 export interface IProvidedServices {
   device_service: IDeviceService;
