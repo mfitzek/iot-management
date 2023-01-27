@@ -6,9 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "types": ["webpack-env", "node"],
     "strict": true,
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../dist/out-tsc"
   },
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
-  "files": []
+  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"]
 }

@@ -14,6 +14,7 @@ module.exports = (config, context) => {
           test: /\.(sa|sc|c)ss$/,
           use: ['vue-style-loader', 'css-loader', 'sass-loader'],
         },
+
       ],
     },
     plugins: [new VueLoaderPlugin()],

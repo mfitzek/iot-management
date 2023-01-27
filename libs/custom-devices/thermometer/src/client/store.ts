@@ -67,7 +67,3 @@ export const useThermometerStore = defineStore('thermometer', () => {
     fetchTelemetry,
   };
 });
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useThermometerStore, import.meta.hot));
-}

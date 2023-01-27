@@ -18,7 +18,6 @@
     "stores-messages": "libs/stores/messages",
     "telemetry": "libs/telemetry",
     "user": "libs/user",
-    "utility": "libs/utility",
-    "vue-components": "libs/vue-components"
+    "utility": "libs/utility"
   }
 }

@@ -54,7 +54,7 @@ import AttributesList from '../../components/telemetry/attributesList.vue';
 import AttributesStats from '../../components/telemetry/AttributesStats.vue';
 import LineGraph from '../../components/telemetry/LineGraph.vue';
 
-import { InputDatePicker } from '@iot/vue-components';
+import InputDatePicker from '../../components/input/InputDatePicker.vue';
 import DataExport from '../../components/telemetry/DataExport.vue';
 
 const currentTab = ref('overview');

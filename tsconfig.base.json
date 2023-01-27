@@ -31,8 +31,7 @@
       "@iot/stores/messages": ["libs/stores/messages/src/index.ts"],
       "@iot/telemetry": ["libs/telemetry/src/index.ts"],
       "@iot/user": ["libs/user/src/index.ts"],
-      "@iot/utility": ["libs/utility/src/index.ts"],
-      "@iot/vue-components": ["libs/vue-components/src/index.ts"]
+      "@iot/utility": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

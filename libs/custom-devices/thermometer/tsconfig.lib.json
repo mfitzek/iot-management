@@ -5,6 +5,5 @@
     "declaration": true,
     "types": ["node"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
-  "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"]
 }

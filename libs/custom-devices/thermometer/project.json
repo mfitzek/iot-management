@@ -4,11 +4,13 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx-plus/vue:library",
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
+        "outputPath": "dist/libs/custom-devices/thermometer",
         "dest": "dist/libs/custom-devices/thermometer",
-        "entry": "libs/custom-devices/thermometer/src/index.ts",
-        "tsConfig": "libs/custom-devices/thermometer/tsconfig.lib.json"
+        "tsConfig": "libs/custom-devices/thermometer/tsconfig.json",
+        "main": "libs/custom-devices/thermometer/src/index.ts"
       }
     },
     "lint": {

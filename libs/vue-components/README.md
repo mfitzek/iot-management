@@ -1,3 +1,0 @@
-# Shared vue components
-
-- InputDatePicker
