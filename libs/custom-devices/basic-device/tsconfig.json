@@ -1,17 +1,14 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "../../../dist/out-tsc",
     "jsx": "preserve",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "types": ["webpack-env", "node"],
-    "strict": true
+    "strict": true,
+    "composite": true
   },
-  "include": [],
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    }
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
+  "files": []
 }

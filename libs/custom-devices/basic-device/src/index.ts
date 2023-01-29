@@ -1,6 +1,5 @@
 import { CustomDevice } from '@iot/custom-device';
-import { IDevice, DeviceData, Device } from '@iot/device';
-import { IProvidedServices } from '@iot/device';
+import { DeviceData, IDevice, IProvidedServices } from '@iot/device';
 import { Component, defineAsyncComponent } from 'vue';
 
 export class BasicDevice implements CustomDevice {

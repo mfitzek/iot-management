@@ -8,8 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/custom-devices/basic-device",
-        "dest": "dist/libs/custom-devices/basic-device",
-        "tsConfig": "libs/custom-devices/basic-device/tsconfig.lib.json",
+        "tsConfig": "libs/custom-devices/basic-device/tsconfig.json",
         "main": "libs/custom-devices/basic-device/src/index.ts"
       }
     },
