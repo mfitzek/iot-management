@@ -1,4 +1,5 @@
 {
+  "name": "custom-device-manager",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/custom-device-manager/src",
   "projectType": "library",
@@ -8,8 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/custom-device-manager",
-        "tsConfig": "libs/custom-device-manager/tsconfig.lib.json",
-        "packageJson": "libs/custom-device-manager/package.json",
+        "tsConfig": "libs/custom-device-manager/tsconfig.json",
         "main": "libs/custom-device-manager/src/index.ts"
       }
     },

@@ -1,4 +1,5 @@
 {
+  "name": "custom-device",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/custom-device/src",
@@ -8,8 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/custom-device",
-        "tsConfig": "libs/custom-device/tsconfig.json",
-        "packageJson": "libs/custom-device/package.json",
+        "tsConfig": "libs/custom-device/tsconfig.lib.json",
         "main": "libs/custom-device/src/index.ts"
       }
     },

@@ -14,7 +14,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "allowJs": true,
     "paths": {
       "@iot/administration": ["libs/administration/src/index.ts"],

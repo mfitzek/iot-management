@@ -28,7 +28,7 @@ export class APIBasicDevice extends Device {
     this.setupHttpGateway();
   }
 
-  async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
+  override async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
     function generateAccessToken() {
       return randomUUID();
     }
@@ -54,7 +54,7 @@ export class APIBasicDevice extends Device {
     }
   }
 
-  async update(data: UpdateDevice) {
+  override async update(data: UpdateDevice) {
     const updated = await super.update(data);
     this.connectToMqtt();
     return updated;
