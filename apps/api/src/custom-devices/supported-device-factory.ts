@@ -4,7 +4,7 @@ import { ThermometerDeviceFactory } from './thermometer/thermometer-device-facto
 
 const supportedDeviceFactories: { [device: string]: CustomDeviceFactory } = {
   'basic-device': new BasicDeviceFactory(),
-  thermometer: new ThermometerDeviceFactory(),
+  Thermometer: new ThermometerDeviceFactory(),
 };
 
 export function getDeviceFactory(deviceType: string) {

@@ -1,17 +1,17 @@
-import { Component } from 'vue';
+import { Component, defineAsyncComponent } from 'vue';
 
 const supportedDevices: { [device: string]: Component } = {
-  'basic-device': () => import('./basic-device/basic-device.vue'),
-  thermometer: () => import('./thermometer/thermometer.vue'),
+  'basic-device': defineAsyncComponent(() => import('./basic-device/basic-device.vue')),
+  Thermometer: defineAsyncComponent(() => import('./thermometer/thermometer.vue')),
 };
 
 export function getDeviceTypes(): readonly string[] {
   return Object.keys(supportedDevices);
 }
 
-export function getDeviceComponent(device: string) {
-  if (device in supportedDevices) {
-    return supportedDevices[device];
+export function getDeviceComponent(deviceType: string) {
+  if (deviceType in supportedDevices) {
+    return supportedDevices[deviceType];
   }
-  throw new Error(`"${device}" is not supported`);
+  throw new Error(`"${deviceType}" is not supported`);
 }

@@ -18,6 +18,7 @@ async function getDevice(id: string) {
 
 const device = await getDevice(props.id ?? '...');
 const comp = getDeviceComponent(device.type);
+console.log(comp);
 </script>
 
 <style scoped></style>
