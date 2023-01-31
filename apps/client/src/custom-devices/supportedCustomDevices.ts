@@ -5,6 +5,10 @@ const supportedDevices: { [device: string]: Component } = {
   thermometer: () => import('./thermometer/thermometer.vue'),
 };
 
+export function getDeviceTypes(): readonly string[] {
+  return Object.keys(supportedDevices);
+}
+
 export function getDeviceComponent(device: string) {
   if (device in supportedDevices) {
     return supportedDevices[device];

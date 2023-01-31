@@ -1,16 +1,15 @@
-import { HttpGatewayService } from './../gateway/http-gateway/http-gateway.service';
+import { CreateUserDevice, DeviceData, IDevice } from '@iot/device';
 import { Injectable } from '@nestjs/common';
+import { HttpGatewayService } from './../gateway/http-gateway/http-gateway.service';
 import { DeviceService } from './device.service';
-import { IDevice, DeviceData, CreateUserDevice, Device } from '@iot/device';
-import { DeviceTypeManager } from '@iot/custom-device-manager';
 
 import { IProvidedServices } from '@iot/device';
 
-import { TelemetryCollectorService } from '../telemetry-collector';
-import { BackupService } from '../settings/backup/backup.service';
 import { Observer } from '@iot/utility';
-import { MqttService } from '../gateway/mqtt-gateway/mqtt.service';
 import { getDeviceFactory } from '../custom-devices/supported-device-factory';
+import { MqttService } from '../gateway/mqtt-gateway/mqtt.service';
+import { BackupService } from '../settings/backup/backup.service';
+import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class DeviceManager implements Observer {
