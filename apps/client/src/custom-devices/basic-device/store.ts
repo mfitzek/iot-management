@@ -1,9 +1,12 @@
+import {
+  getDeviceMqttSettings,
+  getHttpSettings,
+  HttpSettings,
+  IMqttSettings,
+} from '@iot/custom-devices/basic-device';
 import { DeviceData, UpdateDevice, UpdateKeyValue } from '@iot/device';
 import http_api from '@iot/services/http';
 import { reactive } from 'vue';
-import { getHttpSettings, HttpSettings } from '../common/http/HttpSettings';
-import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
-import { IMqttSettings } from './../common/mqtt/IMqttSettings';
 
 interface IDeviceStore {
   device: DeviceData | null;

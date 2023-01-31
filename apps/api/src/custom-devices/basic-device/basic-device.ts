@@ -1,4 +1,10 @@
 import {
+  getDeviceMqttSettings,
+  getHttpSettings,
+  setHttpAccessToken,
+  setHttpGatewayActive,
+} from '@iot/custom-devices/basic-device';
+import {
   CustomRequest,
   CustomRequestMethod,
   CustomRouteResponse,
@@ -12,14 +18,8 @@ import {
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
 import { ITelemetry } from '@iot/telemetry';
 import { randomUUID } from 'crypto';
-import {
-  getHttpSettings,
-  setHttpAccessToken,
-  setHttpGatewayActive,
-} from '../common/http/HttpSettings';
-import { getDeviceMqttSettings } from '../common/mqtt/mqtt';
 
-export class APIBasicDevice extends Device {
+export class BasicDevice extends Device {
   mqtt_client?: IMqttClient;
 
   constructor(data: DeviceData, providers: IProvidedServices) {

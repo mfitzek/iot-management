@@ -6,3 +6,7 @@ export interface CustomDevice {
   getMainComponent(): Component;
   getDevice(data: DeviceData, providers: IProvidedServices): Promise<IDevice>;
 }
+
+export interface CustomDeviceFactory {
+  createDevice(data: DeviceData, providers: IProvidedServices): Promise<IDevice>;
+}

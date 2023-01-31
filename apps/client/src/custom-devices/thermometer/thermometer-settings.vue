@@ -22,7 +22,7 @@ import { useThermometerStore } from './store';
 import api from '@iot/services/http';
 import { UpdateDevice } from '@iot/device';
 import { useQuasar } from 'quasar';
-import { MQTT_KEY } from '../common/device-configuration';
+import { MQTT_KEY } from '@iot/custom-devices/thermometer';
 
 const store = useThermometerStore();
 const connectionString = ref(store.mqtt);

@@ -50,12 +50,11 @@
 </template>
 
 <script setup lang="ts">
-import { IMqttAttributeMap } from '../../../common/mqtt/IMqttSettings';
+import { getAsKeyValue, IMqttAttributeMap } from '@iot/custom-devices/basic-device';
 import { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
-import MqttMapDialog from './mqttMapDialog.vue';
 import store, { getMqttSettings, updateKeyValues } from '../../store';
-import { getAsKeyValue } from '../../../common/mqtt/mqtt';
+import MqttMapDialog from './mqttMapDialog.vue';
 
 const settings = ref(getMqttSettings());
 

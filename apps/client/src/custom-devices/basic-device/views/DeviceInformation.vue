@@ -21,11 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { getDeviceMqttSettings, getHttpSettings } from '@iot/custom-devices/basic-device';
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { getHttpSettings } from '../../common/http/HttpSettings';
-import { getDeviceMqttSettings } from '../../common/mqtt/mqtt';
 import store, { removeCurrentDevice, updateCurrentDevice } from '../store';
 
 const router = useRouter();

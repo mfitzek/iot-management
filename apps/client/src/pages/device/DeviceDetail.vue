@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import api from '@iot/services/http';
-import { DeviceTypeManager } from '@iot/custom-device-manager';
 import { DeviceData } from '@iot/device';
+import { getDeviceComponent } from '../../custom-devices/supportedCustomDevices';
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -17,7 +17,7 @@ async function getDevice(id: string) {
 }
 
 const device = await getDevice(props.id ?? '...');
-const comp = await DeviceTypeManager.instance.getDevice(device?.type ?? '').getMainComponent();
+const comp = getDeviceComponent(device.type);
 </script>
 
 <style scoped></style>

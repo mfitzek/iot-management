@@ -10,6 +10,7 @@ import { TelemetryCollectorService } from '../telemetry-collector';
 import { BackupService } from '../settings/backup/backup.service';
 import { Observer } from '@iot/utility';
 import { MqttService } from '../gateway/mqtt-gateway/mqtt.service';
+import { getDeviceFactory } from '../custom-devices/supported-device-factory';
 
 @Injectable()
 export class DeviceManager implements Observer {
@@ -75,8 +76,8 @@ export class DeviceManager implements Observer {
   }
 
   private createCustomDevice(data: DeviceData) {
-    const custom_device = DeviceTypeManager.instance.getDevice(data.type);
-    return custom_device.getDevice(data, this.getServiceProviders());
+    const deviceFactory = getDeviceFactory(data.type);
+    return deviceFactory.createDevice(data, this.getServiceProviders());
   }
 
   private getServiceProviders(): IProvidedServices {

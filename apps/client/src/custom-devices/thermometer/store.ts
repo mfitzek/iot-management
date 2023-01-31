@@ -1,4 +1,4 @@
-import { MQTT_KEY } from './../common/device-configuration';
+import { MQTT_KEY } from '@iot/custom-devices/thermometer';
 import { DeviceData } from '@iot/device';
 import http from '@iot/services/http';
 import { ITelemetryResponse } from '@iot/telemetry';
