@@ -1,3 +1,4 @@
+import { ITelemetry } from '@iot/telemetry';
 import {
   CreateAttribute,
   Device,
@@ -61,12 +62,22 @@ export class ThermometerDevice extends Device {
       const last = telemetry[telemetry.length - 1];
       lastData = last.createdAt;
     }
-
     return {
       ...part,
-      status: this.mqtt_client ? 'online' : 'ofline',
+      status: this.getStatus(telemetry),
       lastData,
     };
+  }
+
+  private getStatus(telemetry: ITelemetry[]): string {
+    if (!this.mqtt_client) return 'offline';
+    if (telemetry.length === 0) {
+      return 'warning';
+    }
+    const last = telemetry[telemetry.length - 1];
+    const elapsedTime = Date.now() - last.createdAt.getTime();
+    const hour = 1000 * 60 * 60;
+    return elapsedTime > hour ? 'warning' : 'online';
   }
 
   private setupMqttGateway() {

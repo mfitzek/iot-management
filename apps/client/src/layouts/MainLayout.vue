@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> IoT Manager </q-toolbar-title>
+        <q-toolbar-title> IoT Data Storage </q-toolbar-title>
 
         <UserInfo></UserInfo>
       </q-toolbar>
@@ -28,52 +28,42 @@
   </q-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
 import UserInfo from '@components/toolbar/UserInfo.vue';
 import auth from '../store/auth';
-export default defineComponent({
-  name: 'MainLayout',
-  setup() {
-    const leftDrawerOpen = ref(false);
-    const links = [
-      {
-        name: 'Device',
-        icon: 'sym_o_table_lamp',
-        route: { name: 'DeviceList' },
-        isAdmin: false,
-      },
-      {
-        name: 'Data',
-        icon: 'sym_o_monitoring',
-        route: { name: 'Telemetry' },
-        isAdmin: false,
-      },
-      {
-        name: 'Administration',
-        icon: 'sym_o_settings',
-        route: { name: 'SettingsDashboard' },
-        isAdmin: true,
-      },
-    ];
-    const links_filtered = computed(() => {
-      const userIsAdmin = auth.is_admin();
-      return links.filter((link) => {
-        if (link.isAdmin) {
-          return userIsAdmin;
-        }
-        return true;
-      });
-    });
-    function toggleLeftDrawer() {
-      leftDrawerOpen.value = !leftDrawerOpen.value;
-    }
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer,
-      links_filtered,
-    };
+
+const leftDrawerOpen = ref(false);
+const links = [
+  {
+    name: 'Device',
+    icon: 'sym_o_table_lamp',
+    route: { name: 'DeviceList' },
+    isAdmin: false,
   },
-  components: { UserInfo },
+  {
+    name: 'Data',
+    icon: 'sym_o_monitoring',
+    route: { name: 'Telemetry' },
+    isAdmin: false,
+  },
+  {
+    name: 'Administration',
+    icon: 'sym_o_settings',
+    route: { name: 'SettingsDashboard' },
+    isAdmin: true,
+  },
+];
+const links_filtered = computed(() => {
+  const userIsAdmin = auth.is_admin();
+  return links.filter((link) => {
+    if (link.isAdmin) {
+      return userIsAdmin;
+    }
+    return true;
+  });
 });
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 </script>

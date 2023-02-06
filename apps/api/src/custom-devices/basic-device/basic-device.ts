@@ -61,22 +61,34 @@ export class BasicDevice extends Device {
   }
 
   public override async getShortInfo(): Promise<DeviceStatusInfo> {
+    const part = await super.getShortInfo();
+
+    const ids = this.getData().attributes.map((attr) => attr.id);
+
+    const telemetry = await this.providers.telemetry_service.getTelemetry({
+      attribute_ids: ids,
+    });
+
+    let lastData: Date | undefined = undefined;
+    if (telemetry.length) {
+      const last = telemetry[telemetry.length - 1];
+      lastData = last.createdAt;
+    }
     return {
-      id: this.getId(),
-      name: this.name,
-      type: this.type,
-      lastData: new Date(),
-      status: this.getStatus(),
+      ...part,
+      status: this.getStatus(telemetry),
+      lastData,
     };
   }
-
-  private getStatus() {
-    const mqttSettings = this.getUserMqttSettings();
-
-    if (mqttSettings?.active) {
-      return 'online';
+  private getStatus(telemetry: ITelemetry[]): string {
+    if (!this.mqtt_client) return 'offline';
+    if (telemetry.length === 0) {
+      return 'warning';
     }
-    return 'offline';
+    const last = telemetry[telemetry.length - 1];
+    const elapsedTime = Date.now() - last.createdAt.getTime();
+    const hour = 1000 * 60 * 60;
+    return elapsedTime > hour ? 'warning' : 'online';
   }
 
   private connectToMqtt() {
