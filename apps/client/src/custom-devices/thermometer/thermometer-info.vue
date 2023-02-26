@@ -27,7 +27,7 @@
 import { ref } from 'vue';
 import { useThermometerStore } from './store';
 import removeDeviceButton from './components/remove-device-button.vue';
-import http from '@iot/services/http';
+import http from '@iot/services/http-axios';
 import { UpdateDevice } from '@iot/device';
 
 const store = useThermometerStore();

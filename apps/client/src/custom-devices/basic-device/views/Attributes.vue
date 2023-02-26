@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { IAttribute, UpdateDevice } from '@iot/device';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { computed, ref } from 'vue';
 import store, { fetchDevice } from '../store';

@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 
 import { ISearchTelemetry, ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
 import AttributesList from '../../components/telemetry/attributesList.vue';

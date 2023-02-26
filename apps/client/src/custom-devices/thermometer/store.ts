@@ -1,6 +1,6 @@
 import { MQTT_KEY } from '@iot/custom-devices/thermometer';
 import { DeviceData } from '@iot/device';
-import http from '@iot/services/http';
+import http from '@iot/services/http-axios';
 import { ITelemetryResponse } from '@iot/telemetry';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import { computed, ref } from 'vue';

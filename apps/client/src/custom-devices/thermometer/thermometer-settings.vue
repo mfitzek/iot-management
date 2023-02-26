@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useThermometerStore } from './store';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { UpdateDevice } from '@iot/device';
 import { useQuasar } from 'quasar';
 import { MQTT_KEY } from '@iot/custom-devices/thermometer';

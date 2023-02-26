@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { Settings } from '@iot/configuration';
 
 const dbSizeMb = ref(0);

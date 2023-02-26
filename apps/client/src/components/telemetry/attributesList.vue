@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { DeviceData } from '@iot/device';
 import { computed, reactive, ref } from 'vue';
-import http from '@iot/services/http';
+import http from '@iot/services/http-axios';
 
 const emit = defineEmits<{
   (e: 'update', selected: string[]): void;

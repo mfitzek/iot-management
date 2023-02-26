@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import http from '@iot/services/http';
+import http from '@iot/services/http-axios';
 import { IRegisterPost, IRegisterResponse } from '@iot/user';
 import { QForm } from 'quasar';
 import { ref } from 'vue';

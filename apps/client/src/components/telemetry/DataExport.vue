@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ISearchTelemetry, supportedExportFormats, FormatType } from '@iot/telemetry';
 import { ref } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 
 const props = defineProps<{
   filter: ISearchTelemetry;

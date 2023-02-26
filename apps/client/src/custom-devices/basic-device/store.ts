@@ -5,7 +5,7 @@ import {
   IMqttSettings,
 } from '@iot/custom-devices/basic-device';
 import { DeviceData, UpdateDevice, UpdateKeyValue } from '@iot/device';
-import http_api from '@iot/services/http';
+import http_api from '@iot/services/http-axios';
 import { reactive } from 'vue';
 
 interface IDeviceStore {

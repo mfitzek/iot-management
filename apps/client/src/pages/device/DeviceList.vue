@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { DeviceStatusInfo } from '@iot/device';
-import http from '@iot/services/http';
+import http from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';

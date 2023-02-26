@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { UserStats } from '@iot/administration';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { ref } from 'vue';
 
 const userList = ref<UserStats[]>([]);

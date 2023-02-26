@@ -1,6 +1,6 @@
 import { ILoginPost, ILoginResponse, IUserInfo, UserRole } from '@iot/user';
 import { readonly, ref } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { AxiosError } from 'axios';
 
 export interface IAuthStore {

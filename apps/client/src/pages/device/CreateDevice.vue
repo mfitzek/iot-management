@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { CreateDevice } from '@iot/device';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { getDeviceTypes } from '../../custom-devices/supportedCustomDevices';

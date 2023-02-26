@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import { DeviceData } from '@iot/device';
 import { getDeviceComponent } from '../../custom-devices/supportedCustomDevices';
 

@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { Statistics } from '@iot/administration';
 import { computed, ref } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 
 const maxSize = ref(1);
 const currentSize = ref(0);

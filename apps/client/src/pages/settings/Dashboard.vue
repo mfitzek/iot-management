@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import api from '@iot/services/http';
+import api from '@iot/services/http-axios';
 import DBState from '../../components/settings/DBState.vue';
 import { Statistics } from '@iot/administration';
 import { useQuasar } from 'quasar';
