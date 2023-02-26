@@ -1,5 +1,5 @@
 {
-  "name": "@iot/services/http",
+  "name": "@iot/services/http-axios",
   "version": "0.0.1",
   "type": "commonjs"
 }
