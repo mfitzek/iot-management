@@ -11,7 +11,11 @@ RUN npm install
 
 COPY . /app/
 
+RUN npx prisma generate
 RUN npx prisma db push
+RUN npx nx build api
+
+EXPOSE 3333
 
 
-CMD [ "npm", "run", "api" ];
+CMD [ "node", "dist/apps/api/main.js" ];

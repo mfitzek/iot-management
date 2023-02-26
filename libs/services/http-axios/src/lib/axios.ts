@@ -1,7 +1,8 @@
+import { api } from '@iot/services/http-axios';
 import Axios, { AxiosInstance } from 'axios';
 
 // TODO: Move to production/development configuration file
-const API_URL = 'http://localhost:3333/api';
+const API_URL = import.meta.env['VITE_API_SERVER'];
 
 export default class AxiosClient {
   private static _axios: AxiosInstance = Axios.create({

@@ -1,16 +1,14 @@
 FROM node:16
 
+RUN npm install -g http-server
 
 WORKDIR /app
 
-COPY ./package.json /app
-COPY ./package-lock.json /app
+COPY . /app/
 
 RUN npm install
 
+RUN npx nx build client
 
-COPY . /app/
-
-
-
-CMD [ "npm", "run", "client" ];
+EXPOSE 8080
+CMD [ "http-server", "dist/apps/client" ]
