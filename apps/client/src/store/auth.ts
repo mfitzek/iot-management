@@ -32,6 +32,8 @@ function logout() {
 }
 
 async function login(username: string, password: string): Promise<LoginStatus> {
+  console.log('Click login');
+  console.log('DEFAUILTS', { ...api.defaults });
   const login: ILoginPost = {
     username,
     password,

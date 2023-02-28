@@ -4,9 +4,14 @@ RUN npm install -g http-server
 
 WORKDIR /app
 
-COPY . /app/
+COPY ./package.json .
+COPY ./package-lock.json .
 
 RUN npm install
+
+COPY . /app/
+
+
 
 RUN npx nx build client
 
