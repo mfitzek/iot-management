@@ -1,4 +1,3 @@
-import { api } from '@iot/services/http-axios';
 import Axios, { AxiosInstance } from 'axios';
 
 // TODO: Move to production/development configuration file
