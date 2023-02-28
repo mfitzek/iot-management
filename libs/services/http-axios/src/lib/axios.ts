@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from 'axios';
 
 // TODO: Move to production/development configuration file
-const API_URL = import.meta.env['VITE_API_SERVER'];
+export const API_URL = import.meta.env['VITE_API_SERVER'];
 
 console.log('URL', API_URL, import.meta.env);
 
