@@ -1,5 +1,6 @@
-FROM node:lts
+FROM node:lts-alpine
 
+RUN apk add g++ make py3-pip
 
 WORKDIR /app
 
