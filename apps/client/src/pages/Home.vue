@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-md text-center">
-    <h1>Fakt nevim uz</h1>
     <div v-if="auth.is_authenticated() == false">
       <h3>IoT Data Storage</h3>
       <p class="text-h5">To continue, please log in or sing up</p>

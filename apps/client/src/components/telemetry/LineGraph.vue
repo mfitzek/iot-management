@@ -50,13 +50,23 @@ const chartOptions: ChartOptions = {
   scales: {
     x: {
       type: 'time',
+      time: {
+        tooltipFormat: 'DD.MM.YYYY HH:mm:ss',
+        displayFormats: {
+          hour: 'DD.MM - HH:mm',
+          minute: 'HH:mm',
+          second: 'HH:mm:ss',
+          day: 'DD.MM',
+        },
+      },
     },
   },
   elements: {
     point: {
-      radius: 1,
+      radius: 0,
     },
   },
+  borderWidth: 2,
 };
 
 const chartData = computed<ChartData>(() => {
