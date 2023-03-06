@@ -4,19 +4,20 @@ import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { ConfiguratioProvider } from '../settings/settings-provider.service';
 
 import { Observer } from '@iot/utility';
+import { TelemetryCacheSettings } from '@iot/configuration';
 export class CacheTelemetryCollector implements Observer {
-  private primaryActive = true;
-
-  private primaryCache: TelemetryCache;
-  private secondaryCache: TelemetryCache;
+  private cacheSettings: TelemetryCacheSettings | undefined;
+  private activeCache: TelemetryCache | null;
+  private oldCaches: TelemetryCache[] = [];
 
   constructor(private configurationProvider: ConfiguratioProvider) {
-    this.primaryCache = new TelemetryCache(this.currentCacheWriting);
-    this.secondaryCache = new TelemetryCache(this.currentCacheWriting);
-
     this.configurationProvider.register(this);
-
     this.configureCollectors();
+
+    this.activeCache = this.createNewCache();
+  }
+  async onModuleDestroy() {
+    await this.activeCache.shutdownSave();
   }
 
   public onUpdate(): void {
@@ -24,26 +25,43 @@ export class CacheTelemetryCollector implements Observer {
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
-    return this.getCurrentCache().getTelemetry(filter);
+    this.filterOutWrittenCache();
+
+    const result = this.activeCache.getTelemetry(filter);
+    this.oldCaches.forEach((cache) => {
+      result.push(...cache.getTelemetry(filter));
+    });
+    return result;
   }
 
   public saveTelemetry(telemetry: ITelemetry) {
-    this.getCurrentCache().saveTelemetry(telemetry);
+    this.filterOutWrittenCache();
+    this.activeCache.saveTelemetry(telemetry);
   }
 
-  private getCurrentCache() {
-    return this.primaryActive ? this.primaryCache : this.secondaryCache;
+  private lockActiveCache() {
+    console.log({ old: this.oldCaches.length });
+    this.oldCaches.push(this.activeCache);
+    this.activeCache = this.createNewCache();
   }
 
-  private currentCacheWriting(reason: string) {
-    this.primaryActive = !this.primaryActive;
-    if (reason === 'countLimit') {
-      console.warn('Cache reaches the limit, adjust time or cache capacity.');
+  private createNewCache() {
+    if (this.cacheSettings) {
+      return new TelemetryCache(
+        () => this.lockActiveCache(),
+        this.cacheSettings.maxNumberOfRecords,
+        this.cacheSettings.cacheTimeoutMs
+      );
     }
+    return new TelemetryCache(() => this.lockActiveCache());
   }
+
+  private filterOutWrittenCache() {
+    this.oldCaches = this.oldCaches.filter((cache) => cache.readyToDestroy === false);
+  }
+
   private async configureCollectors() {
     const settings = await this.configurationProvider.getSettings();
-    this.primaryCache.changeSettings(settings.telemetryCache);
-    this.secondaryCache.changeSettings(settings.telemetryCache);
+    this.cacheSettings = settings.telemetryCache;
   }
 }

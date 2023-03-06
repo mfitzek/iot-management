@@ -1,1 +1,1 @@
-{"database":{"maxDatabaseSizeMB":2800},"telemetryCache":{"maxNumberOfRecords":150,"cacheTimeoutMs":300000}}
+{"database":{"maxDatabaseSizeMB":2800},"telemetryCache":{"maxNumberOfRecords":100,"cacheTimeoutMs":300000}}
