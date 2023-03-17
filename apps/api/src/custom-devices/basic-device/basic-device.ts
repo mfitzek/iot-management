@@ -3,7 +3,7 @@ import {
   getHttpSettings,
   setHttpAccessToken,
   setHttpGatewayActive,
-} from '@iot/custom-devices/basic-device';
+} from '@iot/custom-devices/basic-device/common';
 import {
   CustomRequest,
   CustomRequestMethod,

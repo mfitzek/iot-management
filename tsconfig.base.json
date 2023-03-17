@@ -20,7 +20,7 @@
       "@iot/administration": ["libs/administration/src/index.ts"],
       "@iot/configuration": ["libs/configuration/src/index.ts"],
       "@iot/custom-device": ["libs/custom-device/src/index.ts"],
-      "@iot/custom-devices/basic-device": ["libs/custom-devices/basic-device/src/index.ts"],
+      "@iot/custom-devices/basic-device/*": ["libs/custom-devices/basic-device/src/*.ts"],
       "@iot/custom-devices/thermometer": ["libs/custom-devices/thermometer/src/index.ts"],
       "@iot/device": ["libs/device/src/index.ts"],
       "@iot/gateway/gateway": ["libs/gateway/gateway/src/index.ts"],

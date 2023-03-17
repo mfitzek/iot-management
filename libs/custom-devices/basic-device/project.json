@@ -9,7 +9,6 @@
       "options": {
         "outputPath": "dist/libs/custom-devices/basic-device",
         "tsConfig": "libs/custom-devices/basic-device/tsconfig.lib.json",
-        "main": "libs/custom-devices/basic-device/src/index.ts",
         "assets": ["libs/custom-devices/basic-device/*.md"]
       }
     },

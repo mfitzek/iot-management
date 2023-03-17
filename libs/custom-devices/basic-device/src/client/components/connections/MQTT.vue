@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { getAsKeyValue, IMqttAttributeMap } from '@iot/custom-devices/basic-device';
+import { getAsKeyValue, IMqttAttributeMap } from '@iot/custom-devices/basic-device/common';
 import { QTableColumn } from 'quasar';
 import { computed, ref, watch } from 'vue';
 import store, { getMqttSettings, updateKeyValues } from '../../store';

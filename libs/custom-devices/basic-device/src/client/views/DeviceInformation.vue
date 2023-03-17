@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { getDeviceMqttSettings, getHttpSettings } from '@iot/custom-devices/basic-device';
+import { getDeviceMqttSettings, getHttpSettings } from '@iot/custom-devices/basic-device/common';
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
