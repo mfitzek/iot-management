@@ -1,8 +1,8 @@
-import { MQTT_KEY } from '@iot/custom-devices/thermometer';
-import { DeviceData } from '@iot/device';
-import http from '@iot/services/http-axios';
+import { MQTT_KEY } from '@iot/custom-devices/thermometer/common';
+import { DeviceData, IAttribute } from '@iot/device';
+import { axios } from '@iot/services/http-axios';
 import { ITelemetryResponse } from '@iot/telemetry';
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useThermometerStore = defineStore('thermometer', () => {
@@ -19,16 +19,16 @@ export const useThermometerStore = defineStore('thermometer', () => {
   );
 
   async function fetchData(id: string) {
-    const res = await http.get<DeviceData>(`device/${id}`);
+    const res = await axios.get<DeviceData>(`device/${id}`);
     device.value = res.data;
 
-    tempId = res.data.attributes.find((a) => a.name === 'temperature')?.id;
-    humiId = res.data.attributes.find((a) => a.name === 'humidity')?.id;
+    tempId = res.data.attributes.find((a: IAttribute) => a.name === 'temperature')?.id;
+    humiId = res.data.attributes.find((a: IAttribute) => a.name === 'humidity')?.id;
     fetchTelemetry();
   }
 
   async function fetchTelemetry() {
-    const telRes = await http.get<ITelemetryResponse>('telemetry', {
+    const telRes = await axios.get<ITelemetryResponse>('telemetry', {
       params: {
         attr: [tempId, humiId],
       },
@@ -48,7 +48,7 @@ export const useThermometerStore = defineStore('thermometer', () => {
 
     const id = device.value.id;
 
-    const req = await http.delete<boolean>(`/device/${id}`);
+    const req = await axios.delete<boolean>(`/device/${id}`);
     if (req.data) {
       device.value = null;
     }

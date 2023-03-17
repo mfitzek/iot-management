@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { IMqttAttributeMap } from '@iot/custom-devices/basic-device';
+import { IMqttAttributeMap } from '@iot/custom-devices/basic-device/common';
 import { IAttribute } from '@iot/device';
 import { ref } from 'vue';
 import store from '../../store';

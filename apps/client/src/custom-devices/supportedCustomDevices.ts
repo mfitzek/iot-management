@@ -1,8 +1,10 @@
 import { Component, defineAsyncComponent } from 'vue';
+import { BasicDeviceComponent } from '@iot/custom-devices/basic-device/client';
+import { ThermometerComponent } from '@iot/custom-devices/thermometer/client';
 
 const supportedDevices: { [device: string]: Component } = {
-  'basic-device': defineAsyncComponent(() => import('./basic-device/basic-device.vue')),
-  Thermometer: defineAsyncComponent(() => import('./thermometer/thermometer.vue')),
+  'basic-device': BasicDeviceComponent,
+  Thermometer: ThermometerComponent,
 };
 
 export function getDeviceTypes(): readonly string[] {

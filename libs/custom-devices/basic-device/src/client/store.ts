@@ -3,7 +3,7 @@ import {
   getHttpSettings,
   HttpSettings,
   IMqttSettings,
-} from '@iot/custom-devices/basic-device';
+} from '@iot/custom-devices/basic-device/common';
 import { DeviceData, UpdateDevice, UpdateKeyValue } from '@iot/device';
 import http_api from '@iot/services/http-axios';
 import { reactive } from 'vue';

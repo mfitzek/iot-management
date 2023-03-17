@@ -1,6 +1,6 @@
 import { CustomDeviceFactory } from '@iot/custom-device';
-import { BasicDeviceFactory } from './basic-device/basic-device-factory';
-import { ThermometerDeviceFactory } from './thermometer/thermometer-device-factory';
+import { BasicDeviceFactory } from '@iot/custom-devices/basic-device/server';
+import { ThermometerDeviceFactory } from '@iot/custom-devices/thermometer/server';
 
 const supportedDeviceFactories: { [device: string]: CustomDeviceFactory } = {
   'basic-device': new BasicDeviceFactory(),
