@@ -1,8 +1,8 @@
-import { MQTT_KEY } from '@iot/custom-devices/thermometer';
+import { MQTT_KEY } from '@iot/custom-devices/thermometer/common';
 import { DeviceData } from '@iot/device';
 import http from '@iot/services/http-axios';
 import { ITelemetryResponse } from '@iot/telemetry';
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useThermometerStore = defineStore('thermometer', () => {

@@ -9,8 +9,7 @@
       "options": {
         "outputPath": "dist/libs/custom-devices/thermometer",
         "dest": "dist/libs/custom-devices/thermometer",
-        "tsConfig": "libs/custom-devices/thermometer/tsconfig.json",
-        "main": "libs/custom-devices/thermometer/src/index.ts"
+        "tsConfig": "libs/custom-devices/thermometer/tsconfig.json"
       }
     },
     "lint": {

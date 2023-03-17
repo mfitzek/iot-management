@@ -8,7 +8,7 @@ import {
   UpdateDevice,
 } from '@iot/device';
 import { IMqttClient } from '@iot/gateway/mqtt';
-import { MQTT_KEY } from '@iot/custom-devices/thermometer';
+import { MQTT_KEY } from '@iot/custom-devices/thermometer/common';
 
 export class ThermometerDevice extends Device {
   private mqtt_client?: IMqttClient;
