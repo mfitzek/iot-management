@@ -14,6 +14,7 @@
     "gateway-http": "libs/gateway/http",
     "gateway-mqtt": "libs/gateway/mqtt",
     "services-http": "libs/services/http-axios",
+    "statistics": "libs/statistics",
     "stores-messages": "libs/stores/messages",
     "telemetry": "libs/telemetry",
     "user": "libs/user",

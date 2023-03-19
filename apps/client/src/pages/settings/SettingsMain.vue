@@ -20,6 +20,7 @@
           label="Accounts"
           :to="{ name: 'SettingsAccounts' }"
         />
+        <q-route-tab name="logs" icon="feed" label="Logs" :to="{ name: 'SettingsLogs' }" />
       </q-tabs>
     </q-toolbar>
 
