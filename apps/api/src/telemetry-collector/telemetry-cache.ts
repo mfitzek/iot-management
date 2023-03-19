@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
+import { CacheRecordType, Monitor } from '@iot/monitor';
 
 export class TelemetryCache {
   public readyToDestroy = false;
@@ -32,6 +33,7 @@ export class TelemetryCache {
   }
 
   public saveTelemetry(telemetry: ITelemetry) {
+    Monitor.instance.createRecord(CacheRecordType.CACHE_WRITE);
     this.startTimeoutCache();
     this.cache.push(telemetry);
     if (this.cache.length >= this.cacheRecordsLimit) {
@@ -69,6 +71,7 @@ export class TelemetryCache {
   }
 
   private async writeCacheToDatabase() {
+    Monitor.instance.createRecord(CacheRecordType.DATABASE_WRITE);
     this.onCacheLock();
     console.log('Writing cache to DB', this.cache.length);
     const transactions = this.cache.map((row) => {

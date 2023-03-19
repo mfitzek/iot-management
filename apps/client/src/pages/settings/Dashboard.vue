@@ -2,8 +2,8 @@
   <div>
     <section>
       <p class="text-h5">Statistics</p>
-      <div>150 Cache Writes / Hour</div>
-      <div>5 Database Writes / Hour</div>
+      <div>{{ stats?.cache.cacheWrites }} Cache Writes / Hour</div>
+      <div>{{ stats?.cache.databaseWrites }} Database Writes / Hour</div>
     </section>
 
     <section>
