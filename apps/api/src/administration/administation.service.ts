@@ -48,6 +48,7 @@ export class AdminsitrationService {
         id: true,
         username: true,
         email: true,
+        role: true,
         Device: {
           select: {
             Attribute: {
@@ -75,13 +76,15 @@ export class AdminsitrationService {
         }
       }
 
+      const role = user.role == 0 ? UserRole.USER : UserRole.ADMIN;
+
       result.push({
         id: user.id,
         username: user.username,
         email: user.email,
         devices: user.Device.length,
         records: records,
-        role: UserRole.USER,
+        role: role,
       });
     }
 

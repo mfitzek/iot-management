@@ -1,3 +1,4 @@
+import { Logger } from '@iot/logger';
 import { CacheMonitorStats } from './common';
 
 export enum CacheRecordType {
@@ -17,7 +18,7 @@ export class Monitor {
   private records: CacheRecord[] = [];
 
   private constructor() {
-    console.log('Creating monitor instance.');
+    Logger.instance.info('Creating monitor instance');
     setInterval(() => {
       this.filterHourOldRecords();
     }, oneHourMs);
@@ -51,7 +52,7 @@ export class Monitor {
 
   private filterHourOldRecords() {
     this.records = this.getHourOldRecords();
-    console.log('Monitor: removing old records');
+    Logger.instance.info('Monitor: removing old records');
   }
 
   private getHourOldRecords() {

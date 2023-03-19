@@ -16,6 +16,7 @@ import {
   UpdateDevice,
 } from '@iot/device';
 import { IMqttClient, IMqttClientSettings } from '@iot/gateway/mqtt';
+import { Logger } from '@iot/logger';
 import { ITelemetry } from '@iot/telemetry';
 import { randomUUID } from 'crypto';
 
@@ -119,6 +120,9 @@ export class BasicDevice extends Device {
 
   private saveTelemetry(attribute: IAttribute | undefined, data: string) {
     if (attribute) {
+      Logger.instance.info(
+        `Device (${this.getId()}) incoming telemetry ${attribute.name}: ${data} `
+      );
       const telemety: ITelemetry = {
         attribute_id: attribute.id ?? '',
         value: data,

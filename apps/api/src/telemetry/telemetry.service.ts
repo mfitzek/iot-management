@@ -36,6 +36,7 @@ export class TelemetryService {
 
   public async exportTelemetry(user: IUser, query: ISearchTelemetry) {
     const data = await this.getTelemetry(user, query);
+    console.log(data);
     switch (query.exportFormat) {
       case 'JSON':
         return exportToJson(data.result);

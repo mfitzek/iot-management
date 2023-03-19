@@ -29,7 +29,7 @@ async function downloadData() {
     params: {
       attr: props.filter.attribute_ids,
       start: props.filter.date_from?.getTime(),
-      end: props.filter.date_from?.getTime(),
+      end: props.filter.date_to?.getTime(),
       format: exportFormat.value,
     },
     responseType: 'blob',

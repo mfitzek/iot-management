@@ -1,27 +1,32 @@
 <template>
   <div class="log-component">
     <h2>Logs</h2>
-    <ul>
-      <li>
-        <span class="log-level">INFO</span>
-        <span class="log-message">Application started</span>
-        <span class="log-time">2023-03-18 10:00:00</span>
-      </li>
-      <li>
-        <span class="log-level">WARNING</span>
-        <span class="log-message">Some files could not be loaded</span>
-        <span class="log-time">2023-03-18 10:01:30</span>
-      </li>
-      <li>
-        <span class="log-level">ERROR</span>
-        <span class="log-message">Database connection failed</span>
-        <span class="log-time">2023-03-18 10:03:45</span>
-      </li>
-    </ul>
+
+    <q-scroll-area style="height: 600px">
+      <ul>
+        <li v-for="log of logs">
+          <span class="log-level">{{ log.type }}</span>
+          <span class="log-time">{{ new Date(log.timestamp).toISOString() }}</span>
+          <span class="log-message">{{ log.message }}</span>
+        </li>
+      </ul>
+    </q-scroll-area>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Log } from '@iot/logger';
+import axios from '@iot/services/http-axios';
+import { ref } from 'vue';
+
+const logs = ref<Log[]>([]);
+
+async function getLogs() {
+  const resp = await axios.get<Log[]>('/administration/logs');
+  logs.value = resp.data.sort((a, b) => b.timestamp - a.timestamp);
+}
+getLogs();
+</script>
 
 <style scoped>
 .log-component {

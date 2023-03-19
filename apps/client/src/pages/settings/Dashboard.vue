@@ -4,15 +4,15 @@
       <p class="text-h5">Statistics</p>
       <div>{{ stats?.cache.cacheWrites }} Cache Writes / Hour</div>
       <div>{{ stats?.cache.databaseWrites }} Database Writes / Hour</div>
+      <div class="">{{ stats?.users }} Users</div>
+      <div class="">{{ stats?.devices }} Devices</div>
+      <div class="">{{ stats?.records }} Records</div>
     </section>
 
     <section>
       <div class="column">
         <p class="text-h5">Size of database</p>
         <DBState></DBState>
-        <div class="">{{ stats?.users }} Users</div>
-        <div class="">{{ stats?.devices }} Devices</div>
-        <div class="">{{ stats?.records }} Records</div>
       </div>
     </section>
 

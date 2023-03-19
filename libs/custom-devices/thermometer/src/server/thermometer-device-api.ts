@@ -8,7 +8,7 @@ import {
   UpdateDevice,
 } from '@iot/device';
 import { IMqttClient } from '@iot/gateway/mqtt';
-import { MQTT_KEY } from '@iot/custom-devices/thermometer/common';
+import { MQTT_KEY } from '../common';
 
 export class ThermometerDevice extends Device {
   private mqtt_client?: IMqttClient;
@@ -25,7 +25,6 @@ export class ThermometerDevice extends Device {
   }
 
   public override onCreate() {
-    console.log('On create !');
     const temperature: CreateAttribute = {
       name: 'temperature',
       type: 'number',

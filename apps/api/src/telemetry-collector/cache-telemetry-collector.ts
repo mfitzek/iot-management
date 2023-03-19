@@ -40,7 +40,6 @@ export class CacheTelemetryCollector implements Observer {
   }
 
   private lockActiveCache() {
-    console.log({ old: this.oldCaches.length });
     this.oldCaches.push(this.activeCache);
     this.activeCache = this.createNewCache();
   }

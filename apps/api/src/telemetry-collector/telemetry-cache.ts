@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { CacheRecordType, Monitor } from '@iot/monitor';
+import { Logger } from '@iot/logger';
 
 export class TelemetryCache {
   public readyToDestroy = false;
@@ -59,21 +60,21 @@ export class TelemetryCache {
     if (this.cacheTimeout) {
       return;
     }
-    console.log('Start ', this.cacheTimeLimitMS);
+    Logger.instance.info(`Cache start timeout (${this.cacheTimeLimitMS} ms)`);
     this.cacheTimeout = setTimeout(() => {
       this.cacheTimeExceeded();
     }, this.cacheTimeLimitMS);
   }
 
   private async cacheTimeExceeded() {
-    console.log('Cache time exceeded 🚀');
+    Logger.instance.info('Cache time exceeded 🚀');
     await this.writeCacheToDatabase();
   }
 
   private async writeCacheToDatabase() {
     Monitor.instance.createRecord(CacheRecordType.DATABASE_WRITE);
     this.onCacheLock();
-    console.log('Writing cache to DB', this.cache.length);
+    Logger.instance.info(`Writing cache to DB (${this.cache.length} items)`);
     const transactions = this.cache.map((row) => {
       return this.prisma.telemetry.create({
         data: {
