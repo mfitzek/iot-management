@@ -26,6 +26,7 @@
       "@iot/gateway/gateway": ["libs/gateway/gateway/src/index.ts"],
       "@iot/gateway/http": ["libs/gateway/http/src/index.ts"],
       "@iot/gateway/mqtt": ["libs/gateway/mqtt/src/index.ts"],
+      "@iot/monitor": ["libs/monitor/src/index.ts"],
       "@iot/services/http-axios": ["libs/services/http-axios/src/index.ts"],
       "@iot/statistics": ["libs/statistics/src/index.ts"],
       "@iot/stores/messages": ["libs/stores/messages/src/index.ts"],

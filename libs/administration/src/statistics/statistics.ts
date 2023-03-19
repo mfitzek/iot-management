@@ -4,4 +4,8 @@ export type Statistics = {
   records: number;
   currentSizeMB: number;
   maxSizeMB: number;
+  cache: {
+    cacheWrites: number;
+    databaseWrites: number;
+  };
 };

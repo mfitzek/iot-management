@@ -13,6 +13,7 @@
     "gateway-gateway": "libs/gateway/gateway",
     "gateway-http": "libs/gateway/http",
     "gateway-mqtt": "libs/gateway/mqtt",
+    "monitor": "libs/monitor",
     "services-http": "libs/services/http-axios",
     "statistics": "libs/statistics",
     "stores-messages": "libs/stores/messages",

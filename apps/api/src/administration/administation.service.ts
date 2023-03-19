@@ -5,6 +5,7 @@ import { Injectable, Query } from '@nestjs/common';
 import fs from 'fs';
 import path from 'path';
 import { UserRole } from '@iot/user';
+import { Monitor } from '@iot/monitor';
 
 @Injectable()
 export class AdminsitrationService {
@@ -12,12 +13,17 @@ export class AdminsitrationService {
 
   async databaseStatistics(): Promise<Statistics> {
     const { users, devices, records } = await this.databaseRecords();
+    const cacheMonitorStats = Monitor.instance.getCacheStats();
     const stats: Statistics = {
       users: users,
       devices: devices,
       records: records,
       currentSizeMB: await this.dbFileSize(),
       maxSizeMB: (await this.configuration.getSettings()).database.maxDatabaseSizeMB,
+      cache: {
+        cacheWrites: cacheMonitorStats.cacheWrites,
+        databaseWrites: cacheMonitorStats.databaseWrites,
+      },
     };
     return stats;
   }

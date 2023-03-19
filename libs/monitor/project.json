@@ -1,0 +1,26 @@
+{
+  "name": "monitor",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/monitor/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/monitor",
+        "main": "libs/monitor/src/index.ts",
+        "tsConfig": "libs/monitor/tsconfig.lib.json",
+        "assets": ["libs/monitor/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/monitor/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
