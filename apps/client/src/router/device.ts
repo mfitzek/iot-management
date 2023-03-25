@@ -2,8 +2,14 @@ import { RouteRecordRaw } from 'vue-router';
 import DeviceList from '@pages/device/DeviceList.vue';
 import CreateDevice from '@pages/device/CreateDevice.vue';
 import DeviceLayoutVue from '../layouts/DeviceLayout.vue';
+import DashboardVue from '../pages/device/Dashboard.vue';
 
 const authRoutes: RouteRecordRaw[] = [
+  {
+    path: 'dashboard',
+    name: 'DeviceDashboard',
+    component: DashboardVue,
+  },
   {
     path: '',
     name: 'DeviceList',
