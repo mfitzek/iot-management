@@ -1,4 +1,4 @@
-import { ILoginResponse, IRegisterResponse, IUser } from '@iot/user';
+import { ILoginResponse, IRegisterResponse, IUser, UserRole } from '@iot/user';
 
 import { ILoginPost, IRegisterPost } from '@iot/user';
 import { Injectable } from '@nestjs/common';
@@ -11,7 +11,10 @@ import { UserService } from '../user/user.service';
 export class AuthService {
   constructor(private users: UserService, private jwtService: JwtService) {}
 
-  async register(data: IRegisterPost): Promise<IRegisterResponse> {
+  public async register(data: IRegisterPost): Promise<IRegisterResponse> {
+    const isFirstUser = await this.firstRegisteredUser();
+    const role = isFirstUser ? UserRole.ADMIN : UserRole.USER;
+
     const { hash, salt } = await this.createPasswordHash(data.password);
 
     const result = await this.users.createUser({
@@ -19,6 +22,7 @@ export class AuthService {
       email: data.email,
       password: hash,
       salt: salt,
+      role: role,
     });
 
     const { errors } = result;
@@ -43,7 +47,7 @@ export class AuthService {
     };
   }
 
-  async login(user: IUser): Promise<ILoginResponse> {
+  public async login(user: IUser): Promise<ILoginResponse> {
     const payload = { id: user.id, username: user.username, email: user.email };
 
     const token = await this.jwtService.signAsync(payload);
@@ -60,7 +64,7 @@ export class AuthService {
     };
   }
 
-  async validateUser(data: ILoginPost): Promise<IUser | null> {
+  public async validateUser(data: ILoginPost): Promise<IUser | null> {
     const user = await this.users.getUser(data.username);
 
     if (user && (await this.comparePasswords(data.password, user.password, user.salt))) {
@@ -111,5 +115,10 @@ export class AuthService {
     }
 
     return expiration;
+  }
+
+  private async firstRegisteredUser(): Promise<boolean> {
+    const users = await this.users.getUsers();
+    return users.length === 0;
   }
 }
