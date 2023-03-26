@@ -6,11 +6,6 @@ import DashboardVue from '../pages/device/Dashboard.vue';
 
 const authRoutes: RouteRecordRaw[] = [
   {
-    path: 'dashboard',
-    name: 'DeviceDashboard',
-    component: DashboardVue,
-  },
-  {
     path: '',
     name: 'DeviceList',
     component: DeviceList,

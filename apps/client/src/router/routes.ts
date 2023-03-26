@@ -7,6 +7,7 @@ import authRoutes from './auth';
 import deviceRoutes from './device';
 import telemetryRoutes from './telemetry';
 import settingsRoutes from './settings';
+import DashboardVue from '../pages/device/Dashboard.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -16,6 +17,12 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'Index page', component: Home },
       { path: '/auth', children: authRoutes },
+      {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: DashboardVue,
+        meta: { requiresAuth: true },
+      },
       { path: '/device', children: deviceRoutes, meta: { requiresAuth: true } },
       {
         path: '/telemetry',

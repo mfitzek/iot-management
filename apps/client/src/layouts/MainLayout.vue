@@ -36,6 +36,12 @@ import auth from '../store/auth';
 const leftDrawerOpen = ref(false);
 const links = [
   {
+    name: 'Dashboard',
+    icon: 'sym_o_dashboard',
+    route: { name: 'Dashboard' },
+    isAdmin: false,
+  },
+  {
     name: 'Device',
     icon: 'sym_o_table_lamp',
     route: { name: 'DeviceList' },
