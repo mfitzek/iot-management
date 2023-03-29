@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md q-gutter-y-md">
-    <CardsInfo></CardsInfo>
+    <CardsInfo :stats="stats"></CardsInfo>
 
     <div class="row">
       <Warnings></Warnings>
@@ -18,6 +18,24 @@
 import CardsInfo from '../../components/device/CardsInfo.vue';
 import Warnings from '../../components/device/Warnings.vue';
 import DeviceList from '../../components/device/List.vue';
+import axios from '@iot/services/http-axios';
+import { DashboardCountStats, DeviceDashboardData } from '@iot/device';
+import { ref } from 'vue';
+
+const stats = ref<DashboardCountStats>({
+  devices: 0,
+  attributes: 0,
+  records: 0,
+  warnings: 0,
+});
+
+async function fetchDashboardData() {
+  const response = await axios.get<DeviceDashboardData>('device/dashboard');
+  console.log(response.data);
+  stats.value = response.data.stats;
+}
+
+fetchDashboardData();
 </script>
 
 <style scoped></style>

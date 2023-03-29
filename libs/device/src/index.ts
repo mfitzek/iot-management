@@ -5,3 +5,5 @@ export * from './interfaces/DeviceApi';
 export * from './interfaces/IDevice';
 export * from './interfaces/IDeviceService';
 export * from './interfaces/ProvidedServices';
+export * from './dashboard';
+export * from './warning';

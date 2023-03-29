@@ -33,6 +33,11 @@ export class DeviceController {
     return Promise.all(devices.map((device) => device.getShortInfo()));
   }
 
+  @Get('dashboard')
+  async getDeviceDashboardData(@Req() req) {
+    return this.devices.getDeviceDashboardData(req.user.id);
+  }
+
   @Put('create')
   createDevice(@Req() req, @Body() data: CreateDevice) {
     const user: IUser = req.user;

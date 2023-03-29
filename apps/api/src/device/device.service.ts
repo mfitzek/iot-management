@@ -1,6 +1,8 @@
 import {
   CreateAttribute,
   CreateUserDevice,
+  DashboardCountStats,
+  DeviceDashboardData,
   DeviceData,
   IDeviceService,
   UpdateAttribute,
@@ -21,7 +23,7 @@ type DeviceInclude = Prisma.DeviceGetPayload<{
 export class DeviceService implements IDeviceService {
   constructor(private prisma: PrismaService) {}
 
-  async createDevice(data: CreateUserDevice): Promise<DeviceData> {
+  public async createDevice(data: CreateUserDevice): Promise<DeviceData> {
     const device = await this.prisma.device.create({
       data: {
         name: data.name,
@@ -36,7 +38,7 @@ export class DeviceService implements IDeviceService {
 
     return this.parseToIDevice(device);
   }
-  async updateDevice(id: string, data: UpdateDevice): Promise<DeviceData | null> {
+  public async updateDevice(id: string, data: UpdateDevice): Promise<DeviceData | null> {
     const deviceBatch = this.prisma.device.update({
       where: {
         id: id,
@@ -62,7 +64,7 @@ export class DeviceService implements IDeviceService {
     if (device) return this.parseToIDevice(device);
     return null;
   }
-  async removeDevice(id: string): Promise<boolean> {
+  public async removeDevice(id: string): Promise<boolean> {
     const device = await this.prisma.device.delete({
       where: {
         id: id,
@@ -72,7 +74,7 @@ export class DeviceService implements IDeviceService {
     return device != null;
   }
 
-  async getDeviceList(): Promise<DeviceData[]> {
+  public async getDeviceList(): Promise<DeviceData[]> {
     const devices = await this.prisma.device.findMany({
       include: {
         Attribute: true,
@@ -82,7 +84,7 @@ export class DeviceService implements IDeviceService {
     return devices.map((device) => this.parseToIDevice(device));
   }
 
-  async getDevice(device_id: string): Promise<DeviceData | null> {
+  public async getDevice(device_id: string): Promise<DeviceData | null> {
     const dev = await this.prisma.device.findFirst({
       where: { id: device_id },
       include: {
@@ -94,6 +96,50 @@ export class DeviceService implements IDeviceService {
     if (!dev) return null;
 
     return this.parseToIDevice(dev);
+  }
+
+  public async getDeviceDashboardData(userId: string): Promise<DeviceDashboardData> {
+    const stats: DashboardCountStats = {
+      devices: 0,
+      attributes: 0,
+      records: 0,
+      warnings: 0,
+    };
+
+    const query = await this.prisma.device.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        name: true,
+        Attribute: {
+          select: {
+            id: true,
+            telemetry: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    query.forEach((device) => {
+      stats.devices++;
+      stats.attributes += device.Attribute.length;
+      device.Attribute.forEach((attr) => {
+        stats.records += attr.telemetry.length;
+      });
+    });
+
+    const warnings = [];
+    stats.warnings = warnings.length;
+
+    return {
+      stats,
+      warnings,
+    };
   }
 
   private parseToIDevice(device: DeviceInclude): DeviceData {
