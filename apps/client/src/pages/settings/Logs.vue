@@ -1,17 +1,17 @@
 <template>
-  <div class="log-component">
-    <h2>Logs</h2>
-
-    <q-scroll-area style="height: 600px">
-      <ul>
-        <li v-for="log of logs">
-          <span class="log-level">{{ log.type }}</span>
-          <span class="log-time">{{ new Date(log.timestamp).toISOString() }}</span>
-          <span class="log-message">{{ log.message }}</span>
-        </li>
-      </ul>
-    </q-scroll-area>
-  </div>
+  <q-card class="log-component">
+    <q-card-section class="text-h4"> Logs </q-card-section>
+    <q-separator></q-separator>
+    <q-card-section>
+      <q-virtual-scroll style="height: 600px" visible :items="logs" v-slot="{ item, index }">
+        <q-item :key="index" dense>
+          <span class="log-level">{{ item.type }}</span>
+          <span class="log-time">{{ new Date(item.timestamp).toISOString() }}</span>
+          <span class="log-message">{{ item.message }}</span>
+        </q-item>
+      </q-virtual-scroll>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
