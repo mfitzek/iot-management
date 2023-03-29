@@ -1,19 +1,18 @@
 <template>
   <div>
-    <q-linear-progress
-      size="25px"
-      :value="progress"
-      rounded
-      :color="color"
-      :track-color="color"
-      class="q-mt-sm"
+    <q-knob
+      show-value
+      readonly
+      font-size="12px"
+      v-model="progress"
+      size="200px"
+      :thickness="0.22"
+      color="teal"
+      track-color="grey-3"
+      class="q-ma-md"
     >
-      <div class="text-primary">
-        <div class="absolute-full flex flex-center">
-          <q-badge color="primary" text-color="white" :label="progressLabel" />
-        </div>
-      </div>
-    </q-linear-progress>
+      {{ progressLabel }}
+    </q-knob>
   </div>
 </template>
 
@@ -26,11 +25,11 @@ const maxSize = ref(1);
 const currentSize = ref(0);
 
 const progress = computed(() => {
-  return currentSize.value / maxSize.value;
+  return (currentSize.value / maxSize.value) * 100;
 });
 
 const progressLabel = computed(() => {
-  const percent = Math.floor(progress.value * 100);
+  const percent = Math.floor(progress.value);
 
   return `${currentSize.value} / ${maxSize.value} MB (${percent}%)`;
 });

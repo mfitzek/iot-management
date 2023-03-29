@@ -1,10 +1,10 @@
 <template>
-  <q-layout view="hHh lpR lFf">
+  <q-layout view="lHh lpR lFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> IoT Data Storage </q-toolbar-title>
+        <q-toolbar-title> </q-toolbar-title>
 
         <UserInfo></UserInfo>
       </q-toolbar>
@@ -12,7 +12,12 @@
 
     <q-drawer v-model="leftDrawerOpen" showIfAbove side="left" bordered>
       <!-- drawer content -->
+
       <q-list>
+        <q-item>
+          <q-item-section class="text-h5">IoT Data Storage</q-item-section>
+        </q-item>
+        <q-separator />
         <q-item v-for="(link, index) in links_filtered" :key="index" :to="link.route">
           <q-item-section>{{ link.name }}</q-item-section>
           <q-item-section avatar>
@@ -73,3 +78,9 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>
+
+<style>
+body {
+  background-color: #fafafa;
+}
+</style>
