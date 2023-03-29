@@ -1,8 +1,13 @@
 <template>
   <div>
-    <q-btn color="red" icon="delete" rounded flat @click="removeDevice()">
-      <q-tooltip> Remove device </q-tooltip>
-    </q-btn>
+    <div class="row justify-end q-mt-md q-gutter-sm">
+      <q-btn color="red" icon="delete" @click="removeDevice()" round>
+        <q-tooltip> Remove device </q-tooltip>
+      </q-btn>
+      <q-btn color="green" icon="file_copy" @click="void" round>
+        <q-tooltip> Copy device </q-tooltip>
+      </q-btn>
+    </div>
   </div>
 </template>
 
