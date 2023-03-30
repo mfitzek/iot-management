@@ -44,17 +44,11 @@ export class DeviceManager implements Observer {
     const device = await this.createCustomDevice(created);
     device.onCreate();
     this.device_list.push(device);
-    return device.getData();
+    return device;
   }
 
   async getUserDevices(user_id: string): Promise<IDevice[]> {
     return this.device_list.filter((device) => device.getOwnerId() === user_id);
-  }
-
-  async getUserDeviceList(user_id: string): Promise<DeviceData[]> {
-    return this.device_list
-      .filter((dev) => dev.getOwnerId() === user_id)
-      .map((dev) => dev.getData());
   }
 
   async getUserDevice(device_id: string, user_id: string): Promise<IDevice | undefined> {
@@ -72,6 +66,21 @@ export class DeviceManager implements Observer {
     await device.delete();
 
     return true;
+  }
+
+  public async copyDevice(device_id: string, user_id: string): Promise<IDevice | null> {
+    const existingDevice = await this.getUserDevice(device_id, user_id);
+    if (existingDevice) {
+      const data = existingDevice.getData();
+      return this.createDevice({
+        name: data.name,
+        type: data.type,
+        owner_id: user_id,
+        attributes: data.attributes,
+        keyValues: data.keyValues,
+      });
+    }
+    return null;
   }
 
   private createCustomDevice(data: DeviceData) {

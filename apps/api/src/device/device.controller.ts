@@ -24,7 +24,9 @@ export class DeviceController {
 
   @Get('list')
   getDevices(@Req() req) {
-    return this.device_manager.getUserDeviceList(req.user.id);
+    return this.device_manager
+      .getUserDevices(req.user.id)
+      .then((devices) => devices.map((d) => d.getData()));
   }
 
   @Get('shortlist')
@@ -41,11 +43,13 @@ export class DeviceController {
   @Put('create')
   createDevice(@Req() req, @Body() data: CreateDevice) {
     const user: IUser = req.user;
-    return this.device_manager.createDevice({
-      name: data.name,
-      type: data.type,
-      owner_id: user.id,
-    });
+    return this.device_manager
+      .createDevice({
+        name: data.name,
+        type: data.type,
+        owner_id: user.id,
+      })
+      .then((device) => device.getData());
   }
 
   @Get(':id')
@@ -68,6 +72,12 @@ export class DeviceController {
   async deleteDevice(@Req() req, @Param() params) {
     const removed = await this.device_manager.removeUserDevice(params.id, req.user.id);
     return removed;
+  }
+
+  @Post(':id/copy')
+  async copyDevice(@Req() req) {
+    const user: IUser = req.user;
+    return this.device_manager.copyDevice(req.body.id, user.id);
   }
 
   @Get(':id/custom/')

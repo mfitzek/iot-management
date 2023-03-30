@@ -4,7 +4,7 @@ import {
   HttpSettings,
   IMqttSettings,
 } from '@iot/custom-devices/basic-device/common';
-import { DeviceData, UpdateDevice, UpdateKeyValue } from '@iot/device';
+import { DeviceData, UpdateDevice, KeyValue } from '@iot/device';
 import http_api from '@iot/services/http-axios';
 import { reactive } from 'vue';
 
@@ -70,7 +70,7 @@ export function getHttpGatewaySettings(): HttpSettings | undefined {
   return getHttpSettings(store.device);
 }
 
-export async function updateKeyValues(keyValues: UpdateKeyValue[]) {
+export async function updateKeyValues(keyValues: KeyValue[]) {
   if (!store.device) return;
   const { id, name } = store.device;
 

@@ -81,7 +81,8 @@ export class TelemetryService {
     return result.filter((dev) => dev.attributes.length);
   }
 
-  private getUsersOwnedDevices(user: IUser) {
-    return this.deviceManager.getUserDeviceList(user.id);
+  private async getUsersOwnedDevices(user: IUser) {
+    const devices = await this.deviceManager.getUserDevices(user.id);
+    return devices.map((device) => device.getData());
   }
 }

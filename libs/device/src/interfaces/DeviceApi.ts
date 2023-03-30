@@ -2,6 +2,8 @@ export interface CreateUserDevice {
   name: string;
   type: string;
   owner_id: string;
+  attributes?: CreateAttribute[];
+  keyValues?: KeyValue[];
 }
 
 export type UpdateDevice = {
@@ -12,7 +14,7 @@ export type UpdateDevice = {
     update: UpdateAttribute[];
     remove: RemoveAttribute[];
   };
-  keyValues?: UpdateKeyValue[];
+  keyValues?: KeyValue[];
 };
 
 // Attributes
@@ -33,7 +35,7 @@ export type RemoveAttribute = {
 
 // KeyValues
 
-export type UpdateKeyValue = {
+export type KeyValue = {
   key: string;
   value: string;
 };

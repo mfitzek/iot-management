@@ -1,4 +1,4 @@
-import { DeviceData, UpdateKeyValue } from '@iot/device';
+import { DeviceData, KeyValue } from '@iot/device';
 
 export type HttpSettings = {
   active: boolean;
@@ -17,7 +17,7 @@ export function getHttpSettings(device: DeviceData) {
   return settings;
 }
 
-function getAsKeyValue(settings: HttpSettings): UpdateKeyValue {
+function getAsKeyValue(settings: HttpSettings): KeyValue {
   const value = JSON.stringify(settings);
   return {
     key: 'http-gateway-settings',
