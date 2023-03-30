@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <DeviceDetail :id="props.id"></DeviceDetail>
+    <DeviceDetail :id="props.id" :key="props.id"></DeviceDetail>
     <template #fallback>
       <LoadingComponent></LoadingComponent>
     </template>

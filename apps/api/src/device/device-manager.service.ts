@@ -52,6 +52,7 @@ export class DeviceManager implements Observer {
   }
 
   async getUserDevice(device_id: string, user_id: string): Promise<IDevice | undefined> {
+    console.log({ device_id, user_id });
     return this.device_list.find(
       (dev) => dev.getId() === device_id && dev.getOwnerId() === user_id
     );
@@ -68,12 +69,16 @@ export class DeviceManager implements Observer {
     return true;
   }
 
-  public async copyDevice(device_id: string, user_id: string): Promise<IDevice | null> {
+  public async copyDevice(
+    device_id: string,
+    user_id: string,
+    name: string
+  ): Promise<IDevice | null> {
     const existingDevice = await this.getUserDevice(device_id, user_id);
     if (existingDevice) {
       const data = existingDevice.getData();
       return this.createDevice({
-        name: data.name,
+        name: name,
         type: data.type,
         owner_id: user_id,
         attributes: data.attributes,

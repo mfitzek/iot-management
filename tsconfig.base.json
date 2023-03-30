@@ -18,6 +18,7 @@
     "allowJs": true,
     "paths": {
       "@iot/administration": ["libs/administration/src/index.ts"],
+      "@iot/common-client": ["libs/common-client/src/index.ts"],
       "@iot/configuration": ["libs/configuration/src/index.ts"],
       "@iot/custom-device": ["libs/custom-device/src/index.ts"],
       "@iot/custom-devices/basic-device/*": ["libs/custom-devices/basic-device/src/*.ts"],

@@ -5,6 +5,7 @@
     "administration": "libs/administration",
     "api": "apps/api",
     "client": "apps/client",
+    "common-client": "libs/common-client",
     "configuration": "libs/configuration",
     "custom-device": "libs/custom-device",
     "custom-devices-basic-device": "libs/custom-devices/basic-device",

@@ -17,7 +17,7 @@
     <q-btn color="red" icon="delete" @click="removeDevice()" round>
       <q-tooltip> Remove device </q-tooltip>
     </q-btn>
-    <q-btn color="green" icon="file_copy" @click="void" round>
+    <q-btn color="green" icon="file_copy" @click="copyDevice()" round>
       <q-tooltip> Copy device </q-tooltip>
     </q-btn>
   </div>
@@ -29,11 +29,21 @@ import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import store, { removeCurrentDevice, updateCurrentDevice } from '../store';
+import { copyDeviceDialog } from '@iot/common-client';
 
 const router = useRouter();
 const $q = useQuasar();
 
 const name = ref(store.device?.name ?? '');
+
+async function copyDevice() {
+  if (store.device?.id) {
+    const deviceId = await copyDeviceDialog(store.device.id);
+    if (deviceId) {
+      router.push({ name: 'DeviceDetail', params: { id: deviceId } });
+    }
+  }
+}
 
 async function saveInformation() {
   const device = store.device;

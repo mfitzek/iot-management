@@ -1,6 +1,7 @@
 import { CreateDevice, CustomRequestMethod, DeviceStatusInfo, UpdateDevice } from '@iot/device';
 import { IUser } from '@iot/user';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -75,9 +76,11 @@ export class DeviceController {
   }
 
   @Post(':id/copy')
-  async copyDevice(@Req() req) {
+  async copyDevice(@Req() req, @Param() params, @Body() data: { name: string }) {
     const user: IUser = req.user;
-    return this.device_manager.copyDevice(req.body.id, user.id);
+    const clone = await this.device_manager.copyDevice(params.id, user.id, data.name);
+    if (clone) return clone.getData();
+    else throw new BadRequestException("Can't copy device");
   }
 
   @Get(':id/custom/')

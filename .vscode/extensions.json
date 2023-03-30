@@ -4,6 +4,7 @@
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "vue.vscode-typescript-vue-plugin",
-    "MisterJ.vue-volar-extention-pack"
+    "MisterJ.vue-volar-extention-pack",
+    "firsttris.vscode-jest-runner"
   ]
 }

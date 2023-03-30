@@ -29,6 +29,12 @@ export class DeviceService implements IDeviceService {
         name: data.name,
         type: data.type,
         userId: data.owner_id,
+        Attribute: {
+          create: data.attributes.map((attr) => ({ name: attr.name, type: attr.type })),
+        },
+        KeyValue: {
+          create: data.keyValues.map((kv) => ({ key: kv.key, value: kv.value })),
+        },
       },
       include: {
         Attribute: true,
