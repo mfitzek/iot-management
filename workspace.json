@@ -21,6 +21,7 @@
     "stores-messages": "libs/stores/messages",
     "telemetry": "libs/telemetry",
     "user": "libs/user",
-    "utility": "libs/utility"
+    "utility": "libs/utility",
+    "reports": "libs/reports"
   }
 }

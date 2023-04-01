@@ -1,0 +1,26 @@
+{
+  "name": "reports",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/reports/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/reports",
+        "main": "libs/reports/src/index.ts",
+        "tsConfig": "libs/reports/tsconfig.lib.json",
+        "assets": ["libs/reports/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/reports/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
