@@ -6,6 +6,7 @@ import { GatewayModule } from './../gateway/gateway.module';
 
 import { SettingsModule } from '../settings/settings.module';
 import { TelemetryModule } from '../telemetry/telemetry.module';
+import { ReportsModule } from '../reports/reports.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TelemetryModule } from '../telemetry/telemetry.module';
     SettingsModule,
     AdministritonModule,
     GatewayModule,
+    ReportsModule,
   ],
 })
 export class AppModule {}

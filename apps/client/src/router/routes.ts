@@ -8,6 +8,7 @@ import deviceRoutes from './device';
 import telemetryRoutes from './telemetry';
 import settingsRoutes from './settings';
 import DashboardVue from '../pages/device/Dashboard.vue';
+import reportsRoutes from './reports';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -34,6 +35,7 @@ const routes: RouteRecordRaw[] = [
         children: settingsRoutes,
         meta: { requiresAuth: true, isAdmin: true },
       },
+      { path: '/reports', children: reportsRoutes, meta: { requiresAuth: true } },
       { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ],
   },

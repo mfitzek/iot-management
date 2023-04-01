@@ -18,7 +18,7 @@
           <q-item-section class="text-h5">IoT Data Storage</q-item-section>
         </q-item>
         <q-separator />
-        <q-item v-for="(link, index) in links_filtered" :key="index" :to="link.route">
+        <q-item v-for="(link, index) in links_filtered" :key="index" :to="link.route" dense>
           <q-item-section>{{ link.name }}</q-item-section>
           <q-item-section avatar>
             <q-icon :name="link.icon"></q-icon>
@@ -56,6 +56,12 @@ const links = [
     name: 'Data',
     icon: 'sym_o_monitoring',
     route: { name: 'Telemetry' },
+    isAdmin: false,
+  },
+  {
+    name: 'Reports',
+    icon: 'sym_o_feed',
+    route: { name: 'Reports' },
     isAdmin: false,
   },
   {

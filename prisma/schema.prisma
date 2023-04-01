@@ -18,25 +18,28 @@ model User {
   salt     String
   role     Int      @default(0)
   Device   Device[]
+  Report   Report[]
 }
 
 model Device {
-  id        String      @id @default(cuid())
-  name      String
-  type      String
-  owner     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  Attribute Attribute[]
-  KeyValue  KeyValue[]
+  id               String             @id @default(cuid())
+  name             String
+  type             String
+  owner            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  Attribute        Attribute[]
+  KeyValue         KeyValue[]
+  AttributesInPost ReportAttributes[]
 }
 
 model Attribute {
-  id        String      @id @default(cuid())
-  name      String
-  type      String
-  device    Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
-  deviceId  String
-  telemetry Telemetry[]
+  id               String             @id @default(cuid())
+  name             String
+  type             String
+  device           Device             @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  deviceId         String
+  telemetry        Telemetry[]
+  AttributesInPost ReportAttributes[]
 }
 
 model KeyValue {
@@ -53,4 +56,25 @@ model Telemetry {
   attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
   value       String
   attributeId String
+}
+
+model Report {
+  id         String             @id @default(cuid())
+  name       String
+  user       User               @relation(fields: [userId], references: [id])
+  attributes ReportAttributes[]
+  userId     String
+  interval   Int
+  email      Boolean
+  lastSent   DateTime
+}
+
+model ReportAttributes {
+  id          String    @id @default(cuid())
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  report      Report    @relation(fields: [reportId], references: [id])
+  device      Device    @relation(fields: [deviceId], references: [id])
+  attributeId String
+  reportId    String
+  deviceId    String
 }
