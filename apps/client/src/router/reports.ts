@@ -12,6 +12,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../pages/reports/ReportsSettings.vue'),
         props: true,
       },
+      {
+        path: ':id/preview',
+        name: 'ReportPreview',
+        component: () => import('../pages/reports/ReportData.vue'),
+        props: true,
+      },
     ],
   },
 ];

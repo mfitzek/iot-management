@@ -63,9 +63,9 @@ model Report {
   user       User               @relation(fields: [userId], references: [id])
   attributes ReportAttributes[]
   userId     String
-  interval   Int
-  email      Boolean
-  lastSent   DateTime
+  intervalMs Int
+  sendEmail  Boolean
+  lastSent   DateTime 
 }
 
 model ReportAttributes {

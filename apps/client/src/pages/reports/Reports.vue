@@ -42,7 +42,13 @@
                 label="Settings"
                 :to="{ name: 'ReportSettings', params: { id: selectedReport.id } }"
               />
-              <q-route-tab ripple name="data" icon="s_feed" label="Data" />
+              <q-route-tab
+                ripple
+                name="data"
+                icon="s_feed"
+                label="Data"
+                :to="{ name: 'ReportPreview', params: { id: selectedReport.id } }"
+              />
               <q-route-tab ripple name="graph" icon="sym_o_monitoring" label="Graph" />
             </q-tabs>
           </q-card-section>
