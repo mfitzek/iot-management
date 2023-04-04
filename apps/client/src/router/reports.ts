@@ -7,16 +7,28 @@ const routes: RouteRecordRaw[] = [
     component: Reports,
     children: [
       {
-        path: ':id/settings',
-        name: 'ReportSettings',
-        component: () => import('../pages/reports/ReportsSettings.vue'),
+        path: ':id',
+        name: 'Report',
+        component: () => import('../pages/reports/Report.vue'),
         props: true,
+        children: [
+          {
+            path: 'settings',
+            name: 'ReportSettings',
+            component: () => import('../pages/reports/ReportsSettings.vue'),
+          },
+          {
+            path: 'preview',
+            name: 'ReportPreview',
+            component: () => import('../pages/reports/ReportData.vue'),
+            props: true,
+          },
+        ],
       },
       {
-        path: ':id/preview',
-        name: 'ReportPreview',
-        component: () => import('../pages/reports/ReportData.vue'),
-        props: true,
+        path: 'create',
+        name: 'CreateReport',
+        component: () => import('../pages/reports/CreateReport.vue'),
       },
     ],
   },

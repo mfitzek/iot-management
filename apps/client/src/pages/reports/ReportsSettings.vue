@@ -8,13 +8,19 @@
     <q-input v-model="name" type="text" label="Report name" filled />
 
     <q-list separator dense bordered>
-      <q-item v-for="item in items" :key="item.attributeId">
+      <q-item v-for="item in items" :key="item.id">
         <q-item-section>
-          <q-item-label>{{ item.attribute }}</q-item-label>
+          <q-item-label>{{ item.name }}</q-item-label>
           <q-item-label caption>{{ item.device }}</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-btn color="red" icon="delete" round @click="deleteItem(item.attributeId)" flat />
+          <q-btn color="red" icon="delete" round @click="deleteItem(item.id)" flat />
+        </q-item-section>
+      </q-item>
+      <q-item v-if="items.length === 0">
+        <q-item-section>
+          <q-item-label>No attributes added</q-item-label>
+          <q-item-label caption>Click "Add attribute" button to add new attribute</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -22,28 +28,48 @@
     <q-toggle v-model="email" color="green" label="Send report to email " />
   </div>
 
-  <AddDeviceAttributeDialog v-model="addDialog"></AddDeviceAttributeDialog>
+  <AddDeviceAttributeDialog v-model="addDialog" @addItem="addItem"></AddDeviceAttributeDialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import AddDeviceAttributeDialog from '../../components/reports/AddDeviceAttributeDialog.vue';
-import { ReportSettings } from '@iot/reports';
+import { ReportData, ReportDataAttribute, ReportSettings } from '@iot/reports';
+import { useReportsStore } from '../../store/reports';
+
+const reports = useReportsStore();
 
 const addDialog = ref(false);
-const name = ref('Name');
+const dayMs = 24 * 60 * 60 * 1000;
 
-const items = ref([
-  { attributeId: 'item1', device: 'Device 1', attribute: 'Attribute 1' },
-  { attributeId: 'item2', device: 'Device 2', attribute: 'Attribute 2' },
-  { attributeId: 'item3', device: 'Device 3', attribute: 'Attribute 3' },
-]);
+const name = ref('');
+const items = ref<ReportDataAttribute[]>([]);
+const interval = ref(7 * dayMs);
+const email = ref(false);
+
+watch(
+  () => reports.getCurrentReport,
+  (report: ReportData | undefined) => {
+    console.log('Report changed', report?.name);
+
+    if (report) {
+      name.value = report.name;
+      items.value = report.attributes;
+      interval.value = report.intervalMs;
+      email.value = report.sendEmail;
+    }
+  },
+  { immediate: true }
+);
 
 const deleteItem = (attributeId: string) => {
-  items.value = items.value.filter((item) => item.attributeId !== attributeId);
+  items.value = items.value.filter((item) => item.id !== attributeId);
 };
 
-const dayMs = 24 * 60 * 60 * 1000;
+const addItem = (item) => {
+  console.log(item);
+};
+
 const options = [
   {
     label: '1 Day',
@@ -61,8 +87,6 @@ const options = [
     description: 'One month interval',
   },
 ];
-const interval = ref(dayMs * 7);
-const email = ref(false);
 
 async function saveSettings() {
   const settings: ReportSettings = {
@@ -70,7 +94,7 @@ async function saveSettings() {
     name: name.value,
     intervalMs: interval.value,
     sendEmail: email.value,
-    attributes: items.value.map((item) => item.attributeId),
+    attributes: items.value.map((item) => item.id),
   };
   console.log(settings);
 }

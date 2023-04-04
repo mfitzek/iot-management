@@ -1,19 +1,19 @@
 export interface ReportSettings {
-  id: string;
   name: string;
   attributes: string[];
   intervalMs: number;
   sendEmail: boolean;
 }
 
+export interface ReportDataAttribute {
+  id: string;
+  device: string;
+  name: string;
+}
 export interface ReportData {
   id: string;
   name: string;
-  attributes: {
-    id: string;
-    device: string;
-    name: string;
-  }[];
+  attributes: ReportDataAttribute[];
   intervalMs: number;
   sendEmail: boolean;
 }

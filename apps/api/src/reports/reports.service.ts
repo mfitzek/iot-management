@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ReportData } from '@iot/reports';
+import { ReportData, ReportSettings } from '@iot/reports';
 
 @Injectable()
 export class ReportService {
@@ -31,5 +31,26 @@ export class ReportService {
         }),
       };
     });
+  }
+
+  async createReport(userId: string, report: ReportSettings) {
+    const newReport = await this.prisma.report.create({
+      data: {
+        name: report.name,
+        intervalMs: report.intervalMs,
+        sendEmail: report.sendEmail,
+        userId: userId,
+        attributes: {
+          create: report.attributes.map((attribute) => {
+            return {
+              attributeId: attribute,
+            };
+          }),
+        },
+        lastSent: new Date(),
+      },
+    });
+
+    return newReport;
   }
 }

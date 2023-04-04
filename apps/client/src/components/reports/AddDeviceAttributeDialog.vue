@@ -15,6 +15,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import axios from '@iot/services/http-axios';
+import { DeviceData } from '@iot/device';
 
 const props = defineProps<{
   modelValue: boolean;
@@ -24,11 +26,34 @@ const emit = defineEmits<{
   'update:modelValue': (value: boolean) => void;
   addItem: () => void;
 }>();
+interface Attribute {
+  label: string;
+  value: string;
+  attribute: { id: string; device: string; name: string };
+}
 
 const selectedDevice = ref(null);
-const selectedAttribute = ref(null);
-const deviceOptions = ref(['Device 1', 'Device 2', 'Device 3']);
-const attributeOptions = ref(['Attribute 1', 'Attribute 2', 'Attribute 3']);
+const selectedAttribute = ref<Attribute | null>(null);
+const deviceOptions = computed(() => devices.value.map((device) => device.name));
+const attributeOptions = computed(() => {
+  const attributes: Attribute[] = [];
+  const filterDevices = selectedDevice.value
+    ? devices.value.filter((device) => device.name === selectedDevice.value)
+    : [];
+
+  filterDevices.forEach((device) => {
+    device.attributes.forEach((attribute) => {
+      attributes.push({
+        label: attribute.name,
+        value: attribute.id,
+        attribute: { id: attribute.id, device: device.name, name: attribute.name },
+      });
+    });
+  });
+  return attributes;
+});
+
+const devices = ref<DeviceData[]>([]);
 
 const isValid = computed(() => selectedDevice.value && selectedAttribute.value);
 
@@ -37,14 +62,18 @@ function closeDialog() {
 }
 
 const saveItem = () => {
-  const newItem = {
-    id: Date.now().toString(),
-    device: selectedDevice.value,
-    attribute: selectedAttribute.value,
-  };
-  emit('addItem');
-  closeDialog();
+  if (selectedAttribute.value) {
+    emit('addItem', selectedAttribute.value.attribute);
+    closeDialog();
+  }
 };
+
+async function fetchUserAttributes() {
+  const response = await axios.get('/device/list');
+  devices.value = response.data;
+}
+
+fetchUserAttributes();
 </script>
 
 <style scoped>
