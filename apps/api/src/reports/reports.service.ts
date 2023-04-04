@@ -53,4 +53,25 @@ export class ReportService {
 
     return newReport;
   }
+
+  async updateReport(userId: string, reportId: string, report: ReportSettings) {
+    const updatedReport = await this.prisma.report.update({
+      where: { id: reportId },
+      data: {
+        name: report.name,
+        intervalMs: report.intervalMs,
+        sendEmail: report.sendEmail,
+        attributes: {
+          deleteMany: {},
+          create: report.attributes.map((attribute) => {
+            return {
+              attributeId: attribute,
+            };
+          }),
+        },
+      },
+    });
+
+    return updatedReport;
+  }
 }

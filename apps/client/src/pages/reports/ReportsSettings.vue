@@ -37,6 +37,10 @@ import AddDeviceAttributeDialog from '../../components/reports/AddDeviceAttribut
 import { ReportData, ReportDataAttribute, ReportSettings } from '@iot/reports';
 import { useReportsStore } from '../../store/reports';
 
+const props = defineProps<{
+  id: string;
+}>();
+
 const reports = useReportsStore();
 
 const addDialog = ref(false);
@@ -67,7 +71,7 @@ const deleteItem = (attributeId: string) => {
 };
 
 const addItem = (item) => {
-  console.log(item);
+  items.value.push(item);
 };
 
 const options = [
@@ -89,14 +93,18 @@ const options = [
 ];
 
 async function saveSettings() {
+  const int = interval.value as any;
+  if (int && typeof int === 'object') {
+    interval.value = int.value;
+  }
   const settings: ReportSettings = {
-    id: 'TO DO',
     name: name.value,
     intervalMs: interval.value,
     sendEmail: email.value,
     attributes: items.value.map((item) => item.id),
   };
-  console.log(settings);
+
+  const report = await reports.updateReport(props.id, settings);
 }
 </script>
 

@@ -32,6 +32,12 @@ export const useReportsStore = defineStore('reports', () => {
     return created;
   }
 
+  async function updateReport(id: string, report: ReportSettings) {
+    const response = await axios.post(`/reports/${id}`, report);
+    await fetchUserReports();
+    return response.data;
+  }
+
   return {
     reports,
     currentReportId,
@@ -39,5 +45,6 @@ export const useReportsStore = defineStore('reports', () => {
     fetchUserReports,
     getCurrentReport,
     createReport,
+    updateReport,
   };
 });
