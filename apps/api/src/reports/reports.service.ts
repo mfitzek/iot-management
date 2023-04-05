@@ -76,4 +76,12 @@ export class ReportService {
 
     return updatedReport;
   }
+
+  async deleteReport(userId: string, reportId: string) {
+    const deleted = await this.prisma.report.deleteMany({
+      where: { userId: userId, id: reportId },
+    });
+
+    return deleted.count > 0;
+  }
 }

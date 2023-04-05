@@ -26,6 +26,10 @@
     </q-list>
     <q-select v-model="interval" :options="options" label="Interval" filled map-options />
     <q-toggle v-model="email" color="green" label="Send report to email " />
+    <div class="row">
+      <q-space />
+      <q-btn color="red" icon="delete" label="Remove report" @click="removeReport" />
+    </div>
   </div>
 
   <AddDeviceAttributeDialog v-model="addDialog" @addItem="addItem"></AddDeviceAttributeDialog>
@@ -36,6 +40,9 @@ import { ref, watch } from 'vue';
 import AddDeviceAttributeDialog from '../../components/reports/AddDeviceAttributeDialog.vue';
 import { ReportData, ReportDataAttribute, ReportSettings } from '@iot/reports';
 import { useReportsStore } from '../../store/reports';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps<{
   id: string;
@@ -105,6 +112,11 @@ async function saveSettings() {
   };
 
   const report = await reports.updateReport(props.id, settings);
+}
+
+async function removeReport() {
+  await reports.removeReport(props.id);
+  router.push({ name: 'Reports' });
 }
 </script>
 

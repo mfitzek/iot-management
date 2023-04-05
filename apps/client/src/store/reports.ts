@@ -38,6 +38,11 @@ export const useReportsStore = defineStore('reports', () => {
     return response.data;
   }
 
+  async function removeReport(id: string) {
+    const response = await axios.delete(`/reports/${id}`);
+    await fetchUserReports();
+  }
+
   return {
     reports,
     currentReportId,
@@ -46,5 +51,6 @@ export const useReportsStore = defineStore('reports', () => {
     getCurrentReport,
     createReport,
     updateReport,
+    removeReport,
   };
 });
