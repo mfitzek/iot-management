@@ -31,4 +31,9 @@ export class ReportsController {
   async deleteReport(@Req() req, @Param('id') id: string) {
     return await this.reports.deleteReport(req.user.id, id);
   }
+
+  @Get(':id/data')
+  async getReportData(@Req() req, @Param('id') id: string) {
+    return await this.reports.getReportData(req.user.id, id);
+  }
 }

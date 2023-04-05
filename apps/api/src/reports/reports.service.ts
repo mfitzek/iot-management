@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ReportData, ReportSettings } from '@iot/reports';
+import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class ReportService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private telemetry: TelemetryCollectorService ) {}
 
   async getUserReports(userId: string): Promise<ReportData[]> {
     const reports = await this.prisma.report.findMany({
@@ -83,5 +84,24 @@ export class ReportService {
     });
 
     return deleted.count > 0;
+  }
+
+  async getReportData(userId: string, reportId: string) {
+    const report = await this.prisma.report.findUnique({
+      where: { id: reportId },
+      include: {
+        attributes: true
+      }
+    });
+
+    const start = Date.now() - report.intervalMs;
+
+    const attributes = report.attributes.map((attribute) => attribute.attributeId);
+    const telemetry = await this.telemetry.getTelemetry({
+      attribute_ids: attributes,
+      date_from: new Date(start)
+    });
+
+
   }
 }
