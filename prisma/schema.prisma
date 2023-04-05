@@ -60,18 +60,18 @@ model Telemetry {
 model Report {
   id         String             @id @default(cuid())
   name       String
-  user       User               @relation(fields: [userId], references: [id])
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   attributes ReportAttributes[]
   userId     String
   intervalMs Int
   sendEmail  Boolean
-  lastSent   DateTime 
+  lastSent   DateTime
 }
 
 model ReportAttributes {
   id          String    @id @default(cuid())
-  attribute   Attribute @relation(fields: [attributeId], references: [id])
-  report      Report    @relation(fields: [reportId], references: [id])
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  report      Report    @relation(fields: [reportId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   attributeId String
   reportId    String
 }

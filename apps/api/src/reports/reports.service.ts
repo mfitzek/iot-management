@@ -24,7 +24,7 @@ export class ReportService {
         sendEmail: report.sendEmail,
         attributes: report.attributes.map((attribute) => {
           return {
-            id: attribute.id,
+            id: attribute.attributeId,
             device: attribute.attribute.device.name,
             name: attribute.attribute.name,
           };
@@ -54,20 +54,22 @@ export class ReportService {
     return newReport;
   }
 
-  async updateReport(userId: string, reportId: string, report: ReportSettings) {
+  async updateReport(userId: string, reportId: string, reportToUpdate: ReportSettings) {
+    const createAttributes = reportToUpdate.attributes.map((attribute) => {
+      return {
+        attributeId: attribute,
+      };
+    });
+
     const updatedReport = await this.prisma.report.update({
       where: { id: reportId },
       data: {
-        name: report.name,
-        intervalMs: report.intervalMs,
-        sendEmail: report.sendEmail,
+        name: reportToUpdate.name,
+        intervalMs: reportToUpdate.intervalMs,
+        sendEmail: reportToUpdate.sendEmail,
         attributes: {
           deleteMany: {},
-          create: report.attributes.map((attribute) => {
-            return {
-              attributeId: attribute,
-            };
-          }),
+          create: createAttributes,
         },
       },
     });
