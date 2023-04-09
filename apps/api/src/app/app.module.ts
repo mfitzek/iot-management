@@ -7,6 +7,7 @@ import { GatewayModule } from './../gateway/gateway.module';
 import { SettingsModule } from '../settings/settings.module';
 import { TelemetryModule } from '../telemetry/telemetry.module';
 import { ReportsModule } from '../reports/reports.module';
+import { MailModule } from '../mailing/mail.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ReportsModule } from '../reports/reports.module';
     AdministritonModule,
     GatewayModule,
     ReportsModule,
+    MailModule,
   ],
 })
 export class AppModule {}

@@ -3,26 +3,30 @@ import { Injectable } from '@nestjs/common';
 import { Transporter, createTransport } from 'nodemailer';
 import { ConfiguratioProvider } from '../settings/settings-provider.service';
 import { MailOptions, MailService } from '@iot/mailing';
+import { Logger } from '@iot/logger';
 
 @Injectable()
 export class GmailMailService implements Observer, MailService {
   private transporter: Transporter | undefined;
 
   constructor(private configurationProvider: ConfiguratioProvider) {
+    this.configurationProvider.register(this);
     this.setTransporter();
   }
   public async sendMail(mailOptions: MailOptions): Promise<void> {
     if (!this.transporter) {
       return;
     }
-    this.transporter.sendMail(mailOptions);
+    await this.transporter.sendMail(mailOptions);
   }
 
   public onUpdate(): void {
+    Logger.instance.info('Mail settings changed');
     this.setTransporter();
   }
 
   private async setTransporter(): Promise<void> {
+    Logger.instance.info('Setting mail transporter');
     const settings = await this.configurationProvider.getSettings();
     this.transporter = undefined;
 

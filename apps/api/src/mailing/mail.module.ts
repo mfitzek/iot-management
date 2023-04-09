@@ -1,8 +1,15 @@
 import { Module } from '@nestjs/common';
 import { GmailMailService } from './mail.service';
+import { SettingsModule } from '../settings/settings.module';
+import { Logger } from '@iot/logger';
 
 @Module({
+  imports: [SettingsModule],
   providers: [GmailMailService],
   exports: [GmailMailService],
 })
-export class MailModule {}
+export class MailModule {
+  constructor(private mailService: GmailMailService) {
+    Logger.instance.info('Mail module initialized');
+  }
+}

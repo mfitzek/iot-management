@@ -10,6 +10,28 @@ export class ReportService {
     private telemetry: TelemetryCollectorService
   ) {}
 
+  public async getAllReportsForMail() {
+    const reports = await this.prisma.report.findMany({
+      where: { sendEmail: true },
+      include: {
+        attributes: true,
+        user: true,
+      },
+    });
+
+    return reports.map((report) => {
+      return {
+        id: report.id,
+        name: report.name,
+        userEmail: report.user.email,
+        intervalMs: Number(report.intervalMs),
+        sendEmail: report.sendEmail,
+        lastSent: report.lastSent,
+        attributes: report.attributes,
+      };
+    });
+  }
+
   async getUserReports(userId: string): Promise<ReportData[]> {
     const reports = await this.prisma.report.findMany({
       where: { userId: userId },
@@ -123,5 +145,12 @@ export class ReportService {
       });
     }
     return data;
+  }
+
+  public async updateLastSent(reportId: string, timestamp: Date) {
+    await this.prisma.report.update({
+      where: { id: reportId },
+      data: { lastSent: timestamp },
+    });
   }
 }
