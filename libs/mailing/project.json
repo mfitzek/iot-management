@@ -1,0 +1,26 @@
+{
+  "name": "mailing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mailing/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/mailing",
+        "main": "libs/mailing/src/index.ts",
+        "tsConfig": "libs/mailing/tsconfig.lib.json",
+        "assets": ["libs/mailing/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/mailing/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
