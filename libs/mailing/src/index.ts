@@ -1,1 +1,1 @@
-export * from './lib/mailing';
+export * from './lib/mail-service';
