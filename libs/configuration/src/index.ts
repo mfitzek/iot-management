@@ -6,7 +6,13 @@ export interface TelemetryCacheSettings {
   cacheTimeoutMs: number;
 }
 
+export interface MailSettings {
+  gmail: string;
+  password: string;
+}
+
 export interface Settings {
   database: DatabaseSettings;
   telemetryCache: TelemetryCacheSettings;
+  mailSettings?: MailSettings;
 }

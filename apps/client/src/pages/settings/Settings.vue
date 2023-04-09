@@ -23,6 +23,23 @@
     />
   </section>
 
+  <section class="q-mt-md q-gutter-md">
+    <p class="text-h5">Mail settings</p>
+    <p class="text">
+      <a href="https://support.google.com/accounts/answer/185833?hl=en" target="_blank"
+        >Generate and use Gmail app password</a
+      >
+    </p>
+    <q-input v-model="mail" class="settingsInput" type="email" label="Gmail address" filled />
+    <q-input
+      v-model="mailPassword"
+      class="settingsInput"
+      type="password"
+      filled
+      label="Gmail app password"
+    />
+  </section>
+
   <q-btn
     class="fixed-bottom-right q-ma-md"
     color="primary"
@@ -42,6 +59,9 @@ const dbSizeMb = ref(0);
 const cacheRecordsLimit = ref(0);
 const cacheTimeoutSec = ref(0);
 
+const mail = ref('');
+const mailPassword = ref('');
+
 async function fetchSettings() {
   const res = await api.get<Settings>('settings');
   const data = res.data;
@@ -49,6 +69,8 @@ async function fetchSettings() {
   dbSizeMb.value = data.database.maxDatabaseSizeMB;
   cacheRecordsLimit.value = data.telemetryCache.maxNumberOfRecords;
   cacheTimeoutSec.value = data.telemetryCache.cacheTimeoutMs / 1000;
+  mail.value = data.mailSettings?.gmail ?? '';
+  mailPassword.value = data.mailSettings?.password ?? '';
 }
 
 async function saveSettings() {
@@ -59,6 +81,10 @@ async function saveSettings() {
     telemetryCache: {
       maxNumberOfRecords: Number(cacheRecordsLimit.value),
       cacheTimeoutMs: Number(cacheTimeoutSec.value * 1000),
+    },
+    mailSettings: {
+      gmail: mail.value,
+      password: mailPassword.value,
     },
   };
 

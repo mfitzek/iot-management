@@ -42,3 +42,5 @@ Thumbs.db
 *.db
 *.db-journal
 *.bak
+
+./settings.json
