@@ -1,9 +1,5 @@
-import {
-  getDeviceMqttSettings,
-  getHttpSettings,
-  setHttpAccessToken,
-  setHttpGatewayActive,
-} from '@iot/custom-devices/basic-device/common';
+import { getDeviceMqttSettings } from '../common/mqtt';
+import { getHttpSettings, setHttpAccessToken, setHttpGatewayActive } from '../common/HttpSettings';
 import {
   CustomRequest,
   CustomRequestMethod,
