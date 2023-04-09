@@ -24,7 +24,7 @@ export class ReportService {
       return {
         id: report.id,
         name: report.name,
-        intervalMs: report.intervalMs,
+        intervalMs: Number(report.intervalMs),
         sendEmail: report.sendEmail,
         attributes: report.attributes.map((attribute) => {
           return {
@@ -99,7 +99,7 @@ export class ReportService {
       },
     });
 
-    const start = Date.now() - report.intervalMs;
+    const start = Date.now() - Number(report.intervalMs);
 
     const attributes = report.attributes.map((attribute) => attribute.attributeId);
     const telemetry = await this.telemetry.getTelemetry({
