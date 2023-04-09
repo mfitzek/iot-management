@@ -63,7 +63,7 @@ model Report {
   user       User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   attributes ReportAttributes[]
   userId     String
-  intervalMs Int
+  intervalMs BigInt
   sendEmail  Boolean
   lastSent   DateTime
 }

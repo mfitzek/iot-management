@@ -11,7 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import axios  from '@iot/services/http-axios';
+import { AttributeData } from '@iot/reports';
+import axios from '@iot/services/http-axios';
+import { ref } from 'vue';
 const props = defineProps({
   id: {
     type: String,
@@ -58,37 +60,14 @@ const columns = [
   },
 ];
 
-const attributes = [
-  {
-    id: 'qweasdasxcasdf',
-    device: 'thermometer',
-    attribute: 'temp_room1',
-    min: 18.0,
-    max: 23.5,
-    avg: 22.5,
-    records: 1500,
-  },
-  {
-    id: 'qweasdasxcasdf',
-    device: 'thermometer',
-    attribute: 'temp_room2',
-    min: 18.0,
-    max: 23.0,
-    avg: 22.2,
-    records: 1800,
-  },
-  {
-    id: 'qweasdasxcasdf',
-    device: 'thermometer',
-    attribute: 'temp_room3',
-    min: 18.0,
-    max: 22.5,
-    avg: 20.5,
-    records: 500,
-  },
-];
+const attributes = ref<AttributeData[]>([]);
 
+async function fetchData() {
+  const { data } = await axios.get<AttributeData[]>(`/reports/${props.id}/data`);
+  attributes.value = data;
+}
 
+fetchData();
 </script>
 
 <style scoped></style>

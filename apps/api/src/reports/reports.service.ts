@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ReportData, ReportSettings } from '@iot/reports';
+import { AttributeData, ReportData, ReportSettings } from '@iot/reports';
 import { TelemetryCollectorService } from '../telemetry-collector';
 
 @Injectable()
 export class ReportService {
-  constructor(private readonly prisma: PrismaService, private telemetry: TelemetryCollectorService ) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private telemetry: TelemetryCollectorService
+  ) {}
 
   async getUserReports(userId: string): Promise<ReportData[]> {
     const reports = await this.prisma.report.findMany({
@@ -90,8 +93,10 @@ export class ReportService {
     const report = await this.prisma.report.findUnique({
       where: { id: reportId },
       include: {
-        attributes: true
-      }
+        attributes: {
+          include: { attribute: { include: { device: true } } },
+        },
+      },
     });
 
     const start = Date.now() - report.intervalMs;
@@ -99,9 +104,24 @@ export class ReportService {
     const attributes = report.attributes.map((attribute) => attribute.attributeId);
     const telemetry = await this.telemetry.getTelemetry({
       attribute_ids: attributes,
-      date_from: new Date(start)
+      date_from: new Date(start),
     });
 
+    const data: AttributeData[] = [];
 
+    for (const attribute of report.attributes) {
+      const records = telemetry.filter((record) => record.attribute_id === attribute.attributeId);
+      const values = records.map((record) => Number(record.value)).filter((value) => !isNaN(value));
+
+      data.push({
+        device: attribute.attribute.device.name,
+        attribute: attribute.attribute.name,
+        max: Math.max(...values),
+        min: Math.min(...values),
+        avg: values.reduce((a, b) => a + b, 0) / Math.max(values.length, 1),
+        records: records.length,
+      });
+    }
+    return data;
   }
 }

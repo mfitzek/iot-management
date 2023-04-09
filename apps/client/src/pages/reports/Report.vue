@@ -21,7 +21,7 @@
           exact
           :to="{ name: 'ReportPreview', params: { id: selectedReport?.id } }"
         />
-        <q-route-tab ripple name="graph" icon="sym_o_monitoring" label="Graph" />
+        <q-route-tab ripple name="graph" icon="sym_o_monitoring" label="Graph" disable />
       </q-tabs>
     </q-card-section>
     <q-card-section>

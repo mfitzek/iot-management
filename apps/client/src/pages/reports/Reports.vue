@@ -16,6 +16,9 @@
         <q-scroll-area style="height: 800px">
           <q-card>
             <q-card-section>
+              <div class="text-h5">List of reports</div>
+            </q-card-section>
+            <q-card-section>
               <q-list separator>
                 <q-item v-if="data.length === 0">No reports created</q-item>
                 <q-item
