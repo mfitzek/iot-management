@@ -1,4 +1,5 @@
 {
+  "name": "custom-devices-thermometer",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/custom-devices/thermometer/src",
   "projectType": "library",

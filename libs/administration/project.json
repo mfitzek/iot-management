@@ -1,4 +1,5 @@
 {
+  "name": "administration",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/administration/src",
   "projectType": "library",

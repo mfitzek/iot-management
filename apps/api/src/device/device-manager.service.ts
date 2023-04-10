@@ -10,6 +10,7 @@ import { getDeviceFactory } from '../custom-devices/supported-device-factory';
 import { MqttService } from '../gateway/mqtt-gateway/mqtt.service';
 import { BackupService } from '../settings/backup/backup.service';
 import { TelemetryCollectorService } from '../telemetry-collector';
+import { GmailMailService } from '../mailing/mail.service';
 
 @Injectable()
 export class DeviceManager implements Observer {
@@ -20,7 +21,8 @@ export class DeviceManager implements Observer {
     private telemetry_service: TelemetryCollectorService,
     private mqtt_service: MqttService,
     private http_service: HttpGatewayService,
-    private backupServicer: BackupService
+    private backupServicer: BackupService,
+    private mailService: GmailMailService
   ) {
     this.initDevices();
     this.backupServicer.register(this);
@@ -99,6 +101,7 @@ export class DeviceManager implements Observer {
       telemetry_service: this.telemetry_service,
       mqtt_service: this.mqtt_service,
       http_service: this.http_service,
+      mail_service: this.mailService,
     };
   }
 }

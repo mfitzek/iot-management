@@ -1,4 +1,5 @@
 {
+  "name": "gateway-mqtt",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/gateway/mqtt/src",
   "projectType": "library",

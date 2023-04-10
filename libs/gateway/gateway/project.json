@@ -1,4 +1,5 @@
 {
+  "name": "gateway-gateway",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/gateway/gateway/src",
   "projectType": "library",

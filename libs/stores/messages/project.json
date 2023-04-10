@@ -1,4 +1,5 @@
 {
+  "name": "stores-messages",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/stores/messages/src",
   "projectType": "library",

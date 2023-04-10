@@ -1,4 +1,5 @@
 {
+  "name": "custom-devices-basic-device",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/custom-devices/basic-device/src",
