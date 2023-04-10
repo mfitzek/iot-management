@@ -18,12 +18,15 @@ import { randomUUID } from 'crypto';
 
 export class BasicDevice extends Device {
   mqtt_client?: IMqttClient;
-  lastDataTimestamp: number = 0;
+  lastDataTimestamp = 0;
 
   constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
     this.connectToMqtt();
     this.setupHttpGateway();
+    setInterval(() => {
+      this.checkActivity();
+    }, 1000 * 60 * 60);
   }
 
   override async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
