@@ -18,6 +18,7 @@ import { randomUUID } from 'crypto';
 
 export class BasicDevice extends Device {
   mqtt_client?: IMqttClient;
+  lastDataTimestamp: number = 0;
 
   constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
@@ -115,17 +116,17 @@ export class BasicDevice extends Device {
   }
 
   private saveTelemetry(attribute: IAttribute | undefined, data: string) {
-    if (attribute) {
-      Logger.instance.info(
-        `Device (${this.getId()}) incoming telemetry ${attribute.name}: ${data} `
-      );
-      const telemety: ITelemetry = {
-        attribute_id: attribute.id ?? '',
-        value: data,
-        createdAt: new Date(),
-      };
-      this.providers.telemetry_service.saveTelemetry(telemety);
-    }
+    if (!attribute) return;
+
+    this.lastDataTimestamp = Date.now();
+
+    Logger.instance.info(`Device (${this.getId()}) incoming telemetry ${attribute.name}: ${data} `);
+    const telemety: ITelemetry = {
+      attribute_id: attribute.id ?? '',
+      value: data,
+      createdAt: new Date(),
+    };
+    this.providers.telemetry_service.saveTelemetry(telemety);
   }
   private getUserMqttSettings() {
     const data = this.getData();
@@ -145,12 +146,30 @@ export class BasicDevice extends Device {
         const attribute = this.attributes.find((attr) => attr.name === telemetryData.attributeName);
         if (!attribute) return;
 
-        this.providers.telemetry_service.saveTelemetry({
-          attribute_id: attribute.id || 'wtf',
-          value: telemetryData.value,
-          createdAt: new Date(),
-        });
+        this.saveTelemetry(attribute, telemetryData.value);
       },
     });
+  }
+
+  private checkActivity() {
+    const data = this.getData();
+    const httpSettings = getHttpSettings(data);
+    const httpActive = httpSettings?.active ?? false;
+
+    const mqttSettings = getDeviceMqttSettings(data);
+    const mqttActive = mqttSettings?.active ?? false;
+
+    if (!httpActive && !mqttActive) {
+      return;
+    }
+
+    if (this.lastDataTimestamp) {
+      const elapsedTime = Date.now() - this.lastDataTimestamp;
+      const hour = 1000 * 60 * 60;
+
+      if (elapsedTime > hour) {
+        // todo: set warning status
+      }
+    }
   }
 }
