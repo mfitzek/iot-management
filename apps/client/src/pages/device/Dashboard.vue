@@ -2,8 +2,16 @@
   <div class="q-pa-md q-gutter-y-md">
     <CardsInfo :stats="stats"></CardsInfo>
 
-    <div class="row">
-      <Warnings></Warnings>
+    <div class="row q-gutter-md justify-between items-end">
+      <div class="col-6 q-pr-md">
+        <Warnings></Warnings>
+      </div>
+
+      <div class="col-auto">
+        <q-btn color="green" icon-right="add" :to="{ name: 'DeviceCreate' }"
+          >Create new device</q-btn
+        >
+      </div>
     </div>
 
     <div class="row">

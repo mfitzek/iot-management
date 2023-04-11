@@ -23,12 +23,6 @@ const columns = [
     align: 'left',
   },
   {
-    name: 'lastUpdate',
-    field: 'lastUpdate',
-    label: 'Last update',
-    align: 'left',
-  },
-  {
     name: 'icon',
     field: 'icon',
     label: '',
@@ -38,16 +32,8 @@ const columns = [
 
 const rows = [
   {
-    name: 'Device 1',
-    status: 'Connection problem',
-    lastUpdate: '2021-01-01 12:00:00',
-    icon: 'sym_o_error',
-    color: 'red',
-  },
-  {
-    name: 'Device 2',
-    status: 'No sensor data',
-    lastUpdate: '2021-01-01 12:00:00',
+    name: 'LivingRoomMeteo',
+    status: 'Not configured',
     icon: 'sym_o_warning',
     color: 'warning',
   },
