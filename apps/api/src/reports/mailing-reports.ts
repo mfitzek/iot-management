@@ -24,7 +24,6 @@ export class MailingReports {
       const data = await this.reportService.getReportData('', report.id);
 
       const mailOptions: MailOptions = {
-        from: 'noreply@iot-manager.com',
         to: report.userEmail,
         subject: `Report ${report.name}`,
         text: this.generateMailHtml(report.name, data),

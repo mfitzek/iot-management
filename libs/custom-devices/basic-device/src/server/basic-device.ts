@@ -81,6 +81,7 @@ export class BasicDevice extends Device {
       lastData,
     };
   }
+
   private getStatus(telemetry: ITelemetry[]): string {
     if (!this.mqtt_client) return 'offline';
     if (telemetry.length === 0) {
@@ -162,7 +163,7 @@ export class BasicDevice extends Device {
     const mqttSettings = getDeviceMqttSettings(data);
     const mqttActive = mqttSettings?.active ?? false;
 
-    if (!httpActive && !mqttActive) {
+    if ((!httpActive && !mqttActive) || this.lastDataTimestamp === -1) {
       return;
     }
 
@@ -171,7 +172,13 @@ export class BasicDevice extends Device {
       const hour = 1000 * 60 * 60;
 
       if (elapsedTime > hour) {
-        // todo: set warning status
+        this.providers.mail_service.sendMailToUser({
+          to: data.owner_id,
+          subject: 'Device inactive',
+          text: `Device ${data.name} is inactive`,
+          html: `<h1>Device ${data.name} is inactive</h1>`,
+        });
+        this.lastDataTimestamp = -1;
       }
     }
   }

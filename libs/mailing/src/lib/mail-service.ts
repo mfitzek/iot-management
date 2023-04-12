@@ -1,5 +1,4 @@
 export interface MailOptions {
-  from: string;
   to: string;
   subject: string;
   text: string;
@@ -8,4 +7,5 @@ export interface MailOptions {
 
 export interface MailService {
   sendMail(mailOptions: MailOptions): Promise<void>;
+  sendMailToUser(mailOptions: MailOptions): Promise<void>;
 }
