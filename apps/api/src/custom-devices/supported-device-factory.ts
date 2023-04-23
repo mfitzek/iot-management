@@ -2,7 +2,9 @@ import { CustomDeviceFactory } from '@iot/custom-device';
 import { BasicDeviceFactory } from '@iot/custom-devices/basic-device/server';
 import { ThermometerDeviceFactory } from '@iot/custom-devices/thermometer/server';
 
-const supportedDeviceFactories: { [device: string]: CustomDeviceFactory } = {
+type CustomDeviceFactories = Record<string, CustomDeviceFactory>;
+
+const supportedDeviceFactories: CustomDeviceFactories = {
   'basic-device': new BasicDeviceFactory(),
   Thermometer: new ThermometerDeviceFactory(),
 };

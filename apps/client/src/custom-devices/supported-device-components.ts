@@ -2,7 +2,9 @@ import { Component, defineAsyncComponent } from 'vue';
 import { BasicDeviceComponent } from '@iot/custom-devices/basic-device/client';
 import { ThermometerComponent } from '@iot/custom-devices/thermometer/client';
 
-const supportedDevices: { [device: string]: Component } = {
+type SupportDeviceComponents = Record<string, Component>;
+
+const supportedDevices: SupportDeviceComponents = {
   'basic-device': BasicDeviceComponent,
   Thermometer: ThermometerComponent,
 };

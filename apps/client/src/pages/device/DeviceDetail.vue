@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import api from '@iot/services/http-axios';
 import { DeviceData } from '@iot/device';
-import { getDeviceComponent } from '../../custom-devices/supportedCustomDevices';
+import { getDeviceComponent } from '../../custom-devices/supported-device-components';
 
 const props = defineProps({
   id: { type: String, required: true },

@@ -14,7 +14,7 @@ import { CreateDevice } from '@iot/device';
 import api from '@iot/services/http-axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { getDeviceTypes } from '../../custom-devices/supportedCustomDevices';
+import { getDeviceTypes } from '../../custom-devices/supported-device-components';
 
 const types = getDeviceTypes();
 

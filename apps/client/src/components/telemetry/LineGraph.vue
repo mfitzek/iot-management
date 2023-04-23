@@ -6,6 +6,8 @@
 
 <script setup lang="ts">
 import { ITelemetryDevice } from '@iot/telemetry';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
 import { computed } from 'vue';
 
 import 'chartjs-adapter-moment';
@@ -37,7 +39,8 @@ ChartJS.register(
   Legend,
   LineElement,
   LinearScale,
-  PointElement
+  PointElement,
+  zoomPlugin
 );
 
 const props = defineProps<{
@@ -61,11 +64,39 @@ const chartOptions: ChartOptions = {
       },
     },
   },
+  parsing: {
+    xAxisKey: 'createdAt',
+    yAxisKey: 'value',
+  },
   elements: {
     point: {
       radius: 0,
     },
+    line: {
+      tension: 1, // smooth lines
+    },
   },
+  plugins: {
+    zoom: {
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        pinch: {
+          enabled: true,
+        },
+        mode: 'x',
+      },
+    },
+  },
+  transitions: {
+    zoom: {
+      animation: {
+        duration: 0,
+      },
+    },
+  },
+  animation: false,
   borderWidth: 2,
 };
 
@@ -89,13 +120,7 @@ const chartData = computed<ChartData>(() => {
       return {
         label: attr.name,
         borderColor: randomColor(),
-        data: attr.telemetry.map((t) => {
-          const point: ScatterDataPoint = {
-            x: t.createdAt,
-            y: Number(t.value),
-          };
-          return point;
-        }),
+        data: attr.telemetry as any,
       };
     }),
   };
