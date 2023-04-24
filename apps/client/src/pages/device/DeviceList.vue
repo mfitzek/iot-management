@@ -34,7 +34,7 @@ import { useRouter } from 'vue-router';
 const rows = reactive<DeviceStatusInfo[]>([]);
 
 async function getRows() {
-  const req = await axios.get('devices/shortlist');
+  const req = await axios.get('devices/status');
   rows.push(...req.data);
 }
 

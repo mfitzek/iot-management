@@ -14,6 +14,39 @@ export class TelemetryController {
     @Req() req,
     @Query('attr') attributesIds: string[],
     @Query('start') dateFrom: string,
+    @Query('end') dateTo: string,
+    @Query('format') format: FormatType | undefined
+  ) {
+    const dateFromNum = Number(dateFrom);
+    const dateToNum = Number(dateTo);
+
+    let searchFrom: Date | undefined = new Date(dateFromNum);
+    let searchTo: Date | undefined = new Date(dateToNum);
+
+    if (isNaN(searchFrom.getDate())) {
+      searchFrom = undefined;
+    }
+    if (isNaN(searchTo.getDate())) {
+      searchTo = undefined;
+    }
+
+    const search: ISearchTelemetry = {
+      attribute_ids: attributesIds ?? [],
+      date_from: searchFrom,
+      date_to: searchTo,
+      exportFormat: format,
+    };
+
+    const user: IUser = req.user;
+
+    return await this.telemetry.getTelemetry(user, search);
+  }
+
+  @Get('stats')
+  async getTelemetryStats(
+    @Req() req,
+    @Query('attr') attributesIds: string[],
+    @Query('start') dateFrom: string,
     @Query('end') dateTo: string
   ) {
     const dateFromNum = Number(dateFrom);
@@ -37,7 +70,23 @@ export class TelemetryController {
 
     const user: IUser = req.user;
 
-    return await this.telemetry.getTelemetry(user, search);
+    const data = await this.telemetry.getTelemetry(user, search);
+
+    return data.result.map((device) => {
+      return {
+        id: device.id,
+        name: device.name,
+        attributes: device.attributes.map((attr) => {
+          return {
+            id: attr.id,
+            name: attr.name,
+            type: attr.type,
+            collected: attr.telemetry.length,
+            last: attr.telemetry[attr.telemetry.length - 1] ?? null,
+          };
+        }),
+      };
+    });
   }
 
   @Get('format')

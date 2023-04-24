@@ -39,7 +39,7 @@ const filteredRows = computed(() => {
 });
 
 async function getRows() {
-  const req = await axios.get('devices/shortlist');
+  const req = await axios.get('devices/status');
   rows.push(...req.data);
 }
 

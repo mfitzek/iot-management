@@ -32,10 +32,10 @@
 
       <div class="row q-pa-md">
         <div class="col" v-if="currentTab === 'overview'">
-          <AttributesStats :data="data"></AttributesStats>
+          <AttributesStats :filter="filter"></AttributesStats>
         </div>
         <div class="col" v-if="currentTab === 'graphs'">
-          <LineGraph :data="data"></LineGraph>
+          <LineGraph :filter="filter"></LineGraph>
         </div>
         <div class="col" v-if="currentTab === 'export'">
           <DataExport :filter="filter"></DataExport>
@@ -46,20 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import axios from '@iot/services/http-axios';
+import { computed, ref } from 'vue';
 
-import { ISearchTelemetry, ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
-import AttributesList from '../../components/telemetry/attributesList.vue';
+import { ISearchTelemetry } from '@iot/telemetry';
 import AttributesStats from '../../components/telemetry/AttributesStats.vue';
 import LineGraph from '../../components/telemetry/LineGraph.vue';
+import AttributesList from '../../components/telemetry/attributesList.vue';
 
 import InputDatePicker from '../../components/input/InputDatePicker.vue';
 import DataExport from '../../components/telemetry/DataExport.vue';
 
 const currentTab = ref('overview');
-
-const data = ref<ITelemetryDevice[]>([]);
 
 const selectedAttributes = ref<string[]>([]);
 
@@ -76,18 +73,6 @@ const filter = computed<ISearchTelemetry>(() => {
 
 function updateAttributes(ids: string[]) {
   selectedAttributes.value = ids;
-  fetchTelemetryData();
-}
-
-async function fetchTelemetryData() {
-  const req = await axios.get<ITelemetryResponse>('/telemetry', {
-    params: {
-      attr: [...selectedAttributes.value],
-      start: dateFrom.value?.getTime(),
-      end: dateTo.value?.getTime(),
-    },
-  });
-  data.value = req.data.result;
 }
 </script>
 

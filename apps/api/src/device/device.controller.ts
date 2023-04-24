@@ -30,7 +30,7 @@ export class DeviceController {
       .then((devices) => devices.map((d) => d.getData()));
   }
 
-  @Get('shortlist')
+  @Get('status')
   async getDevicesShort(@Req() req): Promise<DeviceStatusInfo[]> {
     const devices = await this.device_manager.getUserDevices(req.user.id);
     return Promise.all(devices.map((device) => device.getShortInfo()));
