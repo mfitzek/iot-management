@@ -4,13 +4,13 @@
 
 <script setup lang="ts">
 import { UserStats } from '@iot/administration';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { ref } from 'vue';
 
 const userList = ref<UserStats[]>([]);
 
 async function fetchUsers() {
-  const users = await api.get<UserStats[]>('/administration/users');
+  const users = await axios.get<UserStats[]>('/administration/users');
 
   userList.value = users.data;
 }

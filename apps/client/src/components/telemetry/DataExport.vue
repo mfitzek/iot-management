@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ISearchTelemetry, supportedExportFormats, FormatType } from '@iot/telemetry';
 import { ref } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 
 const props = defineProps<{
   filter: ISearchTelemetry;
@@ -25,7 +25,7 @@ const props = defineProps<{
 const exportFormat = ref<FormatType>('JSON');
 
 async function downloadData() {
-  const req = await api.get('/telemetry/format', {
+  const req = await axios.get('/telemetry/format', {
     params: {
       attr: props.filter.attribute_ids,
       start: props.filter.date_from?.getTime(),

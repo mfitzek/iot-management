@@ -1,11 +1,6 @@
-import {
-  getDeviceMqttSettings,
-  getHttpSettings,
-  HttpSettings,
-  IMqttSettings,
-} from '@iot/custom-devices/basic-device/common';
+import { getDeviceMqttSettings, getHttpSettings, HttpSettings, IMqttSettings } from '../common';
 import { DeviceData, UpdateDevice, KeyValue } from '@iot/device';
-import http_api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { reactive } from 'vue';
 
 interface IDeviceStore {
@@ -17,7 +12,7 @@ const store = reactive<IDeviceStore>({
 });
 
 export async function fetchDevice(id: string) {
-  const req = await http_api.get<DeviceData | null>(`/device/${id}`);
+  const req = await axios.get<DeviceData | null>(`devices/${id}`);
   store.device = req.data;
 }
 
@@ -30,7 +25,7 @@ export async function updateCurrentDevice() {
     name: store.device.name,
   };
 
-  const req = await http_api.post<DeviceData | null>(`/device/${id}`, update);
+  const req = await axios.post<DeviceData | null>(`/devices/${id}`, update);
   store.device = req.data;
 }
 
@@ -38,7 +33,7 @@ export async function removeCurrentDevice() {
   if (!store.device) return;
   const id = store.device.id;
 
-  const req = await http_api.delete<boolean>(`/device/${id}`);
+  const req = await axios.delete<boolean>(`/devices/${id}`);
   if (req.data) {
     store.device = null;
   }
@@ -80,7 +75,7 @@ export async function updateKeyValues(keyValues: KeyValue[]) {
     keyValues: keyValues,
   };
 
-  const res = await http_api.post<DeviceData | null>(`/device/${id}`, update);
+  const res = await axios.post<DeviceData | null>(`/devices/${id}`, update);
   store.device = res.data;
 }
 

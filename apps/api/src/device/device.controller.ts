@@ -19,11 +19,11 @@ import { DeviceManager } from './device-manager.service';
 import { DeviceService } from './device.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('device')
+@Controller('devices')
 export class DeviceController {
   constructor(private devices: DeviceService, private device_manager: DeviceManager) {}
 
-  @Get('list')
+  @Get()
   getDevices(@Req() req) {
     return this.device_manager
       .getUserDevices(req.user.id)
@@ -41,7 +41,7 @@ export class DeviceController {
     return this.devices.getDeviceDashboardData(req.user.id);
   }
 
-  @Put('create')
+  @Put()
   createDevice(@Req() req, @Body() data: CreateDevice) {
     const user: IUser = req.user;
     return this.device_manager

@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import DBState from '../../components/settings/DBState.vue';
 import { Statistics } from '@iot/administration';
 import { useQuasar } from 'quasar';
@@ -63,7 +63,7 @@ const restoreDialog = ref(false);
 const { notify } = useQuasar();
 
 async function getStats() {
-  const res = await api.get<Statistics>('/administration/statistics');
+  const res = await axios.get<Statistics>('/administration/statistics');
   stats.value = res.data;
 }
 
@@ -72,7 +72,7 @@ async function restore() {
     let form = new FormData();
     form.append('file', file.value);
     try {
-      await api.post('/backup', form);
+      await axios.post('/backup', form);
       notify({
         message: 'Database has been restored',
         icon: 'notification',
@@ -88,7 +88,7 @@ async function restore() {
   }
 }
 async function backup() {
-  const res = await api.get('/backup', {
+  const res = await axios.get('/backup', {
     responseType: 'blob',
   });
   const filename = res.headers['content-disposition'].split('=')[1];

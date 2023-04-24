@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { Settings } from '@iot/configuration';
 
 const dbSizeMb = ref(0);
@@ -63,7 +63,7 @@ const mail = ref('');
 const mailPassword = ref('');
 
 async function fetchSettings() {
-  const res = await api.get<Settings>('settings');
+  const res = await axios.get<Settings>('settings');
   const data = res.data;
 
   dbSizeMb.value = data.database.maxDatabaseSizeMB;
@@ -88,7 +88,7 @@ async function saveSettings() {
     },
   };
 
-  await api.post('settings', settings);
+  await axios.post('settings', settings);
 }
 
 fetchSettings();

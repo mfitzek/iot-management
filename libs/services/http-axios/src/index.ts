@@ -1,7 +1,7 @@
 import AxiosClient from './lib/axios';
 
-export default AxiosClient.instance;
+export default AxiosClient.axios;
 
-const instance = AxiosClient.instance;
+const instance = AxiosClient.axios;
 
 export { instance as axios };

@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { Statistics } from '@iot/administration';
 import { computed, ref } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 
 const maxSize = ref(1);
 const currentSize = ref(0);
@@ -35,7 +35,7 @@ const progressLabel = computed(() => {
 });
 
 async function getStats() {
-  const res = await api.get<Statistics>('/administration/statistics');
+  const res = await axios.get<Statistics>('/administration/statistics');
   const data = res.data;
   maxSize.value = Math.round(data.maxSizeMB * 100) / 100;
   currentSize.value = Math.round(data.currentSizeMB * 100) / 100;

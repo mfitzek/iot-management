@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useThermometerStore } from './store';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { UpdateDevice } from '@iot/device';
 import { useQuasar } from 'quasar';
 import { MQTT_KEY } from '@iot/custom-devices/thermometer/common';
@@ -39,7 +39,7 @@ async function updateSettings() {
     keyValues: [{ key: MQTT_KEY, value: mqtt }],
   };
   try {
-    await api.post(`device/${id}`, update);
+    await axios.post(`devices/${id}`, update);
     notify({ message: 'Connection string updated', icon: 'announcement', color: 'positive' });
   } catch (err) {
     console.log(err);

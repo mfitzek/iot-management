@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { IAttribute, UpdateDevice } from '@iot/device';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { computed, ref } from 'vue';
 import store, { fetchDevice } from '../store';
@@ -80,7 +80,7 @@ async function removeCurrent() {
         remove: [{ id: attr.id }],
       },
     };
-    await api.post(`device/${id}`, updateDevice);
+    await axios.post(`devices/${id}`, updateDevice);
     await fetchDevice(id);
   }
 
@@ -100,7 +100,7 @@ async function createCurrent() {
         remove: [],
       },
     };
-    await api.post(`device/${id}`, updateDevice);
+    await axios.post(`devices/${id}`, updateDevice);
     await fetchDevice(id);
   }
 }
@@ -118,7 +118,7 @@ async function updateCurrent() {
         remove: [],
       },
     };
-    await api.post(`device/${id}`, updateDevice);
+    await axios.post(`devices/${id}`, updateDevice);
     await fetchDevice(id);
   }
 }

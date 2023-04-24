@@ -69,7 +69,7 @@ const saveItem = () => {
 };
 
 async function fetchUserAttributes() {
-  const response = await axios.get('/device/list');
+  const response = await axios.get('/devices');
   devices.value = response.data;
 }
 

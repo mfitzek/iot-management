@@ -38,7 +38,7 @@ const stats = ref<DashboardCountStats>({
 });
 
 async function fetchDashboardData() {
-  const response = await axios.get<DeviceDashboardData>('device/dashboard');
+  const response = await axios.get<DeviceDashboardData>('devices/dashboard');
   console.log(response.data);
   stats.value = response.data.stats;
 }

@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { CreateDevice } from '@iot/device';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { getDeviceTypes } from '../../custom-devices/supported-device-components';
@@ -28,7 +28,7 @@ async function submit() {
     name: name.value,
     type: type.value,
   };
-  const req = await api.put('device/create', data);
+  const req = await axios.put('devices/', data);
   if (req.data.id) {
     router.push({ name: 'DeviceDetail', params: { id: req.data.id } });
   } else {

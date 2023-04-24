@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { DeviceData } from '@iot/device';
 import { getDeviceComponent } from '../../custom-devices/supported-device-components';
 
@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 async function getDevice(id: string) {
-  const req = await api.get<DeviceData>(`device/${id}`);
+  const req = await axios.get<DeviceData>(`devices/${id}`);
   return req.data;
 }
 

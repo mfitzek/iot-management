@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import http from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { IRegisterPost, IRegisterResponse } from '@iot/user';
 import { QForm } from 'quasar';
 import { ref } from 'vue';
@@ -82,7 +82,7 @@ async function signup() {
     username: username.value,
     password: password.value,
   };
-  const response = await http.post<IRegisterResponse>('auth/register', registerData);
+  const response = await axios.post<IRegisterResponse>('auth/register', registerData);
 
   if (response.data.success) {
     router.push({ name: 'Login' });

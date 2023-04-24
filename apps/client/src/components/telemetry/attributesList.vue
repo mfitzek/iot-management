@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { DeviceData } from '@iot/device';
 import { computed, reactive, ref } from 'vue';
-import http from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 
 const emit = defineEmits<{
   (e: 'update', selected: string[]): void;
@@ -84,7 +84,7 @@ function filterDeviceAttributes(device: DeviceData) {
 }
 
 async function getRows() {
-  const req = await http.get('device/list');
+  const req = await axios.get('devices/');
   devices.value.push(...req.data);
 }
 

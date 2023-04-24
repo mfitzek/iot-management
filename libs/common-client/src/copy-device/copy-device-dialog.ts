@@ -26,7 +26,7 @@ export function copyDeviceDialog(deviceId: string) {
 }
 
 async function postCopyDevice(deviceId: string, name: string) {
-  const response = await axios.post<DeviceData | null>(`/device/${deviceId}/copy`, { name: name });
+  const response = await axios.post<DeviceData | null>(`/devices/${deviceId}/copy`, { name: name });
   if (response.data) {
     return response.data.id;
   }

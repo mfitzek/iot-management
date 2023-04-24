@@ -48,7 +48,7 @@ async function updateDevice() {
     id: store.device.id,
     name: editNameText.value,
   };
-  const res = await http.post(`device/${store.device.id}`, update);
+  const res = await http.post(`devices/${store.device.id}`, update);
   store.fetchData(store.device.id);
 }
 </script>

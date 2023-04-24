@@ -5,7 +5,7 @@ export default class AxiosClient {
     baseURL: import.meta.env['VITE_API_SERVER'],
   });
 
-  public static get instance() {
+  public static get axios() {
     return this._axios;
   }
 }

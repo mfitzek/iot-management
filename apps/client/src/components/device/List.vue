@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { DeviceStatusInfo } from '@iot/device';
-import http from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { reactive, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -39,7 +39,7 @@ const filteredRows = computed(() => {
 });
 
 async function getRows() {
-  const req = await http.get('device/shortlist');
+  const req = await axios.get('devices/shortlist');
   rows.push(...req.data);
 }
 

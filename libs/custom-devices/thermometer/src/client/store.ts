@@ -19,7 +19,7 @@ export const useThermometerStore = defineStore('thermometer', () => {
   );
 
   async function fetchData(id: string) {
-    const res = await axios.get<DeviceData>(`device/${id}`);
+    const res = await axios.get<DeviceData>(`devices/${id}`);
     device.value = res.data;
 
     tempId = res.data.attributes.find((a: IAttribute) => a.name === 'temperature')?.id;
@@ -48,7 +48,7 @@ export const useThermometerStore = defineStore('thermometer', () => {
 
     const id = device.value.id;
 
-    const req = await axios.delete<boolean>(`/device/${id}`);
+    const req = await axios.delete<boolean>(`/devices/${id}`);
     if (req.data) {
       device.value = null;
     }

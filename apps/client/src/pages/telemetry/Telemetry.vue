@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 
 import { ISearchTelemetry, ITelemetryDevice, ITelemetryResponse } from '@iot/telemetry';
 import AttributesList from '../../components/telemetry/attributesList.vue';
@@ -80,7 +80,7 @@ function updateAttributes(ids: string[]) {
 }
 
 async function fetchTelemetryData() {
-  const req = await api.get<ITelemetryResponse>('/telemetry', {
+  const req = await axios.get<ITelemetryResponse>('/telemetry', {
     params: {
       attr: [...selectedAttributes.value],
       start: dateFrom.value?.getTime(),

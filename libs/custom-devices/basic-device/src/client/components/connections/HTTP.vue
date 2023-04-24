@@ -30,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import api from '@iot/services/http-axios';
+import { computed } from 'vue';
+import axios from '@iot/services/http-axios';
 import store, { getHttpGatewaySettings } from '../../store';
 
 const enabled = computed(() => {
@@ -48,8 +48,8 @@ const token = computed(() => {
 
 async function toggleHttp() {
   if (store.device) {
-    const res = await api.post(
-      `device/${store.device.id}/custom`,
+    const res = await axios.post(
+      `devices/${store.device.id}/custom`,
       {
         active: !enabled.value,
       },
@@ -65,8 +65,8 @@ async function toggleHttp() {
 
 async function refresh() {
   if (store.device) {
-    const res = await api.post(
-      `device/${store.device.id}/custom`,
+    const res = await axios.post(
+      `devices/${store.device.id}/custom`,
       {},
       {
         params: {

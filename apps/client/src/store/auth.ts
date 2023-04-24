@@ -1,6 +1,6 @@
 import { ILoginPost, ILoginResponse, IUserInfo, UserRole } from '@iot/user';
 import { readonly, ref } from 'vue';
-import api from '@iot/services/http-axios';
+import axios from '@iot/services/http-axios';
 import { AxiosError } from 'axios';
 
 export interface IAuthStore {
@@ -33,7 +33,7 @@ function logout() {
 
 async function login(username: string, password: string): Promise<LoginStatus> {
   console.log('Click login');
-  console.log('DEFAUILTS', { ...api.defaults });
+  console.log('DEFAUILTS', { ...axios.defaults });
   const login: ILoginPost = {
     username,
     password,
@@ -44,7 +44,7 @@ async function login(username: string, password: string): Promise<LoginStatus> {
   };
 
   try {
-    const response = await api.post<ILoginResponse>('/auth/login', login);
+    const response = await axios.post<ILoginResponse>('/auth/login', login);
     status.success = true;
     state.value = response.data;
     setHttpClientAuthToken(response.data.token);
@@ -62,7 +62,7 @@ async function login(username: string, password: string): Promise<LoginStatus> {
 }
 
 function setHttpClientAuthToken(token: string) {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 function setAuthStoreToLocalStorage() {
@@ -79,7 +79,7 @@ function loadAuthStoreFromLocalStorage() {
 }
 
 function removeHttpClientAuthToken() {
-  api.defaults.headers.common['Authorization'] = '';
+  axios.defaults.headers.common['Authorization'] = '';
 }
 
 function removeLocalStorageAuthToken() {
