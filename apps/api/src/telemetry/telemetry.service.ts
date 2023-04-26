@@ -9,8 +9,10 @@ import {
 import { IUser } from '@iot/user';
 import { Injectable } from '@nestjs/common';
 import { DeviceManager } from '../device/device-manager.service';
-import { exportToCsv, exportToJson, exportToXml } from './dataFormater';
 import { TelemetryCollectorService } from '../telemetry-collector';
+import { JsonTelemetryDataExporter } from './data-exporter/json-data-exporter';
+import { CsvTelemetryDataExporter } from './data-exporter/csv-data-exporter';
+import { XmlTelemetryDataExporter } from './data-exporter/xml-data-exporter';
 
 @Injectable()
 export class TelemetryService {
@@ -36,16 +38,15 @@ export class TelemetryService {
 
   public async exportTelemetry(user: IUser, query: ISearchTelemetry) {
     const data = await this.getTelemetry(user, query);
-    console.log(data);
-    switch (query.exportFormat) {
-      case 'JSON':
-        return exportToJson(data.result);
-      case 'CSV':
-        return exportToCsv(data.result);
-      case 'XML':
-        return exportToXml(data.result);
+    const parsers = {
+      JSON: new JsonTelemetryDataExporter(),
+      CSV: new CsvTelemetryDataExporter(),
+      XML: new XmlTelemetryDataExporter(),
+    };
+    if (query.exportFormat in parsers) {
+      return parsers[query.exportFormat].export(data.result);
     }
-    return 'Format not available';
+    return 'Format is not supported';
   }
 
   private groupTelemetryData(telemetry: ITelemetry[]) {
