@@ -38,7 +38,7 @@ export class TelemetryCache {
     this.startTimeoutCache();
     this.cache.push(telemetry);
     if (this.cache.length >= this.cacheRecordsLimit) {
-      this.writeCacheToDatabase();
+      this.onCacheLock();
     }
   }
 
@@ -68,23 +68,6 @@ export class TelemetryCache {
 
   private async cacheTimeExceeded() {
     Logger.instance.info('Cache time exceeded 🚀');
-    await this.writeCacheToDatabase();
-  }
-
-  private async writeCacheToDatabase() {
-    Monitor.instance.createRecord(CacheRecordType.DATABASE_WRITE);
     this.onCacheLock();
-    Logger.instance.info(`Writing cache to DB (${this.cache.length} items)`);
-    const transactions = this.cache.map((row) => {
-      return this.prisma.telemetry.create({
-        data: {
-          attributeId: row.attribute_id,
-          createdAt: row.createdAt ?? new Date(),
-          value: row.value,
-        },
-      });
-    });
-    await this.prisma.$transaction(transactions);
-    this.readyToDestroy = true;
   }
 }

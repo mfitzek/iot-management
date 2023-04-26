@@ -2,7 +2,7 @@ import { UserService } from './../user/user.service';
 import { Observer } from '@iot/utility';
 import { Injectable } from '@nestjs/common';
 import { Transporter, createTransport } from 'nodemailer';
-import { ConfiguratioProvider } from '../settings/settings-provider.service';
+import { ConfigurationProvider } from '../settings/settings-provider.service';
 import { MailOptions, MailService } from '@iot/mailing';
 import { Logger } from '@iot/logger';
 
@@ -10,7 +10,7 @@ import { Logger } from '@iot/logger';
 export class GmailMailService implements Observer, MailService {
   private transporter: Transporter | undefined;
 
-  constructor(private configurationProvider: ConfiguratioProvider, private users: UserService) {
+  constructor(private configurationProvider: ConfigurationProvider, private users: UserService) {
     this.configurationProvider.register(this);
     this.setTransporter();
   }

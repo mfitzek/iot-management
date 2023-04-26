@@ -1,20 +1,25 @@
 import { TelemetryCache } from './telemetry-cache';
 
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
-import { ConfiguratioProvider } from '../settings/settings-provider.service';
+import { ConfigurationProvider } from '../settings/settings-provider.service';
 
 import { Observer } from '@iot/utility';
 import { TelemetryCacheSettings } from '@iot/configuration';
+import { CacheWriter } from './cache/cache-writer';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
 export class CacheTelemetryCollector implements Observer {
   private cacheSettings: TelemetryCacheSettings | undefined;
   private activeCache: TelemetryCache | null;
   private oldCaches: TelemetryCache[] = [];
 
-  constructor(private configurationProvider: ConfiguratioProvider) {
+  constructor(
+    private configurationProvider: ConfigurationProvider,
+    private cacheWriter: CacheWriter
+  ) {
     this.configurationProvider.register(this);
     this.configureCollectors();
-
-    this.activeCache = this.createNewCache();
   }
   async onModuleDestroy() {
     await this.activeCache.shutdownSave();
@@ -40,6 +45,7 @@ export class CacheTelemetryCollector implements Observer {
   }
 
   private lockActiveCache() {
+    this.cacheWriter.writeCacheToDatabase(this.activeCache);
     this.oldCaches.push(this.activeCache);
     this.activeCache = this.createNewCache();
   }
@@ -62,5 +68,6 @@ export class CacheTelemetryCollector implements Observer {
   private async configureCollectors() {
     const settings = await this.configurationProvider.getSettings();
     this.cacheSettings = settings.telemetryCache;
+    this.activeCache = this.createNewCache();
   }
 }

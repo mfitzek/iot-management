@@ -4,20 +4,15 @@ import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { TelemetryCollector } from '@iot/telemetry';
 import { CacheTelemetryCollector } from './cache-telemetry-collector';
 import { DatabaseTelemetryCollector } from './database-telemetry-collector';
-import { ConfiguratioProvider } from '../settings/settings-provider.service';
 
 @Injectable()
 export class TelemetryCollectorService implements TelemetryCollector, OnModuleDestroy {
-  private cacheCollector: CacheTelemetryCollector;
-  private databaseCollector: DatabaseTelemetryCollector;
-
-  constructor(private configurationProvider: ConfiguratioProvider) {
-    this.cacheCollector = new CacheTelemetryCollector(configurationProvider);
-    this.databaseCollector = new DatabaseTelemetryCollector();
-  }
+  constructor(
+    private cacheCollector: CacheTelemetryCollector,
+    private databaseCollector: DatabaseTelemetryCollector
+  ) {}
   async onModuleDestroy() {
-    console.clear();
-    console.log('asdasds');
+    console.log('TelemetryCollectorService.onModuleDestroy');
     await this.cacheCollector.onModuleDestroy();
   }
 

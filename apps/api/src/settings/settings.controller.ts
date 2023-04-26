@@ -1,4 +1,4 @@
-import { ConfiguratioProvider } from './settings-provider.service';
+import { ConfigurationProvider } from './settings-provider.service';
 
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { Settings } from '@iot/configuration';
@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 @UseGuards(JwtAuthGuard)
 @Controller('settings')
 export class SettingsController {
-  constructor(private configProvider: ConfiguratioProvider) {}
+  constructor(private configProvider: ConfigurationProvider) {}
 
   @Get()
   public async getSetting() {

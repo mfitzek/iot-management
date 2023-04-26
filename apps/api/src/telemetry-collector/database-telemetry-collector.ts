@@ -2,7 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 import { ITelemetry, ISearchTelemetry } from '@iot/telemetry';
 import { TelemetryCollector } from '@iot/telemetry';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class DatabaseTelemetryCollector implements TelemetryCollector {
   private prisma = new PrismaClient();
 

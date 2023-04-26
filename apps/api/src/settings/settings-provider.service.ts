@@ -5,7 +5,7 @@ import { JsonSettingsStorage } from './settings-storage/jsonSettingsStorage';
 import { SettingsStorage } from './settings-storage/settingsStorage';
 
 @Injectable()
-export class ConfiguratioProvider implements Observable {
+export class ConfigurationProvider implements Observable {
   private settings?: Settings;
   private storage: SettingsStorage;
 
@@ -41,14 +41,16 @@ export class ConfiguratioProvider implements Observable {
   }
 
   private async getSettingsFromStorageOrCreateNew() {
-    const storagedSettings = await this.storage.getSettings();
-    if (storagedSettings) {
-      return storagedSettings;
+    const storedSettings = await this.storage.getSettings();
+    if (storedSettings) {
+      return storedSettings;
     }
     return this.getDefaultConfig();
   }
 
   private getDefaultConfig() {
+    console.log('ConfigurationProvider.getDefaultConfig');
+
     const config: Settings = {
       database: {
         maxDatabaseSizeMB: 4000,

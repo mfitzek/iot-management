@@ -1,5 +1,5 @@
 import { PrismaService } from './../prisma/prisma.service';
-import { ConfiguratioProvider } from './../settings/settings-provider.service';
+import { ConfigurationProvider } from './../settings/settings-provider.service';
 import { Statistics, UserStats } from '@iot/administration';
 import { Injectable, Query } from '@nestjs/common';
 import fs from 'fs';
@@ -9,7 +9,7 @@ import { Monitor } from '@iot/monitor';
 
 @Injectable()
 export class AdminsitrationService {
-  constructor(private configuration: ConfiguratioProvider, private prisma: PrismaService) {}
+  constructor(private configuration: ConfigurationProvider, private prisma: PrismaService) {}
 
   async databaseStatistics(): Promise<Statistics> {
     const { users, devices, records } = await this.databaseRecords();
