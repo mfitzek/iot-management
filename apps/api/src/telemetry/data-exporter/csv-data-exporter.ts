@@ -21,7 +21,7 @@ export class CsvTelemetryDataExporter implements TelemetryDataExporter {
       attr.telemetry.forEach((telemetry) => {
         const record = `${device.id};${device.name};${attr.id};${attr.name};${attr.type};${
           telemetry.value
-        };${telemetry.createdAt.getTime()};`;
+        };${telemetry.createdAt.toISOString()};`;
         result.push(record);
       });
     });

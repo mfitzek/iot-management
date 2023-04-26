@@ -1,7 +1,16 @@
 <template>
   <section>
     <span class="text-h4">HTTP connection</span>
-    <q-toggle v-model="enabled" color="green" @update:model-value="toggleHttp()" />
+  </section>
+
+  <section class="row q-gutter-md">
+    <q-toggle
+      v-model="enabled"
+      color="green"
+      @update:model-value="toggleHttp()"
+      label="Allow HTTP Communication"
+      left-label
+    />
   </section>
 
   <section class="row q-gutter-md items-end">

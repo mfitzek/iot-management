@@ -3,7 +3,7 @@ import { TelemetryDataExporter } from './data-exporter';
 
 export class XmlTelemetryDataExporter implements TelemetryDataExporter {
   export(data: ITelemetryDevice[]): string | Buffer {
-    const devices = data.map(this.deviceToXml).join('');
+    const devices = data.map((device)=>this.deviceToXml(device)).join('');
     const result = [
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<deviceList>',
@@ -14,7 +14,7 @@ export class XmlTelemetryDataExporter implements TelemetryDataExporter {
   }
 
   private deviceToXml(device: ITelemetryDevice) {
-    const attributes = device.attributes.map(this.attributeToXml).join('');
+    const attributes = device.attributes.map((attr) => this.attributeToXml(attr)).join('');
     const result =
       `\t<device id="${device.id}" name="${device.name}">\n` + attributes + '\t</device>';
     return result;
@@ -33,7 +33,7 @@ export class XmlTelemetryDataExporter implements TelemetryDataExporter {
     const reuslt =
       '\t\t\t<telemetry>\n' +
       `\t\t\t\t<value>${telemetry.value}</value>\n` +
-      `\t\t\t\t<timestamp>${telemetry.createdAt.getTime()}</timestamp>\n` +
+      `\t\t\t\t<timestamp>${telemetry.createdAt.toISOString()}</timestamp>\n` +
       '\t\t\t</telemetry>\n';
     return reuslt;
   }
