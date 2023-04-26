@@ -1,5 +1,5 @@
 import { CreateDevice, CustomRequestMethod, DeviceStatusInfo, UpdateDevice } from '@iot/device';
-import { IUser } from '@iot/user';
+import { IUser, UserRole } from '@iot/user';
 import {
   BadRequestException,
   Body,
@@ -17,8 +17,10 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { DeviceManager } from './device-manager.service';
 import { DeviceService } from './device.service';
+import { Roles } from '../auth/decorators/role.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('devices')
 export class DeviceController {
   constructor(private devices: DeviceService, private device_manager: DeviceManager) {}
@@ -33,6 +35,13 @@ export class DeviceController {
   @Get('status')
   async getDevicesShort(@Req() req): Promise<DeviceStatusInfo[]> {
     const devices = await this.device_manager.getUserDevices(req.user.id);
+    return Promise.all(devices.map((device) => device.getShortInfo()));
+  }
+
+  @Roles(UserRole.ADMIN)
+  @Get('status/admin')
+  async getDeviceShortAdmin(@Req() req): Promise<DeviceStatusInfo[]> {
+    const devices = await this.device_manager.getAllDevices();
     return Promise.all(devices.map((device) => device.getShortInfo()));
   }
 
