@@ -1,4 +1,10 @@
-import { CreateDevice, CustomRequestMethod, DeviceStatusInfo, UpdateDevice } from '@iot/device';
+import {
+  CreateDevice,
+  CustomRequestMethod,
+  DeviceListAdmin,
+  DeviceStatusInfo,
+  UpdateDevice,
+} from '@iot/device';
 import { IUser, UserRole } from '@iot/user';
 import {
   BadRequestException,
@@ -19,11 +25,16 @@ import { DeviceManager } from './device-manager.service';
 import { DeviceService } from './device.service';
 import { Roles } from '../auth/decorators/role.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { UserService } from '../user/user.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('devices')
 export class DeviceController {
-  constructor(private devices: DeviceService, private device_manager: DeviceManager) {}
+  constructor(
+    private devices: DeviceService,
+    private device_manager: DeviceManager,
+    private userService: UserService
+  ) {}
 
   @Get()
   getDevices(@Req() req) {
@@ -40,9 +51,19 @@ export class DeviceController {
 
   @Roles(UserRole.ADMIN)
   @Get('status/admin')
-  async getDeviceShortAdmin(@Req() req): Promise<DeviceStatusInfo[]> {
+  async getDeviceShortAdmin(@Req() req): Promise<DeviceListAdmin[]> {
     const devices = await this.device_manager.getAllDevices();
-    return Promise.all(devices.map((device) => device.getShortInfo()));
+    const users = await this.userService.getUsers();
+    return Promise.all(
+      devices.map(async (device) => {
+        const user = users.find((u) => u.id === device.getOwnerId());
+        const data = await device.getShortInfo();
+        return {
+          ...data,
+          user: user.username ?? 'Unknown',
+        };
+      })
+    );
   }
 
   @Get('dashboard')

@@ -39,6 +39,7 @@ export class UserService {
 
     return this.parseUser(user);
   }
+  
 
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
     const role = user.role === UserRole.ADMIN ? 1 : 0;

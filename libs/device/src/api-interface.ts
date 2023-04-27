@@ -7,7 +7,7 @@ export interface CreateDevice {
 
 export type DeviceState = Record<string, unknown>;
 
-export interface  DeviceData {
+export interface DeviceData {
   id: string;
   name: string;
   type: string;
@@ -27,4 +27,8 @@ export interface DeviceStatusInfo {
   lastData?: Date;
   status?: string;
   state?: DeviceState;
+}
+
+export interface DeviceListAdmin extends DeviceStatusInfo {
+  user: string;
 }

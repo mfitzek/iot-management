@@ -1,48 +1,26 @@
 <template>
-  <div class="q-pa-md test-table">
-    <div class="row items-center justify-between">
-      <div class="col-auto">
-        <h3>Device list</h3>
-      </div>
-      <div class="col-auto">
-        <q-btn color="green" icon-right="add" :to="{ name: 'DeviceCreate' }"
-          >Create new device</q-btn
-        >
-      </div>
-    </div>
-    <div>
-      <q-table
-        :columns="columns"
-        :rows="rows"
-        @row-click="clickDevice"
-        v-if="auth.is_admin() == false"
-      >
-        <template #body-cell-status="{ row }">
-          <q-td class="text-right">
-            <q-badge rounded :color="rowStatus(row.status).color">
-              <q-tooltip>{{ rowStatus(row.status).status }}</q-tooltip>
-            </q-badge>
-          </q-td>
-        </template>
-      </q-table>
-      <list-admin v-else></list-admin>
-    </div>
-  </div>
+  <q-table :columns="columns" :rows="rows" @row-click="clickDevice">
+    <template #body-cell-status="{ row }">
+      <q-td class="text-right">
+        <q-badge rounded :color="rowStatus(row.status).color">
+          <q-tooltip>{{ rowStatus(row.status).status }}</q-tooltip>
+        </q-badge>
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script setup lang="ts">
-import { DeviceStatusInfo } from '@iot/device';
+import { DeviceListAdmin, DeviceStatusInfo } from '@iot/device';
 import axios from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import auth from '../../store/auth';
-import ListAdmin from '../../components/device/ListAdmin.vue';
 
-const rows = reactive<DeviceStatusInfo[]>([]);
+const rows = reactive<DeviceListAdmin[]>([]);
 
 async function getRows() {
-  const req = await axios.get('devices/status');
+  const req = await axios.get('devices/status/admin');
   rows.push(...req.data);
 }
 
@@ -51,6 +29,7 @@ getRows();
 const router = useRouter();
 
 const columns: QTableColumn[] = [
+  { name: 'user', label: 'User', field: 'user', align: 'left' },
   { name: 'name', label: 'Name', field: 'name', align: 'left' },
   { name: 'type', label: 'Type', field: 'type', align: 'left' },
   { name: 'lastdata', label: 'Last data', field: 'lastData', align: 'left' },
@@ -76,7 +55,7 @@ function rowStatus(status?: string) {
   return colors[status] ?? 'red';
 }
 
-async function clickDevice({}, row: DeviceStatusInfo) {
+async function clickDevice({}, row: DeviceListAdmin) {
   router.push({ name: 'DeviceDetail', params: { id: row.id } });
 }
 </script>

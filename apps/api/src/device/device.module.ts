@@ -8,6 +8,7 @@ import { DeviceController } from './device.controller';
 import { DeviceService } from './device.service';
 import { GatewayModule } from '../gateway/gateway.module';
 import { MailModule } from '../mailing/mail.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   controllers: [DeviceController],
@@ -20,6 +21,7 @@ import { MailModule } from '../mailing/mail.module';
     SettingsModule,
     GatewayModule,
     MailModule,
+    UserModule,
   ],
 })
 export class DeviceModule {}

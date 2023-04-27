@@ -58,7 +58,6 @@ export class DeviceManager implements Observer {
   }
 
   async getUserDevice(device_id: string, user_id: string): Promise<IDevice | undefined> {
-    console.log({ device_id, user_id });
     return this.device_list.find(
       (dev) => dev.getId() === device_id && dev.getOwnerId() === user_id
     );
