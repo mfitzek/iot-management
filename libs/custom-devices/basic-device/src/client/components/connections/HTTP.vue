@@ -5,9 +5,9 @@
 
   <section class="row q-gutter-md">
     <q-toggle
-      v-model="enabled"
+      :model-value="deviceStore.httpGatewaySettings.active"
       color="green"
-      @update:model-value="toggleHttp()"
+      @click="toggleHttp()"
       label="Allow HTTP Communication"
       left-label
     />
@@ -15,7 +15,13 @@
 
   <section class="row q-gutter-md items-end">
     <div class="col-4">
-      <q-input v-model="token" type="text" label="Access Token" readonly filled>
+      <q-input
+        v-model="deviceStore.httpGatewaySettings.accessToken"
+        type="text"
+        label="Access Token"
+        readonly
+        filled
+      >
         <template #append>
           <q-btn round dense flat icon="content_copy" @click="clipboard_copy" />
         </template>
@@ -29,9 +35,9 @@
     <p>
       Usage: <br />
       send <span class="text-bold">POST</span> request to <br />
-      <span class="text-italic">api-server/api/gateway/{{ store.device?.id }}</span> <br />
+      <span class="text-italic">api-server/api/gateway/{{ deviceStore.device?.id }}</span> <br />
       with header<br />
-      <code>Authorization: {{ token }}</code> <br />
+      <code>Authorization: {{ deviceStore.httpGatewaySettings.accessToken }}</code> <br />
       with body as JSON format: <br />
       <code> { "attribute_name": value, "temperature": 24.2 } </code>
     </p>
@@ -39,43 +45,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import axios from '@iot/services/http-axios';
-import store, { getHttpGatewaySettings } from '../../store';
+import { useBasicDeviceStore } from '../../store-pinia';
 
-const enabled = computed(() => {
-  return settings.value?.active ?? false;
-});
-
-const settings = computed(() => {
-  return getHttpGatewaySettings();
-});
-
-const token = computed(() => {
-  return settings.value?.accessToken ?? '';
-});
+const deviceStore = useBasicDeviceStore();
 
 async function toggleHttp() {
-  if (store.device) {
-    const res = await axios.post(
-      `devices/${store.device.id}/custom`,
-      {
-        active: !enabled.value,
+  if (!deviceStore.device) return;
+  await axios.post(
+    `devices/${deviceStore.device.id}/custom`,
+    {
+      active: !deviceStore.httpGatewaySettings.active,
+    },
+    {
+      params: {
+        path: 'set-http-active',
       },
-      {
-        params: {
-          path: 'set-http-active',
-        },
-      }
-    );
-    store.device = res.data;
-  }
+    }
+  );
+  deviceStore.fetchDevice(deviceStore.device.id);
 }
 
 async function refresh() {
-  if (store.device) {
+  if (deviceStore.device) {
     const res = await axios.post(
-      `devices/${store.device.id}/custom`,
+      `devices/${deviceStore.device.id}/custom`,
       {},
       {
         params: {
@@ -83,13 +77,13 @@ async function refresh() {
         },
       }
     );
-    store.device = res.data;
+    deviceStore.device = res.data;
   }
 }
 
 function clipboard_copy() {
-  if (token.value.length) {
-    navigator.clipboard.writeText(token.value);
+  if (deviceStore.httpGatewaySettings.accessToken.length) {
+    navigator.clipboard.writeText(deviceStore.httpGatewaySettings.accessToken);
   }
 }
 </script>

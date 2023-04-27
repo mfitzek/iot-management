@@ -21,21 +21,28 @@
         <!-- <DeviceInformation></DeviceInformation> -->
         <component :is="currentView"> </component>
       </q-card-section>
+      <q-inner-loading
+        :showing="deviceStore.isLoading"
+        label="Please wait..."
+        label-class="text-teal"
+        label-style="font-size: 1.1em"
+      />
     </q-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchDevice } from './store';
 import DeviceInformation from './views/DeviceInformation.vue';
 import AttributesView from './views/Attributes.vue';
 import ConnectionView from './views/Connection.vue';
 import { computed, ref } from 'vue';
-import deviceStore from './store';
+import { useBasicDeviceStore } from './store-pinia';
 
 const props = defineProps({
   id: { type: String, required: true },
 });
+
+const deviceStore = useBasicDeviceStore();
 
 const views: { [key: string]: any } = {
   info: DeviceInformation,
@@ -50,8 +57,7 @@ const currentView = computed(() => {
   return views[currentTab] || null;
 });
 
-// init store
-await fetchDevice(props.id);
+deviceStore.fetchDevice(props.id);
 </script>
 
 <style scoped>

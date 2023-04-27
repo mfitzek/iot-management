@@ -32,6 +32,7 @@ export class BasicDevice extends Device {
 
   public override getData(): DeviceData {
     const data = super.getData();
+    console.log('Get data', data.owner_id);
     const state: DeviceState = {
       lastData:
         this.lastDataTimestamp > 0 ? new Date(this.lastDataTimestamp).toISOString() : undefined,

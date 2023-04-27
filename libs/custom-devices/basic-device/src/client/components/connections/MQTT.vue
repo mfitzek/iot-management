@@ -52,11 +52,12 @@
 <script setup lang="ts">
 import { getAsKeyValue, IMqttAttributeMap } from '@iot/custom-devices/basic-device/common';
 import { QTableColumn } from 'quasar';
-import { computed, ref, watch } from 'vue';
-import store, { getMqttSettings, updateKeyValues } from '../../store';
+import { computed, ref, watchEffect } from 'vue';
 import MqttMapDialog from './mqttMapDialog.vue';
+import { useBasicDeviceStore } from '../../store-pinia';
 
-const settings = ref(getMqttSettings());
+const deviceStore = useBasicDeviceStore();
+const settings = ref(deviceStore.mqttSettings);
 
 const showDialog = ref(false);
 const dialogMapping = ref<IMqttAttributeMap | undefined>(undefined);
@@ -69,7 +70,7 @@ const columns: QTableColumn[] = [
 
 const data = computed(() => {
   return settings.value.attribute_mapping.map((map) => {
-    const attribute = store.device?.attributes.find((a) => a.id == map.attribute_id);
+    const attribute = deviceStore.device?.attributes.find((a) => a.id == map.attribute_id);
     return {
       id: attribute?.id,
       attribute: `${attribute?.name} (${attribute?.type})`,
@@ -96,14 +97,10 @@ function removeTopic() {
   dialogMapping.value = undefined;
 }
 
-function setMqttData() {
-  settings.value = getMqttSettings();
-}
-
 function updateSettings() {
-  if (!store.device) return;
+  if (!deviceStore.device) return;
   const updatedKeyValue = getAsKeyValue(settings.value);
-  updateKeyValues([updatedKeyValue]);
+  deviceStore.updateKeyValues([updatedKeyValue]);
 }
 
 function openEditDialog({}, {}, index: number) {
@@ -118,13 +115,9 @@ function openAddDialog() {
   showDialog.value = true;
 }
 
-watch(
-  () => store.device,
-  () => {
-    setMqttData();
-  },
-  { deep: true, immediate: true }
-);
+watchEffect(() => {
+  settings.value = deviceStore.mqttSettings;
+});
 </script>
 
 <style scoped></style>

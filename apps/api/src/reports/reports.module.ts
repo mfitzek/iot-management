@@ -15,7 +15,7 @@ import { MailModule } from '../mailing/mail.module';
 export class ReportsModule {
   constructor(private mailingReports: MailingReports) {
     const hourMs = 1000 * 60 * 60;
-    this.mailingReports.maillAllReports();
-    setInterval(() => this.mailingReports.maillAllReports(), hourMs);
+    this.mailingReports.mailAllReports();
+    setInterval(() => this.mailingReports.mailAllReports(), hourMs);
   }
 }

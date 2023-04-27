@@ -49,15 +49,17 @@
 import { IMqttAttributeMap } from '@iot/custom-devices/basic-device/common';
 import { IAttribute } from '@iot/device';
 import { ref } from 'vue';
-import store from '../../store';
+import { useBasicDeviceStore } from '../../store-pinia';
 
 const show = true;
+
+const deviceStore = useBasicDeviceStore();
 
 const props = defineProps<{ mapping?: IMqttAttributeMap }>();
 const emits = defineEmits(['close', 'add', 'remove']);
 
 const attribute = ref<IAttribute | null>(null);
-const options = store.device?.attributes;
+const options = deviceStore.device?.attributes;
 
 const topic = ref('');
 
@@ -85,7 +87,8 @@ function removeTopic() {
 function initValues() {
   if (props.mapping) {
     attribute.value =
-      store.device?.attributes.find((attr) => attr.id === props.mapping?.attribute_id) ?? null;
+      deviceStore.device?.attributes.find((attr) => attr.id === props.mapping?.attribute_id) ??
+      null;
     topic.value = props.mapping.topic;
   }
 }

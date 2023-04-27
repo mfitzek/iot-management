@@ -19,6 +19,7 @@ export class GmailMailService implements Observer, MailService {
       return;
     }
     const user = await this.users.getUser(mailOptions.to);
+    console.log('Send Mail to user', mailOptions, user);
 
     await this.sendMail({ ...mailOptions, to: user.email });
   }

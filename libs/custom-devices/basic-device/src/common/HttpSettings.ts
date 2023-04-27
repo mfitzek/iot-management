@@ -9,9 +9,14 @@ export function getHttpGatewayKeyValue(device: DeviceData) {
   return device.keyValues.find((keyValue) => keyValue.key === 'http-gateway-settings');
 }
 
+export const defaultHttpSettings: HttpSettings = {
+  active: false,
+  accessToken: '',
+};
+
 export function getHttpSettings(device: DeviceData) {
   const keyValue = getHttpGatewayKeyValue(device);
-  if (!keyValue) return undefined;
+  if (!keyValue) return defaultHttpSettings;
 
   const settings = JSON.parse(keyValue.value) as HttpSettings;
   return settings;

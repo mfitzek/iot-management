@@ -41,7 +41,7 @@ import { IAttribute, UpdateDevice } from '@iot/device';
 import axios from '@iot/services/http-axios';
 import { QTableColumn } from 'quasar';
 import { computed, ref } from 'vue';
-import store, { fetchDevice } from '../store';
+import { useBasicDeviceStore } from '../store-pinia';
 
 type Attribute = {
   id?: string;
@@ -49,8 +49,10 @@ type Attribute = {
   type: string;
 };
 
+const deviceStore = useBasicDeviceStore();
+
 const data = computed(() => {
-  return store.device?.attributes ?? [];
+  return deviceStore.device?.attributes ?? [];
 });
 
 const typeOptions = ['string', 'number', 'object'];
@@ -69,11 +71,11 @@ function rowClick({}, row: IAttribute) {
 
 async function removeCurrent() {
   const attr = selected.value;
-  if (attr && attr.id && store.device) {
-    const id = store.device.id;
+  if (attr && attr.id && deviceStore.device) {
+    const id = deviceStore.device.id;
     const updateDevice: UpdateDevice = {
       id: id,
-      name: store.device.name,
+      name: deviceStore.device.name,
       attributes: {
         create: [],
         update: [],
@@ -81,7 +83,7 @@ async function removeCurrent() {
       },
     };
     await axios.post(`devices/${id}`, updateDevice);
-    await fetchDevice(id);
+    await deviceStore.fetchDevice(id);
   }
 
   selected.value = { name: '', type: 'number' };
@@ -89,11 +91,11 @@ async function removeCurrent() {
 
 async function createCurrent() {
   const attr = selected.value;
-  if (attr && store.device) {
-    const id = store.device.id;
+  if (attr && deviceStore.device) {
+    const id = deviceStore.device.id;
     const updateDevice: UpdateDevice = {
       id: id,
-      name: store.device.name,
+      name: deviceStore.device.name,
       attributes: {
         create: [{ name: attr.name, type: attr.type }],
         update: [],
@@ -101,17 +103,17 @@ async function createCurrent() {
       },
     };
     await axios.post(`devices/${id}`, updateDevice);
-    await fetchDevice(id);
+    await deviceStore.fetchDevice(id);
   }
 }
 
 async function updateCurrent() {
   const attr = selected.value;
-  if (attr && attr.id && store.device) {
-    const id = store.device.id;
+  if (attr && attr.id && deviceStore.device) {
+    const id = deviceStore.device.id;
     const updateDevice: UpdateDevice = {
       id: id,
-      name: store.device.name,
+      name: deviceStore.device.name,
       attributes: {
         create: [],
         update: [{ id: attr.id, name: attr.name, type: attr.type }],
@@ -119,7 +121,7 @@ async function updateCurrent() {
       },
     };
     await axios.post(`devices/${id}`, updateDevice);
-    await fetchDevice(id);
+    await deviceStore.fetchDevice(id);
   }
 }
 

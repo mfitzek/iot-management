@@ -17,8 +17,8 @@ import '@quasar/extras/material-symbols-sharp/material-symbols-sharp.css';
 import 'quasar/dist/quasar.css';
 import { createPinia } from 'pinia';
 
-const pinia = createPinia();
 const app = createApp(App);
+const pinia = createPinia();
 
 app.use(Quasar, {
   plugins: { Notify, Dialog },

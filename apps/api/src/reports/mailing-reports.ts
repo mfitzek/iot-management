@@ -9,7 +9,7 @@ import { Logger } from '@iot/logger';
 export class MailingReports {
   constructor(private reportService: ReportService, private mailService: GmailMailService) {}
 
-  public async maillAllReports() {
+  public async mailAllReports() {
     const reports = await this.reportService.getAllReportsForMail();
 
     const timestamp = Date.now();

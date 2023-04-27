@@ -7,7 +7,7 @@
   </div>
 
   <div row class="device-info">
-    <div>Attributes: {{ store.device?.attributes.length }}</div>
+    <div>Attributes: {{ deviceStore.device?.attributes.length }}</div>
     <div>Status:</div>
     <div>Last data:</div>
     <div>HTTP <q-badge rounded :color="connectionStateColor(http)"></q-badge></div>
@@ -26,19 +26,21 @@
 <script setup lang="ts">
 import { getDeviceMqttSettings, getHttpSettings } from '@iot/custom-devices/basic-device/common';
 import { useQuasar } from 'quasar';
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-import store, { removeCurrentDevice, updateCurrentDevice } from '../store';
 import { copyDeviceDialog } from '@iot/common-client';
+import { useBasicDeviceStore } from '../store-pinia';
 
 const router = useRouter();
 const $q = useQuasar();
 
-const name = ref(store.device?.name ?? '');
+const deviceStore = useBasicDeviceStore();
+
+const name = ref(deviceStore.device?.name ?? '');
 
 async function copyDevice() {
-  if (store.device?.id) {
-    const deviceId = await copyDeviceDialog(store.device.id);
+  if (deviceStore.device?.id) {
+    const deviceId = await copyDeviceDialog(deviceStore.device.id);
     if (deviceId) {
       router.push({ name: 'DeviceDetail', params: { id: deviceId } });
     }
@@ -46,11 +48,11 @@ async function copyDevice() {
 }
 
 async function saveInformation() {
-  const device = store.device;
+  const device = deviceStore.device;
   if (device) {
     device.name = name.value;
     try {
-      await updateCurrentDevice();
+      await deviceStore.updateCurrentDevice();
       $q.notify({
         message: 'Information has been saved',
         icon: 'announcement',
@@ -68,7 +70,7 @@ async function saveInformation() {
 
 async function removeDevice() {
   try {
-    await removeCurrentDevice();
+    await deviceStore.removeCurrentDevice();
     router.push({ name: 'DeviceList' });
     $q.notify({
       message: 'Device has been deleted',
@@ -85,15 +87,15 @@ async function removeDevice() {
 }
 
 const mqtt = computed(() => {
-  if (store.device) {
-    const settings = getDeviceMqttSettings(store.device);
+  if (deviceStore.device) {
+    const settings = getDeviceMqttSettings(deviceStore.device);
     return settings?.active ? true : false;
   }
   return false;
 });
 const http = computed(() => {
-  if (store.device) {
-    const settings = getHttpSettings(store.device);
+  if (deviceStore.device) {
+    const settings = getHttpSettings(deviceStore.device);
     return settings?.active ? true : false;
   }
   return false;
@@ -102,9 +104,10 @@ const http = computed(() => {
 function connectionStateColor(online: boolean) {
   return online ? 'green' : 'red';
 }
-function connectionState(online: boolean) {
-  return online ? 'On' : 'Off';
-}
+
+watchEffect(() => {
+  name.value = deviceStore.device?.name ?? '';
+});
 </script>
 
 <style scoped>
