@@ -64,10 +64,11 @@ export class DeviceController {
 
   @Get(':id')
   async getDevice(@Req() req, @Param() params) {
-    const device = await this.devices.getDevice(params.id);
-    if (device?.owner_id === req.user.id) {
-      return device;
+    const device = await this.device_manager.getUserDevice(params.id, req.user.id);
+    if (device) {
+      return device.getData();
     }
+
     return { message: 'Not found' };
   }
 

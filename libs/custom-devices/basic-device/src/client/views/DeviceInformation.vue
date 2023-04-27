@@ -9,7 +9,7 @@
   <div row class="device-info">
     <div>Attributes: {{ deviceStore.device?.attributes.length }}</div>
     <div>Status:</div>
-    <div>Last data:</div>
+    <div>Last data: {{ lastData }}</div>
     <div>HTTP <q-badge rounded :color="connectionStateColor(http)"></q-badge></div>
     <div>MQTT <q-badge rounded :color="connectionStateColor(mqtt)"></q-badge></div>
   </div>
@@ -35,6 +35,18 @@ const router = useRouter();
 const $q = useQuasar();
 
 const deviceStore = useBasicDeviceStore();
+
+const lastData = computed(() => {
+  if (
+    deviceStore.device &&
+    deviceStore.device.state &&
+    deviceStore.device.state.lastData != undefined
+  ) {
+    return new Date(deviceStore.device.state.lastData).toLocaleString();
+  }
+  console.log(deviceStore.device);
+  return 'No data';
+});
 
 const name = ref(deviceStore.device?.name ?? '');
 
