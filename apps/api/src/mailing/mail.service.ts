@@ -29,7 +29,9 @@ export class GmailMailService implements Observer, MailService {
     if (!this.transporter) {
       return;
     }
-    await this.transporter.sendMail({ ...mailOptions, from: 'noreply@iot-manager.local' });
+    //await this.transporter.sendMail({ ...mailOptions, from: 'noreply@iot-manager.local' });
+    Logger.instance.info('Mails are disabled, logging them instead');
+    Logger.instance.info(JSON.stringify(mailOptions));
   }
 
   public onUpdate(): void {

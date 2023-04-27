@@ -28,11 +28,15 @@ export class CustomMqttClient implements IMqttClient {
   }
 
   async connectMqttServer() {
-    this.client = connect(this.settings.server);
-    this.client.on('message', (topic, data) => this.onMessage(topic, data));
-    this.client.on('error', (err) => {
+    try {
+      this.client = connect(this.settings.server);
+      this.client.on('message', (topic, data) => this.onMessage(topic, data));
+      this.client.on('error', (err) => {
+        this.lastError = err;
+      });
+    } catch (err) {
       this.lastError = err;
-    });
+    }
   }
 
   subscribe(topic: string, onData: (topic: string, data: any) => void): boolean {
