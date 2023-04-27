@@ -21,9 +21,6 @@ export class CacheTelemetryCollector implements Observer {
     this.configurationProvider.register(this);
     this.configureCollectors();
   }
-  async onModuleDestroy() {
-    await this.activeCache.shutdownSave();
-  }
 
   public onUpdate(): void {
     this.configureCollectors();

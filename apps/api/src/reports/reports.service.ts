@@ -63,7 +63,7 @@ export class ReportService {
     const newReport = await this.prisma.report.create({
       data: {
         name: report.name,
-        intervalMs: report.intervalMs,
+        intervalMs: Number(report.intervalMs),
         sendEmail: report.sendEmail,
         userId: userId,
         attributes: {
@@ -91,7 +91,7 @@ export class ReportService {
       where: { id: reportId },
       data: {
         name: reportToUpdate.name,
-        intervalMs: reportToUpdate.intervalMs,
+        intervalMs: Number(reportToUpdate.intervalMs),
         sendEmail: reportToUpdate.sendEmail,
         attributes: {
           deleteMany: {},

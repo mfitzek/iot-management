@@ -37,8 +37,6 @@ export class BasicDevice extends Device {
         this.lastDataTimestamp > 0 ? new Date(this.lastDataTimestamp).toISOString() : undefined,
     };
 
-    console.log(state, this.lastDataTimestamp);
-
     return {
       ...data,
       state,

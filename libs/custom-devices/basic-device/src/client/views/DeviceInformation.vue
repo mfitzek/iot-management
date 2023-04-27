@@ -7,8 +7,7 @@
   </div>
 
   <div row class="device-info">
-    <div>Attributes: {{ deviceStore.device?.attributes.length }}</div>
-    <div>Status:</div>
+    <div>Attributes: {{ deviceStore.device?.attributes.length }}</div>  
     <div>Last data: {{ lastData }}</div>
     <div>HTTP <q-badge rounded :color="connectionStateColor(http)"></q-badge></div>
     <div>MQTT <q-badge rounded :color="connectionStateColor(mqtt)"></q-badge></div>
