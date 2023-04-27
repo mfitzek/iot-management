@@ -5,7 +5,9 @@ export interface CreateDevice {
   type: string;
 }
 
-export interface DeviceData {
+export type DeviceState = Record<string, unknown>;
+
+export interface  DeviceData {
   id: string;
   name: string;
   type: string;
@@ -13,6 +15,8 @@ export interface DeviceData {
 
   attributes: IAttribute[];
   keyValues: IKeyValue[];
+
+  state?: DeviceState;
 }
 
 export interface DeviceStatusInfo {
@@ -22,4 +26,5 @@ export interface DeviceStatusInfo {
 
   lastData?: Date;
   status?: string;
+  state?: DeviceState;
 }

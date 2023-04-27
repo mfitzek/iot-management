@@ -6,6 +6,7 @@ import {
   CustomRouteResponse,
   Device,
   DeviceData,
+  DeviceState,
   DeviceStatusInfo,
   IAttribute,
   IProvidedServices,
@@ -27,6 +28,19 @@ export class BasicDevice extends Device {
     setInterval(() => {
       this.checkActivity();
     }, 1000 * 60 * 60);
+  }
+
+  public override getData(): DeviceData {
+    const data = super.getData();
+    const state: DeviceState = {
+      lastData:
+        this.lastDataTimestamp > 0 ? new Date(this.lastDataTimestamp).toISOString() : undefined,
+    };
+
+    return {
+      ...data,
+      state,
+    };
   }
 
   override async handleCustomRoute(request: CustomRequest): Promise<CustomRouteResponse> {
