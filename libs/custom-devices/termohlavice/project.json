@@ -1,0 +1,26 @@
+{
+  "name": "custom-devices-termohlavice",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/custom-devices/termohlavice/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/custom-devices/termohlavice",
+        "dest": "dist/libs/custom-devices/termohlavice",
+        "tsConfig": "libs/custom-devices/termohlavice/tsconfig.lib.json",
+        "main": "libs/custom-devices/termohlavice/*"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/custom-devices/termohlavice/**/*.{ts,tsx,vue}"]
+      }
+    }
+  },
+  "tags": []
+}

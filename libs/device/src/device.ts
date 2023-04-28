@@ -1,7 +1,7 @@
 import { ISearchTelemetry, ITelemetry } from '@iot/telemetry';
 import { DeviceData, DeviceStatusInfo } from './api-interface';
 import { CustomRequest, CustomRouteResponse } from './interfaces/CustomRoute';
-import { UpdateDevice } from './interfaces/DeviceApi';
+import { CreateAttribute, UpdateDevice } from './interfaces/DeviceApi';
 import { IAttribute, IDevice, IKeyValue } from './interfaces/IDevice';
 import { IDeviceService } from './interfaces/IDeviceService';
 import { IProvidedServices } from './interfaces/ProvidedServices';
@@ -99,5 +99,21 @@ export class Device implements IDevice {
       this.keyValues = data.keyValues;
       this.owner_id = data.owner_id;
     }
+  }
+
+  protected async createAttributes(attributes: CreateAttribute[]) {
+    return this.update({
+      id: this.getId(),
+      name: this.name,
+      attributes: {
+        create: attributes,
+        update: [],
+        remove: [],
+      },
+    });
+  }
+
+  public getAttributeByName(name: string){
+    return this.attributes.find((attr) => attr.name === name);
   }
 }
