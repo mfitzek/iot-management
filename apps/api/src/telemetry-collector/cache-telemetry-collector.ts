@@ -27,8 +27,6 @@ export class CacheTelemetryCollector implements Observer {
   }
 
   public getTelemetry(filter: ISearchTelemetry) {
-    this.filterOutWrittenCache();
-
     const result = this.activeCache.getTelemetry(filter);
     this.oldCaches.forEach((cache) => {
       result.push(...cache.getTelemetry(filter));
@@ -37,13 +35,12 @@ export class CacheTelemetryCollector implements Observer {
   }
 
   public saveTelemetry(telemetry: ITelemetry) {
-    this.filterOutWrittenCache();
     this.activeCache.saveTelemetry(telemetry);
   }
 
   private lockActiveCache() {
-    this.cacheWriter.writeCacheToDatabase(this.activeCache);
     this.oldCaches.push(this.activeCache);
+    this.cacheWriter.writeCacheToDatabase(this.activeCache).then(() => {this.filterOutWrittenCache()});
     this.activeCache = this.createNewCache();
   }
 
