@@ -6,10 +6,12 @@ export class Termohlavice extends Device {
 
   constructor(data: DeviceData, providers: IProvidedServices) {
     super(data, providers);
+    this.setupMqtt();
   }
 
   public override getData(): DeviceData {
     const data = super.getData();
+    console.log('getData', this.teplota);
     return {
       ...data,
       state: {
@@ -34,7 +36,7 @@ export class Termohlavice extends Device {
     });
   }
 
-  private setupMqtt() {
+  private setupMqtt(): void {
     const teplota = this.getAttributeByName('teplota');
     const otevreniVentilu = this.getAttributeByName('otevreniVentilu');
 
@@ -42,7 +44,7 @@ export class Termohlavice extends Device {
       return;
     }
     const client = this.providers.mqtt_service.createClient({
-      server: 'mqtt://192.168.1.100',
+      server: 'mqtt://192.168.1.100:1883',
     });
 
     client.subscribe('termohlavice/teplota', (topic, data) => {
